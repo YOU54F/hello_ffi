@@ -105,7 +105,7 @@ jobs:
       - if: runner.os == 'Windows'
         run: |
           rm -rf /usr/bin/perl.exe
-          cpanm FFI::Platypus
+      - run: cpanm FFI::Platypus
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: ls
