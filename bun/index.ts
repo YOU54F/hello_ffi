@@ -52,7 +52,7 @@ const {
   },
   pactffi_with_specification: {
     args: [FFIType.pointer, FFIType.i32],
-    returns: FFIType.i32
+    returns: FFIType.bool
   },
   pactffi_using_plugin: {
     args: [FFIType.pointer, FFIType.cstring, FFIType.cstring],
@@ -213,10 +213,14 @@ const PactTestGrpc = () => {
     s2b("INFO"),
     s2b(`pactffi_new_sync_message_interaction: ${message_pact}`)
   );
-  pactffi_with_specification(pact, 5);
-
+  console.log('try pactffi_with_specification')
+  const pactffi_with_specification_res = pactffi_with_specification(pact, 5);
+  console.log('pactffi_with_specification_res')
+  console.log(pactffi_with_specification_res)
   // Start mock server
-  pactffi_using_plugin(pact, s2b("protobuf"), s2b("0.1.17"));
+  const pactffi_using_plugin_res = pactffi_using_plugin(pact, s2b("protobuf"), s2b("0.1.17"));
+  console.log('pactffi_using_plugin_res')
+  console.log(pactffi_using_plugin_res)
   pactffi_interaction_contents(message_pact, 0, s2b("application/grpc"), s2b(JSON.stringify(contents)));
   const mock_server_port = pactffi_create_mock_server_for_transport(
     pact,
