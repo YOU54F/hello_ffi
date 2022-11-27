@@ -9,7 +9,7 @@ const test = async () => {
   // Arrange
 
   const pact_contents = {
-    "pact:proto": "/Users/saf/dev/R_examples/proto/area_calculator.proto",
+    "pact:proto": `${Deno.cwd()}/proto/area_calculator.proto`,
     "pact:proto-service": "Calculator/calculateOne",
     "pact:content-type": "application/protobuf",
     request: {

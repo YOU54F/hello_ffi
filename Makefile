@@ -91,7 +91,7 @@ deno_run_greeter_server:
 	deno run --allow-all --unstable deno/gRPC/greeter/greeterServer.ts
 
 deno_run_area_calculator_client:
-	deno run --allow-all --unstable deno/gRPC/area_calculator/areaCalculatorClient.ts
+	deno run --allow-all --unstable deno/gRPC/area_calculator/areaCalculatorClientRun.ts
 
 deno_run_area_calculator_server:
 	deno run --allow-all --unstable deno/gRPC/area_calculator/areaCalculatorServer.ts

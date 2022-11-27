@@ -9,7 +9,7 @@
         "markup": "```protobuf\nmessage AreaResponse {\n    repeated float value = 1;\n}\n```\n",
         "markupType": "COMMON_MARK"
       },
-      "key": "ab98c08a2562ef2e",
+      "key": "c68c161eb95e7f10",
       "pending": false,
       "pluginConfiguration": {
         "protobuf": {

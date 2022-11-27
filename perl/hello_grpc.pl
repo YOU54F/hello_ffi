@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 use warnings;
+use Cwd qw();
+
 print("Hello, from Perl!\n");
 
 $library = (("$^O" eq "darwin") eq 1 ? 'libpact_ffi.dylib' : (("$^O" eq "windows") eq 1 ? 'pact_ffi.dll' : 'libpact_ffi.so'));
@@ -25,7 +27,9 @@ pactffi_logger_apply();
 pactffi_log_message('pact-perl-ffi', 'INFO', "hello from ffi version: $version");
 
 use JSON;;
-my $contents = "{\"pact:proto\":\"/Users/saf/dev/R_examples/proto/area_calculator.proto\",\"pact:proto-service\":\"Calculator/calculateOne\",\"pact:content-type\":\"application/protobuf\",\"request\":{\"rectangle\":{\"length\":\"matching(number, 3)\",\"width\":\"matching(number, 4)\"}},\"response\":{\"value\":[\"matching(number, 12)\"]}}\n";
+my $path = Cwd::cwd();
+print "$path\n";
+my $contents = "{\"pact:proto\":\"$path/proto/area_calculator.proto\",\"pact:proto-service\":\"Calculator/calculateOne\",\"pact:content-type\":\"application/protobuf\",\"request\":{\"rectangle\":{\"length\":\"matching(number, 3)\",\"width\":\"matching(number, 4)\"}},\"response\":{\"value\":[\"matching(number, 12)\"]}}\n";
 
 ## Setup pact for testing
 $ffi->type( 'opaque' => 'pact' );

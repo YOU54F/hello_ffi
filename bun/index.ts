@@ -1,6 +1,7 @@
 // https://blog.devgenius.io/how-to-run-blazingly-fast-javascript-code-with-bun-rust-and-go-2e645cf579b5
 import { dlopen, FFIType, suffix } from "ffi";
 const path = `libpact_ffi.${suffix}`;
+import process from 'process';
 const {
   symbols: {
     pactffi_version,
@@ -179,9 +180,8 @@ PactTestHttp();
 
 const PactTestGrpc = () => {
   console.log("🚀 Running Pact Protobuf Plugin Test with gRPC 🚀");
-
   const contents = {
-    "pact:proto": "/Users/saf/dev/R_examples/proto/area_calculator.proto",
+    "pact:proto": `${process.cwd()}/../proto/area_calculator.proto`,
     "pact:proto-service": "Calculator/calculateOne",
     "pact:content-type": "application/protobuf",
     request: {

@@ -1,9 +1,12 @@
 import { GrpcServer } from "https://deno.land/x/grpc_basic@0.4.6/server.ts";
-import { Calculator } from "./area_calculator.d.ts";
+import { Calculator, ShapeMessage } from "./area_calculator.d.ts";
 
 const server = new GrpcServer();
 
-const protoPath = new URL("../proto/area_calculator.proto", import.meta.url);
+const protoPath = new URL(
+  `${Deno.cwd()}/proto/area_calculator.proto`,
+  import.meta.url
+);
 const protoFile = await Deno.readTextFile(protoPath);
 
 server.addService<Calculator>(protoFile, {
@@ -17,7 +20,7 @@ server.addService<Calculator>(protoFile, {
         return { value: [message.rectangle.length * message.rectangle.width] };
       case "square":
         return {
-          value: [message.square.edge_length * message.square.edge_length]
+          value: [message.square.edgeLength * message.square.edgeLength]
         };
       case "circle":
         return {
@@ -30,13 +33,25 @@ server.addService<Calculator>(protoFile, {
           ]
         };
       case "triangle":
-          const p = ((message.triangle.edge_a + message.triangle.edge_b + message.triangle.edge_c) / 2.0)
-          const area = Math.sqrt((p * (p - message.triangle.edge_a) * (p - message.triangle.edge_b) * (p - message.triangle.edge_c)))
-          return {value:[area]}
-        break;
+        const p =
+          (message.triangle.edgeA +
+            message.triangle.edgeB +
+            message.triangle?.edgeC) /
+          2.0;
+        const area = Math.sqrt(
+          p *
+            (p - message.triangle.edgeA) *
+            (p - message.triangle.edgeB) *
+            (p - message.triangle.edgeC)
+        );
+        return { value: [area] };
       default:
         throw new Error(`Error: not a valid shape ${message}`);
     }
+  },
+  async calculateMulti(message) {
+    console.log(`Unimplemented  ${JSON.stringify(message)}`);
+    return { value: [1] };
   }
 });
 
@@ -47,4 +62,4 @@ const main = async (port = 37757) => {
   }
 };
 
-await main(37757)
+await main(37757);

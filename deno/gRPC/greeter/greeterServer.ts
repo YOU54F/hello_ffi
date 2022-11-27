@@ -1,7 +1,7 @@
 import { GrpcServer } from "https://deno.land/x/grpc_basic@0.4.6/server.ts";
 import { Greeter } from "./greeter.d.ts";
 
-const port = 50051;
+const port = 37757;
 const server = new GrpcServer();
 
 const protoPath = new URL("./greeter.proto", import.meta.url);

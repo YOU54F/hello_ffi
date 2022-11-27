@@ -1,7 +1,7 @@
 import { getClient } from "https://deno.land/x/grpc_basic@0.4.6/client.ts";
 import { Calculator } from "./area_calculator.d.ts";
 
-const protoPath = new URL("../../../proto/area_calculator.proto", import.meta.url);
+const protoPath = new URL(`${Deno.cwd()}/proto/area_calculator.proto`, import.meta.url);
 const protoFile = await Deno.readTextFile(protoPath);
 
 
