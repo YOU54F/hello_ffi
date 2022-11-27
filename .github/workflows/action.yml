@@ -221,6 +221,7 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+      - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: make deno
   bun:
