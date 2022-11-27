@@ -218,7 +218,7 @@ const PactTestGrpc = async() => {
     s2b("0.0.0.0"),
     0,
     s2b("grpc"),
-    s2b("NULL")
+    null
   );
   console.log('mock_server_port')
   console.log(mock_server_port)
