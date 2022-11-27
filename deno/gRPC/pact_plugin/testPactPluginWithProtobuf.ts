@@ -26,7 +26,7 @@ const test = async () => {
   );
   DenoPact.setPactSpecification(5);
   DenoPact.usingPactPlugin(pact, "denopactplugin");
-  // usingPactPlugin(pact, "protobuf");
+  DenoPact.usingPactPlugin(pact, "protobuf");
   DenoPact.withInteractionContents(message_pact, 0, "application/protobuf", pact_contents);
   // # Start mock server
   const mock_server_port = DenoPact.createMockServerForTransport(pact, "grpc");

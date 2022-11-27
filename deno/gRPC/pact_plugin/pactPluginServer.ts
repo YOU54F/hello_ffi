@@ -43,10 +43,11 @@ const PactPluginService: PactPlugin = {
           key: "deno-plugin-matcher-example",
           values: { "content-types": "application/protobuf" }
         },
-        {
-          type: "TRANSPORT",
-          key: "grpc",
-        }
+        // TODO - Check out gRPC-Basic errors, see below
+        // {
+        //   type: "TRANSPORT",
+        //   key: "grpc",
+        // }
       ]
     }
     console.log("InitPluginResponse");
@@ -55,6 +56,9 @@ const PactPluginService: PactPlugin = {
   },
 
   async UpdateCatalogue(request) {
+    // 2022-11-27T14:43:43.878055Z  WARN tokio-runtime-worker pact_plugin_driver::plugin_manager: F
+    // Failed to send updated catalogue to plugin 'denopactplugin' - status: Unimplemented, 
+    //  message: "Method \"/io.pact.plugin.PactPlugin/UpdateCatalogue\" not implemented", details: [], metadata: MetadataMap { headers: {} }
     console.log("UpdateCatalogue");
     console.log(request);
     return request;
@@ -77,6 +81,9 @@ const PactPluginService: PactPlugin = {
   ){
   //   request: ConfigureInteractionRequest
   // ): Promise<ConfigureInteractionResponse> {
+
+  // 2022-11-27T14:43:44.384189Z ERROR ThreadId(01) pact_ffi::plugins: Failed to call out to plugin - Call to plugin failed - 
+  // status: Unknown, message: "Error: no such Type or Enum 'google.protobuf.Struct' in Type .io.pact.plugin.ConfigureInteractionRequest", details: [], metadata: MetadataMap { headers: {} }
     console.log("ConfigureInteraction");
     console.log(request);
     return {

@@ -40,11 +40,11 @@ server.addService<Calculator>(protoFile, {
   }
 });
 
-const main = async (port = 50051) => {
+const main = async (port = 37757) => {
   console.log(`gRPC Area Calculator running on port: ${port}`);
   for await (const conn of Deno.listen({ port })) {
     server.handle(conn);
   }
 };
 
-await main(50051)
+await main(37757)
