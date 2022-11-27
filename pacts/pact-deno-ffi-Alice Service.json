@@ -21,12 +21,12 @@
   ],
   "metadata": {
     "pact-deno": {
-      "ffi": "0.3.14",
+      "ffi": "0.3.8",
       "version": "1.0.0"
     },
     "pactRust": {
-      "mockserver": "0.9.5",
-      "models": "1.0.0"
+      "mockserver": "0.9.4",
+      "models": "0.4.4"
     },
     "pactSpecification": {
       "version": "1.0.0"
