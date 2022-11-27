@@ -33,7 +33,7 @@ const {
     args: [FFIType.cstring, FFIType.i32],
     returns: FFIType.i32
   },
-  pactffi_logger_apply: { args: [], returns: FFIType.void },
+  pactffi_logger_apply: { args: [], returns: FFIType.i32 },
   pactffi_log_message: {
     args: [FFIType.cstring, FFIType.cstring, FFIType.cstring],
     returns: FFIType.void
@@ -51,19 +51,19 @@ const {
     returns: FFIType.pointer
   },
   pactffi_with_specification: {
-    args: [FFIType.pointer, FFIType.i32],
+    args: [FFIType.pointer, FFIType.cstring],
     returns: FFIType.bool
   },
   pactffi_using_plugin: {
     args: [FFIType.pointer, FFIType.cstring, FFIType.cstring],
-    returns: FFIType.i32
+    returns: FFIType.u16
   },
   pactffi_interaction_contents: {
-    args: [FFIType.pointer, FFIType.i32, FFIType.cstring, FFIType.cstring],
-    returns: FFIType.i32
+    args: [FFIType.pointer, FFIType.cstring, FFIType.cstring, FFIType.cstring],
+    returns: FFIType.u16
   },
   pactffi_create_mock_server: {
-    args: [FFIType.cstring, FFIType.cstring, FFIType.i32],
+    args: [FFIType.cstring, FFIType.cstring, FFIType.bool],
     returns: FFIType.i32
   },
   pactffi_create_mock_server_for_transport: {
@@ -72,20 +72,20 @@ const {
       FFIType.cstring,
       FFIType.u16,
       FFIType.cstring,
-      FFIType.pointer
+      FFIType.cstring
     ],
     returns: FFIType.i32
   },
-  pactffi_mock_server_matched: { args: [FFIType.i32], returns: FFIType.i32 },
+  pactffi_mock_server_matched: { args: [FFIType.i32], returns: FFIType.bool },
   pactffi_mock_server_mismatches: {
     args: [FFIType.i32],
     returns: FFIType.cstring
   },
   pactffi_write_pact_file: {
-    args: [FFIType.i32, FFIType.cstring, FFIType.i32],
+    args: [FFIType.i32, FFIType.cstring, FFIType.bool],
     returns: FFIType.i32
   },
-  pactffi_cleanup_mock_server: { args: [FFIType.i32], returns: FFIType.i32 },
+  pactffi_cleanup_mock_server: { args: [FFIType.i32], returns: FFIType.bool },
   pactffi_cleanup_plugins: { args: [FFIType.pointer], returns: FFIType.void }
 });
 
@@ -122,7 +122,7 @@ const PactTestHttp = () => {
   const mock_server_port = pactffi_create_mock_server(
     s2b(JSON.stringify(pact)),
     s2b("127.0.0.1:4432"),
-    0
+    false
   );
   pactffi_log_message(
     s2b("pact-bun-ffi"),
@@ -203,14 +203,14 @@ const PactTestGrpc = async() => {
     s2b(`pactffi_new_sync_message_interaction: ${message_pact}`)
   );
   console.log('try pactffi_with_specification')
-  const pactffi_with_specification_res = pactffi_with_specification(pact, 5);
+  const pactffi_with_specification_res = pactffi_with_specification(pact, s2b('PactSpecification_V4'));
   console.log('pactffi_with_specification_res')
   console.log(pactffi_with_specification_res)
   // Start mock server
   const pactffi_using_plugin_res = pactffi_using_plugin(pact, s2b("protobuf"), s2b("0.1.17"));
   console.log('pactffi_using_plugin_res')
   console.log(pactffi_using_plugin_res)
-  const pactffi_interaction_contents_res = pactffi_interaction_contents(message_pact, 0, s2b("application/grpc"), s2b(JSON.stringify(contents)));
+  const pactffi_interaction_contents_res = pactffi_interaction_contents(message_pact, s2b('InteractionPart_Request'), s2b("application/grpc"), s2b(JSON.stringify(contents)));
   console.log('pactffi_interaction_contents_res')
   console.log(pactffi_interaction_contents_res)
   const mock_server_port = pactffi_create_mock_server_for_transport(
