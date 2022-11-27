@@ -1,20 +1,12 @@
 // ffi.ts
 // https://medium.com/deno-the-complete-reference/calling-c-functions-from-deno-part-2-pass-buffers-ad168a3b6cc7
 // https://github.com/denoland/deno/issues/15289
-let libSuffix = "";
-switch (Deno.build.os) {
-  case "windows":
-    libSuffix = "dll";
-    break;
-  case "darwin":
-    libSuffix = "dylib";
-    break;
-  default:
-    libSuffix = "so";
-    break;
-}
+const libName = Deno.build.os === "darwin"
+? "libpact_ffi.dylib"
+: Deno.build.os === "windows"
+? "pact_ffi.dll"
+: "libpact_ffi.so";
 
-const libName = `./libpact_ffi.${libSuffix}`;
 const dylib = Deno.dlopen(libName, {
   pactffi_version: { parameters: [], result: "pointer" },
   pactffi_logger_init: { parameters: [], result: "void" },
