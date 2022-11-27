@@ -30,23 +30,23 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.3.14") => {
   console.log(platform);
   let filename;
   switch (platform) {
-    // case "darwin-aarch64":
-    //   filename = "libpact_ffi-osx-aarch64-apple-darwin.dylib.gz";
-    //   break;
-    // case "darwin-x86_64":
-    //   filename = "libpact_ffi-osx-x86_64.dylib.gz";
-    //   break;
-    // case "linux-aarch64":
-    //   filename = "libpact_ffi-linux-aarch64.so.gz";
-    //   break;
-    // case "linux-x86_64":
-    //   filename = "libpact_ffi-linux-x86_64.so.gz";
-    //   break;
+    case "darwin-aarch64":
+      filename = "libpact_ffi-osx-aarch64-apple-darwin.dylib.gz";
+      break;
+    case "darwin-x86_64":
+      filename = "libpact_ffi-osx-x86_64.dylib.gz";
+      break;
+    case "linux-aarch64":
+      filename = "libpact_ffi-linux-aarch64.so.gz";
+      break;
+    case "linux-x86_64":
+      filename = "libpact_ffi-linux-x86_64.so.gz";
+      break;
     default:
-      // if (platform.includes("windows")) {
+      if (platform.includes("windows")) {
         filename = "pact_ffi-windows-x86_64.dll.gz";
         break;
-      // }
+      }
       `We do not have a binary for your platform ${platform}`;
       break;
   }
