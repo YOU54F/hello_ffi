@@ -38,10 +38,10 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.3.14") => {
       filename = "libpact_ffi-osx-x86_64.dylib.gz";
       break;
     case "linux-aarch64":
-      filename = "libpact_ffi-linux-aarch64.dylib.gz";
+      filename = "libpact_ffi-linux-aarch64.so.gz";
       break;
     case "linux-x86_64":
-      filename = "libpact_ffi-linux-x86_64.dylib.gz";
+      filename = "libpact_ffi-linux-x86_64.so.gz";
       break;
     default:
       if (platform.includes("windows")) {
@@ -57,18 +57,20 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.3.14") => {
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
 
+
+
 export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
   const locs = detectFfiDownloadForPlatform(ffiVersion);
-  const ext =
+  const libraryFilename =
     Deno.build.os === "darwin"
-      ? ".dylib"
+      ? "libpact_ffi.dylib"
       : Deno.build.os === "windows"
-      ? ".dll"
-      : ".so";
-  const exists = checkIfFfiExists(ext);
+      ? "pact_ffi.dll"
+      : "libpact_ffi.so";
+  const exists = checkIfFfiExists(libraryFilename);
   if (!exists.pactFfiLib) {
     await downloadFile(locs.ffiLibDownloadLocation, "libpact_ffi.gz");
-    await gunzipFile("./libpact_ffi.gz", `./libpact_ffi${ext}`);
+    await gunzipFile("./libpact_ffi.gz", `./${libraryFilename}`);
     Deno.removeSync("./libpact_ffi.gz");
   } else{
     console.log('pact ffi library exists')
@@ -83,8 +85,8 @@ export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
   await helloFfi()
 };
 
-const checkIfFfiExists = (ext:string) => {
-  const pactFfiLib = existsSync(`./libpact_ffi${ext}`);
+const checkIfFfiExists = (libraryFilename:string) => {
+  const pactFfiLib = existsSync(`./${libraryFilename}`);
   const pactFfiHeaders = existsSync(`./pact.h`);
   return { pactFfiLib, pactFfiHeaders };
 };
