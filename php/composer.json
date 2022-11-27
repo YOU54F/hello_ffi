@@ -1,0 +1,10 @@
+{
+    "require": {
+        "php": ">=7.4",
+        "ext-ffi": "*",
+        "ext-json": "*"
+    },
+    "scripts": {
+        "hello_ffi": "MATCHING=1 php src/hello_ffi.php"
+    }
+}

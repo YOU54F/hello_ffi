@@ -1,0 +1,11 @@
+{
+  "name": "bun",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^0.2.0"
+  },
+  "dependencies": {
+    "ffi": "^2.3.0"
+  }
+}
