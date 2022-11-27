@@ -44,7 +44,7 @@ const {
   },
   pactffi_with_pact_metadata: {
     args: [FFIType.pointer, FFIType.cstring, FFIType.cstring, FFIType.cstring],
-    returns: FFIType.i32
+    returns: FFIType.bool
   },
   pactffi_new_sync_message_interaction: {
     args: [FFIType.pointer, FFIType.cstring],
@@ -196,12 +196,18 @@ const PactTestGrpc = () => {
     s2b("grpc-consumer-bun"),
     s2b("area-calculator-provider")
   );
+  console.log('pact')
+  console.log(pact)
   pactffi_log_message(s2b("pact-bun-ffi"), s2b("INFO"), s2b(`pactffi_new_pact: ${pact})`));
-  pactffi_with_pact_metadata(pact, s2b("pact-bun"), s2b("ffi"), s2b(pactffi_version()));
+  const pactffi_with_pact_metadata_res = pactffi_with_pact_metadata(pact, s2b("pact-bun"), s2b("ffi"), s2b(pactffi_version()));
+  console.log('pactffi_with_pact_metadata_res')
+  console.log(pactffi_with_pact_metadata_res)
   const message_pact = pactffi_new_sync_message_interaction(
     pact,
     s2b("A gRPC calculateOne request")
   );
+  console.log('message_pact')
+  console.log(message_pact)
   pactffi_log_message(
     s2b("pact-bun-ffi"),
     s2b("INFO"),

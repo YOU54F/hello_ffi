@@ -249,8 +249,11 @@ jobs:
         uses: crazy-max/ghaction-chocolatey@v2
         with:
           args: install protoc
-      - name: Setup Bun Runtime
-        uses: antongolub/action-setup-bun@v1
+      # - name: Setup Bun Runtime
+      #   uses: antongolub/action-setup-bun@v1
+      - uses: xhyrom/setup-bun@v0.1.8
+        with:
+          bun-version: latest
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: make bun
