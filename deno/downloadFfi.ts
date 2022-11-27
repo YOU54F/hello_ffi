@@ -73,10 +73,14 @@ export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
     console.log('extracting', libraryFilename)
     await gunzipFile("libpact_ffi.gz", libraryFilename);
     Deno.removeSync("libpact_ffi.gz");
+    for await (const dirEntry of Deno.readDir(Deno.cwd())) {
+      console.log(dirEntry);
+    }
   } else{
     console.log('pact ffi library exists')
   }
   if (!exists.pactFfiHeaders) {
+    console.log('downloading',locs.ffiHeaderDownloadLocation)
     await downloadFile(locs.ffiHeaderDownloadLocation, "pact.h");
   } else{
     console.log('pact header files exist')
