@@ -102,10 +102,9 @@ jobs:
           perl-version: '5.16'
           install-modules-with: cpanm
           # distribution: strawberry
-      - run: |
-          cpanm Capture::Tiny
-          cpanm ExtUtils::ParseXS
-          cpanm FFI::Platypus
+      - if: runner.os == 'Windows'
+        run: |
+          rm -rf /usr/bin/perl.exe
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: ls
