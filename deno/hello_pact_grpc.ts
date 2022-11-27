@@ -7,7 +7,9 @@ const main = async () => {
   DenoPact.setupLoggers(3);
 
   // Arrange
-
+  console.log('protopath')
+  console.log(Deno.cwd())
+  console.log(`${Deno.cwd()}/proto/area_calculator.proto`)
   const pact_contents = {
     "pact:proto": `${Deno.cwd()}/proto/area_calculator.proto`,
     "pact:proto-service": "Calculator/calculateOne",

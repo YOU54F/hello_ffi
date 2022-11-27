@@ -3,7 +3,7 @@ use warnings;
 use Config;
 print("Hello, from Perl!\n");
 
-print(""$^O"\n");
+print("$^O\n");
 $library = (("$^O" eq "darwin") eq 1 ? 'libpact_ffi.dylib' : (("$^O" eq "windows") eq 1 ? 'pact_ffi.dll' : 'libpact_ffi.so'));
 use FFI::Platypus;;
  my $ffi = FFI::Platypus->new(
