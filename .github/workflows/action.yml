@@ -101,6 +101,7 @@ jobs:
         with:
           perl-version: '5.36'
       - run: |
+          cpanm ExtUtils::MakeMaker
           cpanm Pod::Man
           cpanm ExtUtils::ParseXS
           cpanm FFI::Platypus
