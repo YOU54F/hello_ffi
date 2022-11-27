@@ -100,6 +100,7 @@ jobs:
       - uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: '5.16'
+          install-modules-with: cpanm
           # distribution: strawberry
       - run: |
           cpanm FFI::Platypus
