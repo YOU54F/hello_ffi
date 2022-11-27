@@ -101,6 +101,7 @@ jobs:
         with:
           perl-version: '5.36'
       - run: |
+          cpanm Pod::Podman
           cpanm ExtUtils::ParseXS
           cpanm FFI::Platypus
       - run: make get_pact_ffi
