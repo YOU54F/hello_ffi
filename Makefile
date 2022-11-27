@@ -111,8 +111,7 @@ deno_run_pact_grpc:
 deno_compile_plugin_and_test:
 	deno compile --allow-all --unstable deno/gRPC/pact_plugin/pactPluginServer.ts && mv pactPluginServer ~/.pact/plugins/denopactplugin-0.0.1 && deno run --allow-all --unstable deno/gRPC/pact_plugin/testPactPluginWithProtobuf.ts
 
-deno: deno_run_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
-# deno: deno_run_download_ffi deno_run_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
+deno: deno_run_download_ffi deno_run_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
 bun_hello_ffi:
 	cd bun && bun index.ts

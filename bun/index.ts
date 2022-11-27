@@ -167,7 +167,7 @@ const PactTestHttp = () => {
 };
 
 
-const PactTestGrpc = () => {
+const PactTestGrpc = async() => {
   console.log("🚀 Running Pact Protobuf Plugin Test with gRPC 🚀");
   const contents = {
     "pact:proto": `${process.cwd()}/../proto/area_calculator.proto`,
@@ -265,7 +265,7 @@ const PactTestGrpc = () => {
     s2b("INFO"),
     s2b(`pactffi_cleanup_mock_server: ${pactffi_cleanup_mock_server_result}`)
   );
-  pactffi_cleanup_plugins(pact);
+  await pactffi_cleanup_plugins(pact);
   console.log("🧹 Cleaned up Pact processes");
 };
 

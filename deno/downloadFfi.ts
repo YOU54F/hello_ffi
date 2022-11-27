@@ -142,6 +142,7 @@ function helloFfi() {
       result: "void"
     }
   } as const);
+  
   const version = decode(dylib.symbols.pactffi_version());
 
   console.log("Hello from Pact Deno FFI - Version", version);

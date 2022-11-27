@@ -194,37 +194,35 @@ jobs:
   #     - run: make get_pact_plugins
   #     - run: ls
   #     - run: make php
-  deno:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
-      - if: runner.os == 'Windows'
-        name: Choco install protoc
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: install protoc
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      - run: make deno_run_download_ffi
-      # - run: make get_pact_ffi
-      - run: make get_pact_plugins
-      - run: make deno
+  # deno:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - if: runner.os == 'macOS'
+  #       run: brew install protobuf
+  #     - if: runner.os == 'Windows'
+  #       name: Choco install protoc
+  #       uses: crazy-max/ghaction-chocolatey@v2
+  #       with:
+  #         args: install protoc
+  #     - uses: denoland/setup-deno@v1
+  #       with:
+  #         deno-version: v1.x
+  #     - run: make get_pact_plugins
+  #     - run: make deno
   bun:
     timeout-minutes: 10
     # runs-on: ubuntu-latest
