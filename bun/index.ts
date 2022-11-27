@@ -92,16 +92,6 @@ const {
 const s2b = (s: string) => Buffer.from(s + "\0", "utf-8");
 
 const PactTestHttp = () => {
-  console.log("Hello from Pact Bun FFI - Version", pactffi_version());
-
-  pactffi_logger_init();
-  pactffi_logger_attach_sink(s2b("stdout"), 5);
-  pactffi_logger_apply();
-  pactffi_log_message(
-    s2b("pact-bun-ffi"),
-    s2b("INFO"),
-    s2b(`hello from ffi version: ${pactffi_version()}`)
-  );
 
   console.log("🚀 Pact Mock Server Test - HTTP 🚀");
 
@@ -176,7 +166,6 @@ const PactTestHttp = () => {
   console.log("🧹 Cleaned up Pact processes");
 };
 
-PactTestHttp();
 
 const PactTestGrpc = () => {
   console.log("🚀 Running Pact Protobuf Plugin Test with gRPC 🚀");
@@ -280,5 +269,17 @@ const PactTestGrpc = () => {
   console.log("🧹 Cleaned up Pact processes");
 };
 
+console.log("Hello from Pact Bun FFI - Version", pactffi_version());
+
+pactffi_logger_init();
+pactffi_logger_attach_sink(s2b("stdout"), 5);
+pactffi_logger_apply();
+pactffi_log_message(
+  s2b("pact-bun-ffi"),
+  s2b("INFO"),
+  s2b(`hello from ffi version: ${pactffi_version()}`)
+);
+
+PactTestHttp();
 
 PactTestGrpc()

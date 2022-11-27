@@ -89,17 +89,16 @@ const checkIfFfiExists = async (libraryFilename:string) => {
   let pactFfiLib;
   let pactFfiHeaders;
   try {
-     pactFfiLib=await Deno.stat(`./${libraryFilename}`);
+     pactFfiLib=await Deno.stat(libraryFilename);
   } catch(e) {
     if(e instanceof Deno.errors.NotFound)
-      console.error('file does not exists');
-  }
-  
+      console.error('ffi lib does not exist, will download', libraryFilename);
+  }  
   try {
-     pactFfiLib=await Deno.stat('./pact.h');
+    pactFfiHeaders=await Deno.stat('pact.h');
   } catch(e) {
     if(e instanceof Deno.errors.NotFound)
-      console.error('file does not exists');
+    console.error('ffi header file does not exist, will download');
   }
   
   return { pactFfiLib, pactFfiHeaders };
