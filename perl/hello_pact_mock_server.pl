@@ -2,12 +2,11 @@
 use warnings;
 print("Hello, from Perl!\n");
 
-$ext = (("$^O" eq "darwin") eq 1 ? '.dylib' : (("$^O" eq "windows") eq 1 ? '.dll' : '.so'));
-print("$ext\n");
+$library = (("$^O" eq "darwin") eq 1 ? 'libpact_ffi.dylib' : (("$^O" eq "windows") eq 1 ? 'pact_ffi.dll' : 'libpact_ffi.so'));
 use FFI::Platypus;;
  my $ffi = FFI::Platypus->new(
   api => 2,
-  lib => "libpact_ffi$ext",
+  lib => $library,
 );
 
 
