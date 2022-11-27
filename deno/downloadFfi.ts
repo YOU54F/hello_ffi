@@ -56,8 +56,6 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.3.14") => {
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
 
-
-
 export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
   const locs = detectFfiDownloadForPlatform(ffiVersion);
   const libraryFilename =
@@ -68,42 +66,46 @@ export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
       : "libpact_ffi.so";
   const exists = await checkIfFfiExists(libraryFilename);
   if (!exists.pactFfiLib) {
-    console.log('downloading',locs.ffiLibDownloadLocation)
+    console.log("downloading", locs.ffiLibDownloadLocation);
     await downloadFile(locs.ffiLibDownloadLocation, "libpact_ffi.gz");
-    console.log('extracting', libraryFilename)
+    console.log("extracting", libraryFilename);
     await gunzipFile("libpact_ffi.gz", libraryFilename);
     Deno.removeSync("libpact_ffi.gz");
+    const fileNames: string[] = [];
     for await (const dirEntry of Deno.readDir(Deno.cwd())) {
-      console.log(dirEntry);
+      if (dirEntry.isFile) {
+        fileNames.push(dirEntry.name);
+      }
     }
-  } else{
-    console.log('pact ffi library exists')
+    console.log(fileNames);
+  } else {
+    console.log("pact ffi library exists");
   }
   if (!exists.pactFfiHeaders) {
-    console.log('downloading',locs.ffiHeaderDownloadLocation)
+    console.log("downloading", locs.ffiHeaderDownloadLocation);
     await downloadFile(locs.ffiHeaderDownloadLocation, "pact.h");
-  } else{
-    console.log('pact header files exist')
+  } else {
+    console.log("pact header files exist");
   }
-  return
+  return;
 };
 
-const checkIfFfiExists = async (libraryFilename:string) => {
+const checkIfFfiExists = async (libraryFilename: string) => {
   let pactFfiLib;
   let pactFfiHeaders;
   try {
-     pactFfiLib=await Deno.stat(libraryFilename);
-  } catch(e) {
-    if(e instanceof Deno.errors.NotFound)
-      console.error('ffi lib does not exist, will download', libraryFilename);
-  }  
-  try {
-    pactFfiHeaders=await Deno.stat('pact.h');
-  } catch(e) {
-    if(e instanceof Deno.errors.NotFound)
-    console.error('ffi header file does not exist, will download');
+    pactFfiLib = await Deno.stat(libraryFilename);
+  } catch (e) {
+    if (e instanceof Deno.errors.NotFound)
+      console.error("ffi lib does not exist, will download", libraryFilename);
   }
-  
+  try {
+    pactFfiHeaders = await Deno.stat("pact.h");
+  } catch (e) {
+    if (e instanceof Deno.errors.NotFound)
+      console.error("ffi header file does not exist, will download");
+  }
+
   return { pactFfiLib, pactFfiHeaders };
 };
 
@@ -118,13 +120,14 @@ function helloFfi() {
   const decode = (result: any) => {
     return new Deno.UnsafePointerView(result).getCString();
   };
-  const libName = Deno.build.os === "darwin"
-    ? "libpact_ffi.dylib"
-    : Deno.build.os === "windows"
+  const libName =
+    Deno.build.os === "darwin"
+      ? "libpact_ffi.dylib"
+      : Deno.build.os === "windows"
       ? "pact_ffi.dll"
       : "libpact_ffi.so";
 
-      console.log(libName)
+  console.log(libName);
 
   const dylib = Deno.dlopen(libName, {
     pactffi_version: { parameters: [], result: "pointer" },
@@ -154,7 +157,8 @@ function helloFfi() {
   );
 }
 
-
-await downloadFfiForPlatform().then(()=>{
-  helloFfi()
-})
+await downloadFfiForPlatform().then(() => {
+  if (Deno.build.os !== "windows") {
+    helloFfi();
+  }
+});
