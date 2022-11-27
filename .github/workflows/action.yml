@@ -103,6 +103,8 @@ jobs:
           install-modules-with: cpanm
           # distribution: strawberry
       - run: |
+          cpanm Capture::Tiny
+          cpanm ExtUtils::ParseXS
           cpanm FFI::Platypus
       - run: make get_pact_ffi
       - run: make get_pact_plugins
