@@ -92,6 +92,11 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
       - if: runner.os == 'Darwin'
         run: brew install protobuf
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
       - uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: '5.36'
@@ -142,6 +147,11 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
       - if: runner.os == 'Darwin'
         run: brew install protobuf
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10' 
@@ -168,6 +178,11 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
       - if: runner.os == 'Darwin'
         run: brew install protobuf
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
@@ -195,6 +210,11 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
       - if: runner.os == 'Darwin'
         run: brew install protobuf
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
@@ -219,6 +239,16 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
       - if: runner.os == 'Darwin'
         run: brew install protobuf
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
       - name: Setup Bun Runtime
         uses: antongolub/action-setup-bun@v1
       - run: make get_pact_ffi
