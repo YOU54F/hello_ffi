@@ -1,5 +1,6 @@
 import { DenoPact } from "./deno-pact.ts";
 import { getShapeMessage } from "./gRPC/area_calculator/areaCalculatorClient.ts";
+import * as path from "https://deno.land/std/path/mod.ts";
 
 const main = async () => {
   // Setup
@@ -7,11 +8,11 @@ const main = async () => {
   DenoPact.setupLoggers(3);
 
   // Arrange
-  console.log('protopath')
-  console.log(Deno.cwd())
-  console.log(`${Deno.cwd()}/proto/area_calculator.proto`)
+  console.log('area calc proto path')
+  console.log(path.join(Deno.cwd(),'proto','area_calculator.proto'))
+  const protoPath = path.join(Deno.cwd(),'proto','area_calculator.proto')
   const pact_contents = {
-    "pact:proto": `${Deno.cwd()}/proto/area_calculator.proto`,
+    "pact:proto": protoPath,
     "pact:proto-service": "Calculator/calculateOne",
     "pact:content-type": "application/protobuf",
     request: {
