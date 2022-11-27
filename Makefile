@@ -27,7 +27,7 @@ perl_hello_pact_mock_server:
 perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
 php_install_deps:
-	cd php && composer install
+	cd php && composer update && composer install
 php_run_hello_work:
 	cd php && composer hello_ffi
 php: php_install_deps php_run_hello_work

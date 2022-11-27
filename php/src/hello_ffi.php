@@ -2,9 +2,9 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$ext = php_uname('s') == 'Darwin' ? '.dylib' : (php_uname('s') == 'Windows' ? '.dll' : '.so');
+$library = php_uname('s') == 'Darwin' ? 'libpact_ffi.dylib' : (php_uname('s') == 'Windows' ? 'pact_ffi.dll' : 'libpact_ffi.so');
 $code = file_get_contents(__DIR__ . '/../../pact.h');
-$ffi = FFI::cdef($code, __DIR__ . '/../../libpact_ffi' . $ext);
+$ffi = FFI::cdef($code, __DIR__ . '/../../' . $library);
 
 // Setup Loggers
 $ffi->pactffi_logger_init();
