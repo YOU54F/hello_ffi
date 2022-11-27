@@ -1,6 +1,5 @@
 import { ensureFile } from "https://deno.land/std/fs/ensure_file.ts";
 import { gunzipFile } from "https://deno.land/x/compress@v0.4.4/gzip/mod.ts";
-import { existsSync } from "https://deno.land/std/fs/mod.ts";
 
 async function downloadFile(src: string, dest: string) {
   if (!(src.startsWith("http://") || src.startsWith("https://"))) {
@@ -67,7 +66,7 @@ export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
       : Deno.build.os === "windows"
       ? "pact_ffi.dll"
       : "libpact_ffi.so";
-  const exists = checkIfFfiExists(libraryFilename);
+  const exists = await checkIfFfiExists(libraryFilename);
   if (!exists.pactFfiLib) {
     await downloadFile(locs.ffiLibDownloadLocation, "libpact_ffi.gz");
     await gunzipFile("./libpact_ffi.gz", `./${libraryFilename}`);
@@ -82,16 +81,30 @@ export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
   } else{
     console.log('pact header files exist')
   }
-  await helloFfi()
+  helloFfi()
 };
 
-const checkIfFfiExists = (libraryFilename:string) => {
-  const pactFfiLib = existsSync(`./${libraryFilename}`);
-  const pactFfiHeaders = existsSync(`./pact.h`);
+const checkIfFfiExists = async (libraryFilename:string) => {
+  let pactFfiLib;
+  let pactFfiHeaders;
+  try {
+     pactFfiLib=await Deno.stat(`./${libraryFilename}`);
+  } catch(e) {
+    if(e instanceof Deno.errors.NotFound)
+      console.error('file does not exists');
+  }
+  
+  try {
+     pactFfiLib=await Deno.stat('./pact.h');
+  } catch(e) {
+    if(e instanceof Deno.errors.NotFound)
+      console.error('file does not exists');
+  }
+  
   return { pactFfiLib, pactFfiHeaders };
 };
 
-export const helloFfi = async () => {
+export const helloFfi = () => {
     const textEncoder = new TextEncoder();
   
     const encode = (text: string) => {
@@ -140,4 +153,4 @@ export const helloFfi = async () => {
 };
 
 
-downloadFfiForPlatform()
+await downloadFfiForPlatform()

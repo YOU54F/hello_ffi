@@ -5,6 +5,6 @@
         "ext-json": "*"
     },
     "scripts": {
-        "hello_ffi": "MATCHING=1 php src/hello_ffi.php"
+        "hello_ffi": "php src/hello_ffi.php"
     }
 }
