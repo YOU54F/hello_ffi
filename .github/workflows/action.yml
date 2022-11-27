@@ -243,7 +243,10 @@ jobs:
       - uses: actions/checkout@v3
       - if: runner.os == 'macOS'
         run: brew install protobuf
-      - run: curl -fsSL https://bun.sh/install | bash
+      - run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "BUN_INSTALL="$HOME/.bun" >> $GITHUB_ENV
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: make bun
