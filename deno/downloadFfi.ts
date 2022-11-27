@@ -115,14 +115,14 @@ export const helloFfi = () => {
     const decode = (result:any) => {
       return new Deno.UnsafePointerView(result).getCString();
     };
-    const ext =
-      Deno.build.os === "darwin"
-        ? ".dylib"
-        : Deno.build.os === "windows"
-        ? ".dll"
-        : ".so";
+    const libraryFilename =
+    Deno.build.os === "darwin"
+      ? "libpact_ffi.dylib"
+      : Deno.build.os === "windows"
+      ? "pact_ffi.dll"
+      : "libpact_ffi.so";
   
-    const libName = `./libpact_ffi${ext}`;
+    const libName = `./${libraryFilename}`;
     const dylib = Deno.dlopen(libName, {
       pactffi_version: { parameters: [], result: "pointer" },
       pactffi_logger_init: { parameters: [], result: "void" },
