@@ -99,7 +99,7 @@ jobs:
           args: install protoc
       - uses: shogo82148/actions-setup-perl@v1
         with:
-          perl-version: "5.36"
+          perl-version: "5.32"
           install-modules-with: cpanm
           distribution: strawberry
       - if: runner.os == 'Windows'
