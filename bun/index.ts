@@ -272,7 +272,7 @@ const PactTestGrpc = () => {
 console.log("Hello from Pact Bun FFI - Version", pactffi_version());
 
 pactffi_logger_init();
-pactffi_logger_attach_sink(s2b("stdout"), 5);
+pactffi_logger_attach_sink(s2b("stdout"), 3);
 pactffi_logger_apply();
 pactffi_log_message(
   s2b("pact-bun-ffi"),

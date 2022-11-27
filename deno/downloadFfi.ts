@@ -77,12 +77,11 @@ export const downloadFfiForPlatform = async (ffiVersion = "v0.3.14") => {
     console.log('pact ffi library exists')
   }
   if (!exists.pactFfiHeaders) {
-    exists.pactFfiHeaders
-      ? console.log("ffi header file exists")
-      : await downloadFile(locs.ffiHeaderDownloadLocation, "pact.h");
+    await downloadFile(locs.ffiHeaderDownloadLocation, "pact.h");
   } else{
     console.log('pact header files exist')
   }
+  return
 };
 
 const checkIfFfiExists = async (libraryFilename:string) => {
@@ -121,6 +120,8 @@ function helloFfi() {
       ? "pact_ffi.dll"
       : "libpact_ffi.so";
 
+      console.log(libName)
+
   const dylib = Deno.dlopen(libName, {
     pactffi_version: { parameters: [], result: "pointer" },
     pactffi_logger_init: { parameters: [], result: "void" },
@@ -150,5 +151,6 @@ function helloFfi() {
 }
 
 
-await downloadFfiForPlatform()
-helloFfi()
+await downloadFfiForPlatform().then(()=>{
+  helloFfi()
+})
