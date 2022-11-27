@@ -100,10 +100,8 @@ jobs:
       - uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: '5.36'
+          distribution: strawberry
       - run: |
-          cpanm ExtUtils::MakeMaker
-          cpanm Pod::Man
-          cpanm ExtUtils::ParseXS
           cpanm FFI::Platypus
       - run: make get_pact_ffi
       - run: make get_pact_plugins
