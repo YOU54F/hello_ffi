@@ -43,15 +43,20 @@ $ffi->type( 'opaque' => 'message_pact' );
 $ffi->attach('pactffi_new_sync_message_interaction', ['pact','string'] => 'message_pact');
 my $message_pact = pactffi_new_sync_message_interaction($pact, 'A gRPC calculateOne request');
 pactffi_log_message('pact-perl-ffi', 'INFO', "pactffi_new_sync_message_interaction: $message_pact");
-$ffi->attach('pactffi_with_specification', ['string','int'] => 'int');
+$ffi->attach('pactffi_with_specification', ['pact','int'] => 'int');
 pactffi_with_specification($pact, 5);
 
 # Start mock server
+pactffi_log_message('pact-perl-ffi', 'INFO', "using plugin");
 $ffi->attach('pactffi_using_plugin', ['pact','string'] => 'int');
 pactffi_using_plugin($pact, 'protobuf', '0.1.17');
+pactffi_log_message('pact-perl-ffi', 'INFO', "got plugin");
+pactffi_log_message('pact-perl-ffi', 'INFO', "setting interaction contents");
 $ffi->attach('pactffi_interaction_contents', ['message_pact','int','string','string'] => 'int');
 pactffi_interaction_contents($message_pact, 0, 'application/grpc', $contents);
+pactffi_log_message('pact-perl-ffi', 'INFO', "set interaction contents");
 
+pactffi_log_message('pact-perl-ffi', 'INFO', "setting pactffi_create_mock_server_for_transport");
 $ffi->attach('pactffi_create_mock_server_for_transport', ['pact','string','int','string','string'] => 'int');
 my $mock_server_port = pactffi_create_mock_server_for_transport($pact,'0.0.0.0',0,'grpc',0);
 pactffi_log_message('pact-perl-ffi', 'INFO', "pactffi_create_mock_server_for_transport: $mock_server_port");
