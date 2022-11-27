@@ -11,6 +11,7 @@ const main = async () => {
   console.log('area calc proto path')
   console.log(path.join(Deno.cwd(),'proto','area_calculator.proto'))
   const protoPath = path.join(Deno.cwd(),'proto','area_calculator.proto')
+
   const pact_contents = {
     "pact:proto": protoPath,
     "pact:proto-service": "Calculator/calculateOne",

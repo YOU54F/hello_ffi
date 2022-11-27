@@ -4,9 +4,15 @@ import * as path from "https://deno.land/std/path/mod.ts";
 
 console.log('area calc proto path')
 console.log(path.join(Deno.cwd(),'proto','area_calculator.proto'))
-const protoPath = new URL(path.join(Deno.cwd(),'proto','area_calculator.proto'), import.meta.url);
-const protoFile = await Deno.readTextFile(protoPath);
+let protoFile:string;
 
+ const protoPath = new URL(path.join(Deno.cwd(),'proto','area_calculator.proto'), import.meta.url);
+ if (Deno.build.os === "windows") {
+   protoFile = await Deno.readTextFile('file:///D:/a/hello_ffi/proto/area_calculator.proto');
+ } else {
+  protoFile = await Deno.readTextFile(protoPath);
+
+ }
 
 export async function getShapeMessage(port:number) {
   const client = getClient<Calculator>({

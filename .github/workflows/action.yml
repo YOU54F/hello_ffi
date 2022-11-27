@@ -248,5 +248,9 @@ jobs:
           echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
       - run: make get_pact_ffi
+      - run: mv libpact_ffi.dylib bun
+        if: runner.os == 'macOS'
+      - run: mv libpact_ffi.so bun
+        if: runner.os != 'macOS'
       - run: make get_pact_plugins
       - run: make bun
