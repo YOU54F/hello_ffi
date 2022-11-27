@@ -1,8 +1,9 @@
 <?php
-
+echo php_uname();
+echo PHP_OS;
 require __DIR__ . '/../vendor/autoload.php';
 
-$library = php_uname('s') == 'Darwin' ? 'libpact_ffi.dylib' : (php_uname('s') == 'Windows' ? 'pact_ffi.dll' : 'libpact_ffi.so');
+$library = php_uname('s') == 'Darwin' ? 'libpact_ffi.dylib' : (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? 'pact_ffi.dll' : 'libpact_ffi.so');
 $code = file_get_contents(__DIR__ . '/../../pact.h');
 $ffi = FFI::cdef($code, __DIR__ . '/../../' . $library);
 
