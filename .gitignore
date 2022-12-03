@@ -1,3 +1,5 @@
 *.dylib
 *.h
 .DS_Store
+target
+hello_ffi

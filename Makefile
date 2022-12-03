@@ -1,6 +1,10 @@
 test_ci:
 	act --container-architecture linux/amd64 --job ruby
 
+# usage: make test JOB=lua
+test: 
+	act --container-architecture linux/amd64 --job $(JOB)
+
 get_pact_ffi:
 	./script/download-libs.sh
 
@@ -67,7 +71,7 @@ julia_hello_ffi:
 
 julia: julia_hello_ffi
 
-.PHONY: haskell php ruby deno
+.PHONY: bun deno features haskell java julia perl php python raku ruby zig c dart scala lua
 
 clean_haskell:
 	rm -rf haskell/hello_ffi_haskell
@@ -118,10 +122,60 @@ bun_hello_ffi:
 
 bun: bun_hello_ffi
 
+zig_hello:
+	zig run zig/hello.zig
 
+zig_hello_ffi:
+	zig run zig/hello_ffi.zig -L./ -lpact_ffi 
+
+zig_run_pact_mock_server:
+	zig run zig/hello_pact_mock_server.zig -L./ -lpact_ffi --library curl --library c $(pkg-config --cflags libcurl) 
+
+zig: zig_hello zig_hello_ffi zig_run_pact_mock_server
+
+dart_gen_bindings:
+	dart pub add --dev ffigen && dart pub add ffi && dart run ffigen
+
+dart_hello_ffi:
+	dart dart/hello_ffi.dart
+
+dart: dart_hello_ffi
+
+c_hello_ffi:
+	gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi && ./c/hello_ffi
+
+c: c_hello_ffi
+
+swift_hello_ffi:
+	swiftc swift/hello_ffi.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_ffi && ./swift/hello_ffi
+
+swift_hello_grpc:
+	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && ./swift/hello_grpc
+
+lua:
+	luajit lua/ffi.lua
+
+scala_hello_world:
+	cd scala && scala$(BAT) hello.scala
+
+scala_test_ffi:
+	cd scala && scala$(BAT) ffi.scala
+# scala_hello_world:
+# 	scala scala/hello.scala
+
+# scala_test_ffi:
+# 	scala scala/ffi.scala
+
+scala: scala_hello_world
+
+# Swift requires pact_ffi.dll.lib
+swift: swift_hello_ffi swift_hello_grpc
 	
 ifeq ($(OS),Windows_NT)
     pactffi_filename = 'pact_ffi.dll'
+	DLL=.dll
+	EXE=.exe
+	BAT=.bat 
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)

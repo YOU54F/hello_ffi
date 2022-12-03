@@ -253,3 +253,179 @@ jobs:
         if: runner.os != 'macOS'
       - run: make get_pact_plugins
       - run: make bun
+  zig:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [macos-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+      - uses: goto-bus-stop/setup-zig@v2
+      - run: make get_pact_ffi
+      - run: make zig
+  dart:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+      - uses: dart-lang/setup-dart@v1.3
+      - run: make get_pact_ffi
+      - run: dart pub get
+        working-directory: dart
+      - run: make dart
+  c:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+      - run: make get_pact_ffi
+      - run: make c
+  swift:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+      - uses: compnerd/gha-setup-swift@main
+        if: runner.os == 'Windows'
+        with:
+          branch: swift-5.7.1-release
+          tag: 5.7.1-RELEASE
+      - run: make get_pact_ffi
+      - run: make get_pact_plugins
+      - run: make swift
+  lua:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+      - uses: MunifTanjim/luver-action@v1
+        if: runner.os == 'Linux'
+        with:
+          lua_versions: 5.1.5 5.4.3
+          luajit_versions: 5.1.5:2.1.0-beta3
+          luarocks_versions: 5.1.5:3.7.0 5.4.3:3.8.0
+      - run: brew install lua luajit luarocks
+        if: runner.os == 'macOS'
+      - uses: leafo/gh-actions-lua@v9.1.0
+        if: runner.os == 'Windows'
+        with:
+          luaVersion: "luajit-2.1.0-beta3"
+        continue-on-error: true
+      - uses: crazy-max/ghaction-chocolatey@v2
+        if: runner.os == 'Windows'
+        with:
+          args: install lua luarocks
+      - run: |
+          ls "C:\Program Files (x86)\Lua\5.1"
+          "C:\Program Files (x86)\Lua\5.1\lua.exe" -v
+          echo "C:\Program Files (x86)\Lua\5.1" >> $GITHUB_PATH
+          "D:/a/hello_ffi/hello_ffi/.install/LuaJIT-2.1.0-beta3/src/luajit.exe" -v
+          echo "D:/a/hello_ffi/hello_ffi/.install/LuaJIT-2.1.0-beta3/src" >> $GITHUB_PATH
+        if: runner.os == 'Windows'
+      - run: luver use 5.1.5
+        if: runner.os == 'Linux'
+      - run: |
+          lua -v
+          luajit -v
+          luarocks --version
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+      - run: |
+          lua.exe -v
+          luajit.exe -v
+          luarocks.exe --version
+        if: runner.os == 'Windows'
+      - run: make get_pact_ffi
+      - run: make lua
+  scala:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+      - uses: japgolly/setup-everything-scala@v3.1
+        if: runner.os == 'Linux'
+      - run: brew install scala
+        if: runner.os == 'macOS'
+      - run: sudo apt install -y scala
+        if: runner.os == 'Linux'
+      - uses: crazy-max/ghaction-chocolatey@v2
+        if: runner.os == 'Windows'
+        with:
+          args: install scala.install
+      - run: |
+          ls "C:\Program Files (x86)\scala\bin"
+          # "C:\Program Files (x86)\scala\bin\scala.bat" -h
+          echo "C:\Program Files (x86)\scala\bin" >> $GITHUB_PATH
+        if: runner.os == 'Windows'
+      - run: make get_pact_ffi
+      - run: make scala
