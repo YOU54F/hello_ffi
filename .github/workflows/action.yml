@@ -414,16 +414,17 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
       - uses: japgolly/setup-everything-scala@v3.1
         if: runner.os == 'Linux'
-      - run: brew install scala
+      - run: brew install scala Virtuslab/scala-cli/scala-cli
         if: runner.os == 'macOS'
-      - run: sudo apt install -y scala
+      - run: sudo apt install -y scala scala-cli
         if: runner.os == 'Linux'
       - uses: crazy-max/ghaction-chocolatey@v2
         if: runner.os == 'Windows'
         with:
-          args: install scala.install
+          args: install scala.install scala-cli
       - run: |
           ls "C:\Program Files (x86)\scala\bin"
+          ls "C:\Program Files (x86)\scala-cli\bin"
           # "C:\Program Files (x86)\scala\bin\scala.bat" -h
           echo "C:\Program Files (x86)\scala\bin" >> $GITHUB_PATH
         if: runner.os == 'Windows'

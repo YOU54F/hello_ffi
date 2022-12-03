@@ -159,14 +159,14 @@ scala_hello_world:
 	cd scala && scala$(BAT) hello.scala
 
 scala_test_ffi:
-	cd scala && scala$(BAT) ffi.scala
+	cd scala && scala-cli$(BAT)  -j 19 -J --enable-native-access=ALL-UNNAMED ffi.scala
 # scala_hello_world:
 # 	scala scala/hello.scala
 
 # scala_test_ffi:
 # 	scala scala/ffi.scala
 
-scala: scala_hello_world
+scala: scala_hello_world scala_test_ffi
 
 # Swift requires pact_ffi.dll.lib
 swift: swift_hello_ffi swift_hello_grpc
