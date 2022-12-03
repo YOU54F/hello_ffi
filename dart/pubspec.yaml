@@ -1,0 +1,20 @@
+name: PactFfiBindingsGen
+description: Generate PactFfiBindings.
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.18.5 <3.0.0'
+ffigen:
+  name: PactFfiBindings
+  description: Bindings for Pact FFI.
+  language: objc
+  output: 'pact_ffi_bindings.dart'
+  headers:
+    entry-points:
+      - '/Users/saf/dev/R_examples/pact.h'
+
+dev_dependencies:
+  ffigen: ^7.2.2
+dependencies:
+  ffi: ^2.0.1
