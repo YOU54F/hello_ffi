@@ -447,5 +447,8 @@ jobs:
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
       - uses: jiro4989/setup-nim-action@v1
+        if: runner.os != 'macOS'
+      - uses: brew install nim
+        if: runner.os == 'macOS'
       - run: make get_pact_ffi
       - run: make nim
