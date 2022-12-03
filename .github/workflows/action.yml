@@ -5,430 +5,430 @@ on:
   workflow_dispatch:
 
 jobs:
-  ruby:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "2.7.6"
-      - run: make get_pact_ffi
-      - run: ls
-      - run: make ruby
-  julia:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: julia-actions/setup-julia@v1
-        with:
-          version: "v1.8.3"
-          arch: x64
-      - run: make get_pact_ffi
-      - run: ls
-      - run: make julia
-  raku:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: Raku/setup-raku@v1
-      - run: make get_pact_ffi
-      - run: ls
-      - run: make raku
-  perl:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
-      - if: runner.os == 'Windows'
-        name: Choco install protoc
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: install protoc
-      - uses: shogo82148/actions-setup-perl@v1
-        with:
-          perl-version: "5.32"
-          install-modules-with: cpanm
-          distribution: strawberry
-      - if: runner.os == 'Windows'
-        run: |
-          rm -rf /usr/bin/perl.exe
-      - run: cpanm FFI::Platypus
-      - run: make get_pact_ffi
-      - run: make get_pact_plugins
-      - run: ls
-      - run: make perl
-  haskell:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: haskell/actions/setup@v2
-      - run: make get_pact_ffi
-      - run: ls
-      - run: make haskell
-  python:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
-      - if: runner.os == 'Windows'
-        name: Choco install protoc
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: install protoc
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - run: make get_pact_ffi
-      - run: make get_pact_plugins
-      - run: ls
-      - run: make python
-  php:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
-      - if: runner.os == 'Windows'
-        name: Choco install protoc
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: install protoc
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.1
-          extensions: ffi
-      - run: make get_pact_ffi
-      - run: make get_pact_plugins
-      - run: ls
-      - run: make php
-  deno:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
-      - if: runner.os == 'Windows'
-        name: Choco install protoc
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: install protoc
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      - run: make get_pact_plugins
-      - run: make deno
-  bun:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # No bun on windows
-        # os: [ubuntu-latest, windows-latest, macos-latest]
-        os: [ubuntu-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
-      - run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
-      - run: make get_pact_ffi
-      - run: mv libpact_ffi.dylib bun
-        if: runner.os == 'macOS'
-      - run: mv libpact_ffi.so bun
-        if: runner.os != 'macOS'
-      - run: make get_pact_plugins
-      - run: make bun
-  zig:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [macos-latest]
-        # os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: goto-bus-stop/setup-zig@v2
-      - run: make get_pact_ffi
-      - run: make zig
-  dart:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: dart-lang/setup-dart@v1.3
-      - run: make get_pact_ffi
-      - run: dart pub get
-        working-directory: dart
-      - run: make dart
-  c:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - run: make get_pact_ffi
-      - run: make c
-  swift:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: compnerd/gha-setup-swift@main
-        if: runner.os == 'Windows'
-        with:
-          branch: swift-5.7.1-release
-          tag: 5.7.1-RELEASE
-      - run: make get_pact_ffi
-      - run: make get_pact_plugins
-      - run: make swift
-  lua:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: MunifTanjim/luver-action@v1
-        if: runner.os == 'Linux'
-        with:
-          lua_versions: 5.1.5 5.4.3
-          luajit_versions: 5.1.5:2.1.0-beta3
-          luarocks_versions: 5.1.5:3.7.0 5.4.3:3.8.0
-      - run: brew install lua luajit luarocks
-        if: runner.os == 'macOS'
-      - uses: leafo/gh-actions-lua@v9.1.0
-        if: runner.os == 'Windows'
-        with:
-          luaVersion: "luajit-2.1.0-beta3"
-        continue-on-error: true
-      - uses: crazy-max/ghaction-chocolatey@v2
-        if: runner.os == 'Windows'
-        with:
-          args: install lua luarocks
-      - run: |
-          ls "C:\Program Files (x86)\Lua\5.1"
-          "C:\Program Files (x86)\Lua\5.1\lua.exe" -v
-          echo "C:\Program Files (x86)\Lua\5.1" >> $GITHUB_PATH
-          "D:/a/hello_ffi/hello_ffi/.install/LuaJIT-2.1.0-beta3/src/luajit.exe" -v
-          echo "D:/a/hello_ffi/hello_ffi/.install/LuaJIT-2.1.0-beta3/src" >> $GITHUB_PATH
-        if: runner.os == 'Windows'
-      - run: luver use 5.1.5
-        if: runner.os == 'Linux'
-      - run: |
-          lua -v
-          luajit -v
-          luarocks --version
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-      - run: |
-          lua.exe -v
-          luajit.exe -v
-          luarocks.exe --version
-        if: runner.os == 'Windows'
-      - run: make get_pact_ffi
-      - run: make lua
-  scala:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: japgolly/setup-everything-scala@v3.1
-        if: runner.os == 'Linux'
-      - run: brew install scala
-        if: runner.os == 'macOS'
-      - run: sudo apt install -y scala
-        if: runner.os == 'Linux'
-      - uses: crazy-max/ghaction-chocolatey@v2
-        if: runner.os == 'Windows'
-        with:
-          args: install scala.install
-      - run: |
-          ls "C:\Program Files (x86)\scala\bin"
-          # "C:\Program Files (x86)\scala\bin\scala.bat" -h
-          echo "C:\Program Files (x86)\scala\bin" >> $GITHUB_PATH
-        if: runner.os == 'Windows'
-      - run: make get_pact_ffi
-      - run: make scala
+  # ruby:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: "2.7.6"
+  #     - run: make get_pact_ffi
+  #     - run: ls
+  #     - run: make ruby
+  # julia:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: julia-actions/setup-julia@v1
+  #       with:
+  #         version: "v1.8.3"
+  #         arch: x64
+  #     - run: make get_pact_ffi
+  #     - run: ls
+  #     - run: make julia
+  # raku:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: Raku/setup-raku@v1
+  #     - run: make get_pact_ffi
+  #     - run: ls
+  #     - run: make raku
+  # perl:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - if: runner.os == 'macOS'
+  #       run: brew install protobuf
+  #     - if: runner.os == 'Windows'
+  #       name: Choco install protoc
+  #       uses: crazy-max/ghaction-chocolatey@v2
+  #       with:
+  #         args: install protoc
+  #     - uses: shogo82148/actions-setup-perl@v1
+  #       with:
+  #         perl-version: "5.32"
+  #         install-modules-with: cpanm
+  #         distribution: strawberry
+  #     - if: runner.os == 'Windows'
+  #       run: |
+  #         rm -rf /usr/bin/perl.exe
+  #     - run: cpanm FFI::Platypus
+  #     - run: make get_pact_ffi
+  #     - run: make get_pact_plugins
+  #     - run: ls
+  #     - run: make perl
+  # haskell:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: haskell/actions/setup@v2
+  #     - run: make get_pact_ffi
+  #     - run: ls
+  #     - run: make haskell
+  # python:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - if: runner.os == 'macOS'
+  #       run: brew install protobuf
+  #     - if: runner.os == 'Windows'
+  #       name: Choco install protoc
+  #       uses: crazy-max/ghaction-chocolatey@v2
+  #       with:
+  #         args: install protoc
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: "3.10"
+  #     - run: make get_pact_ffi
+  #     - run: make get_pact_plugins
+  #     - run: ls
+  #     - run: make python
+  # php:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - if: runner.os == 'macOS'
+  #       run: brew install protobuf
+  #     - if: runner.os == 'Windows'
+  #       name: Choco install protoc
+  #       uses: crazy-max/ghaction-chocolatey@v2
+  #       with:
+  #         args: install protoc
+  #     - uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: 8.1
+  #         extensions: ffi
+  #     - run: make get_pact_ffi
+  #     - run: make get_pact_plugins
+  #     - run: ls
+  #     - run: make php
+  # deno:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - if: runner.os == 'macOS'
+  #       run: brew install protobuf
+  #     - if: runner.os == 'Windows'
+  #       name: Choco install protoc
+  #       uses: crazy-max/ghaction-chocolatey@v2
+  #       with:
+  #         args: install protoc
+  #     - uses: denoland/setup-deno@v1
+  #       with:
+  #         deno-version: v1.x
+  #     - run: make get_pact_plugins
+  #     - run: make deno
+  # bun:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       # No bun on windows
+  #       # os: [ubuntu-latest, windows-latest, macos-latest]
+  #       os: [ubuntu-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'macOS'
+  #       run: brew install protobuf
+  #     - run: |
+  #         curl -fsSL https://bun.sh/install | bash
+  #         echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
+  #         echo "$HOME/.bun/bin" >> $GITHUB_PATH
+  #     - run: make get_pact_ffi
+  #     - run: mv libpact_ffi.dylib bun
+  #       if: runner.os == 'macOS'
+  #     - run: mv libpact_ffi.so bun
+  #       if: runner.os != 'macOS'
+  #     - run: make get_pact_plugins
+  #     - run: make bun
+  # zig:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [macos-latest]
+  #       # os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: goto-bus-stop/setup-zig@v2
+  #     - run: make get_pact_ffi
+  #     - run: make zig
+  # dart:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: dart-lang/setup-dart@v1.3
+  #     - run: make get_pact_ffi
+  #     - run: dart pub get
+  #       working-directory: dart
+  #     - run: make dart
+  # c:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - run: make get_pact_ffi
+  #     - run: make c
+  # swift:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: compnerd/gha-setup-swift@main
+  #       if: runner.os == 'Windows'
+  #       with:
+  #         branch: swift-5.7.1-release
+  #         tag: 5.7.1-RELEASE
+  #     - run: make get_pact_ffi
+  #     - run: make get_pact_plugins
+  #     - run: make swift
+  # lua:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: MunifTanjim/luver-action@v1
+  #       if: runner.os == 'Linux'
+  #       with:
+  #         lua_versions: 5.1.5 5.4.3
+  #         luajit_versions: 5.1.5:2.1.0-beta3
+  #         luarocks_versions: 5.1.5:3.7.0 5.4.3:3.8.0
+  #     - run: brew install lua luajit luarocks
+  #       if: runner.os == 'macOS'
+  #     - uses: leafo/gh-actions-lua@v9.1.0
+  #       if: runner.os == 'Windows'
+  #       with:
+  #         luaVersion: "luajit-2.1.0-beta3"
+  #       continue-on-error: true
+  #     - uses: crazy-max/ghaction-chocolatey@v2
+  #       if: runner.os == 'Windows'
+  #       with:
+  #         args: install lua luarocks
+  #     - run: |
+  #         ls "C:\Program Files (x86)\Lua\5.1"
+  #         "C:\Program Files (x86)\Lua\5.1\lua.exe" -v
+  #         echo "C:\Program Files (x86)\Lua\5.1" >> $GITHUB_PATH
+  #         "D:/a/hello_ffi/hello_ffi/.install/LuaJIT-2.1.0-beta3/src/luajit.exe" -v
+  #         echo "D:/a/hello_ffi/hello_ffi/.install/LuaJIT-2.1.0-beta3/src" >> $GITHUB_PATH
+  #       if: runner.os == 'Windows'
+  #     - run: luver use 5.1.5
+  #       if: runner.os == 'Linux'
+  #     - run: |
+  #         lua -v
+  #         luajit -v
+  #         luarocks --version
+  #       if: runner.os == 'Linux' || runner.os == 'macOS'
+  #     - run: |
+  #         lua.exe -v
+  #         luajit.exe -v
+  #         luarocks.exe --version
+  #       if: runner.os == 'Windows'
+  #     - run: make get_pact_ffi
+  #     - run: make lua
+  # scala:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: japgolly/setup-everything-scala@v3.1
+  #       if: runner.os == 'Linux'
+  #     - run: brew install scala
+  #       if: runner.os == 'macOS'
+  #     - run: sudo apt install -y scala
+  #       if: runner.os == 'Linux'
+  #     - uses: crazy-max/ghaction-chocolatey@v2
+  #       if: runner.os == 'Windows'
+  #       with:
+  #         args: install scala.install
+  #     - run: |
+  #         ls "C:\Program Files (x86)\scala\bin"
+  #         # "C:\Program Files (x86)\scala\bin\scala.bat" -h
+  #         echo "C:\Program Files (x86)\scala\bin" >> $GITHUB_PATH
+  #       if: runner.os == 'Windows'
+  #     - run: make get_pact_ffi
+  #     - run: make scala
   nim:
     timeout-minutes: 10
     # runs-on: ubuntu-latest
@@ -447,5 +447,8 @@ jobs:
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
       - uses: jiro4989/setup-nim-action@v1
+        if: runner.os != 'macOS'
+      - uses: brew install nim
+        if: runner.os == 'macOS'
       - run: make get_pact_ffi
       - run: make nim
