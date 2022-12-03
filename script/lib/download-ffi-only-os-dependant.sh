@@ -71,7 +71,7 @@ case ${detected_os} in
 "Windows"* | "MINGW64"*)
     echo "downloading of windows x86_64 FFI libs"
     download_ffi "windows-x86_64.dll.gz" "" "pact_ffi.dll.gz"
-    # download_ffi "windows-x86_64.dll.lib.gz" "" "pact_ffi.dll.lib.gz"
+    download_ffi "windows-x86_64.dll.lib.gz" "" "pact_ffi.dll.lib.gz"
     os='win32'
     ;;
   *)
