@@ -172,10 +172,10 @@ scala: scala_hello_world
 swift: swift_hello_ffi swift_hello_grpc
 
 nim_hello_ffi:
-	nim$(BAT) c -r nim/hello_ffi.nim
+	nim$(EXE) c -r nim/hello_ffi.nim
 
 nim_hello_world:
-	nim$(BAT) c -r nim/hello.nim
+	nim$(EXE) c -r nim/hello.nim
 
 nim: nim_hello_world nim_hello_ffi
 	
