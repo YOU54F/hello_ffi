@@ -170,6 +170,13 @@ scala: scala_hello_world
 
 # Swift requires pact_ffi.dll.lib
 swift: swift_hello_ffi swift_hello_grpc
+
+nim_hello_ffi:
+	nim c -r nim/hello_ffi.nim
+nim_hello_world:
+	nim c -r nim/hello.nim
+
+nim: nim_hello_world nim_hello_ffi
 	
 ifeq ($(OS),Windows_NT)
     pactffi_filename = 'pact_ffi.dll'
