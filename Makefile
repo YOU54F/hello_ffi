@@ -178,6 +178,11 @@ nim_hello_world:
 	nim$(EXE) c -r nim/hello.nim
 
 nim: nim_hello_world nim_hello_ffi
+
+d_hello_world:
+	dmd d/hello.d -L${PWD} && ./hello
+
+d: d_hello_world
 	
 ifeq ($(OS),Windows_NT)
     pactffi_filename = 'pact_ffi.dll'

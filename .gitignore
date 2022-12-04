@@ -3,3 +3,5 @@
 .DS_Store
 target
 hello_ffi
+hello
+hello.o
