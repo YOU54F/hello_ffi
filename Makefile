@@ -152,8 +152,13 @@ swift_hello_ffi:
 swift_hello_grpc:
 	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && ./swift/hello_grpc
 
-lua:
-	luajit lua/ffi.lua
+lua_hello_grpc:
+	cd lua && luajit hello_grpc.lua
+
+lua_hello_ffi:
+	cd lua && luajit hello_ffi.lua
+
+lua: lua_hello_ffi lua_hello_grpc
 
 scala_hello_world:
 	cd scala && scala$(BAT) hello.scala

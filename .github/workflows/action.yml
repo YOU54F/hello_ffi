@@ -393,7 +393,15 @@ jobs:
           luajit.exe -v
           luarocks.exe --version
         if: runner.os == 'Windows'
+      - if: runner.os == 'macOS'
+        run: brew install protobuf
+      - if: runner.os == 'Windows'
+        name: Choco install protoc
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install protoc
       - run: make get_pact_ffi
+      - run: make get_pact_plugins
       - run: make lua
   scala:
     timeout-minutes: 10
