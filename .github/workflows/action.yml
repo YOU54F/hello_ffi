@@ -471,6 +471,7 @@ jobs:
       run:
         shell: bash
     steps:
+      - uses: actions/checkout@v3
       # - uses: teaxyz/setup@v0
       #   with:
       #     target: build

@@ -39,3 +39,12 @@ Things that could be useful
 2. Create a cucumber test suite that can be used to execute each test in every language. Example feature file in `./features`
 3. More languages
 4. Create more examples of test suite lifecycles and proper arranging of FFI calls. See https://github.com/pact-foundation/pact-reference/blob/master/rust/pact_ffi/ARCHITECTURE.md
+
+
+# build
+
+```sh
+tea -X deno run -A --unstable deno/downloadFfi.ts
+tea -X deno run -A --unstable deno/hello_ffi.ts
+tea -X perl perl/hello_ffi.pl
+```
