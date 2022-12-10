@@ -19,6 +19,6 @@ echo 'hello from C'
 tea -X gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi && ./c/hello_ffi
 echo perl_hello_ffi:
 tea cpan App::cpanminus
-tea cpanm Capture::Tiny 
-tea cpanm FFI::Platypus
+tea cpan Capture::Tiny 
+tea cpan FFI::Platypus
 tea -X perl perl/hello_ffi.pl
