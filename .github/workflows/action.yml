@@ -472,4 +472,5 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v3
-      - run: sh <(curl tea.xyz) cup
+      - uses: teaxyz/setup@v0
+      - run: tea cup
