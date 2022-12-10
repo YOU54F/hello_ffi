@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# shellcheck disable=SC2028
+
+_="
+---
+args:
+  - sh
+---
+"
+
+pactffi_filename=${HOME}/.pact/ffi/v0.3.15/libpact_ffi.dylib
+echo '\n*** Interpreters ***\n'
+echo ${pactffi_filename}
+echo 'hello from Deno'
+tea -X deno run -A --unstable deno/downloadFfi.ts
+tea -X deno run -A --unstable deno/hello_ffi.ts
+echo 'hello from C'
+tea -X gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi && ./c/hello_ffi
+echo perl_hello_ffi:
+tea cpan App::cpanminus
+tea cpanm Capture::Tiny 
+tea cpanm FFI::Platypus
+tea -X perl perl/hello_ffi.pl
