@@ -34,20 +34,20 @@ tea -X gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi && ./c/hello_ffi
 echo perl_hello_ffi:
 # tea cpan App::cpanminus
 # tea cpanm Capture::Tiny 
-# tea cpanm FFI::Platypus
+tea cpanm FFI::Platypus
 tea -X perl perl/hello_ffi.pl
 
 # echo perl_hello_grpc:
-# tea -X perl perl/hello_grpc.pl
+tea -X perl perl/hello_grpc.pl
 
 # echo perl_hello_pact_mock_server:
-# tea -X perl perl/hello_pact_mock_server.pl
+tea -X perl perl/hello_pact_mock_server.pl
 
 # echo php_run_hello_world:
-# tea -X cd php && composer hello_ffi
+tea -X cd php && composer hello_ffi
 
 # echo python_install_deps:
-# tea -X cd python/cffi && pip install -r requirements.txt
+tea -X cd python/cffi && pip install -r requirements.txt
 
 # echo python_cffi: python_install_deps
 # tea -X python python/cffi/hello_ffi.py

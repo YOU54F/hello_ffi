@@ -25,8 +25,8 @@
       "version": "1.0.0"
     },
     "pactRust": {
-      "mockserver": "0.9.5",
-      "models": "1.0.0"
+      "mockserver": "0.9.6",
+      "models": "1.0.1"
     },
     "pactSpecification": {
       "version": "1.0.0"
