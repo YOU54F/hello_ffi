@@ -491,7 +491,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: Vampire/setup-wsl@v1
-      # - run: apt update && apt install -y curl unzip
+      - run: apt update && apt install -y curl unzip
       # - run: |
       #     curl -fsSL https://bun.sh/install | bash
       #     export BUN_INSTALL="/root/.bun"
@@ -505,5 +505,5 @@ jobs:
           # echo "DENO_INSTALL=$HOME/.deno" >> $GITHUB_ENV
           # echo "$HOME/.deno/bin" >> $GITHUB_PATH
           tea --version
-      - uses: teaxyz/setup@v0
+      # - uses: teaxyz/setup@v0
       - run: tea tea/hello_universe.sh
