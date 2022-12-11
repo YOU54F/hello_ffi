@@ -464,7 +464,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest,macos-latest]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     defaults:
@@ -472,5 +472,40 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v3
+      - uses: teaxyz/setup@v0
+      - run: tea tea/hello_universe.sh
+  tea_win:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [windows-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: wsl-bash {0}
+    # env:
+    #   DENO_INSTALL: /root/.deno
+    #   BUN_INSTALL: /root/.bun
+    #   PATH: /root/.deno/bin:/root/.bun/bin:$PATH
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Vampire/setup-wsl@v1
+      # - run: apt update && apt install -y curl unzip
+      # - run: |
+      #     curl -fsSL https://bun.sh/install | bash
+      #     export BUN_INSTALL="/root/.bun"
+      #     export PATH="/root/.bun/bin:$PATH"
+      #     # echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
+      #     # echo "$HOME/.bun/bin" >> $GITHUB_PATH
+      #     echo $HOME
+      #     bun --version
+      # - run: |
+      #     curl -fsSL https://deno.land/x/install/install.sh | sh
+      #     export DENO_INSTALL="/root/.deno"
+      #     export PATH="/root/.deno/bin:$PATH"
+      #     # echo "DENO_INSTALL=$HOME/.deno" >> $GITHUB_ENV
+      #     # echo "$HOME/.deno/bin" >> $GITHUB_PATH
+      #     deno --version
       - uses: teaxyz/setup@v0
       - run: tea tea/hello_universe.sh
