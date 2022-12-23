@@ -30,13 +30,13 @@ perl_hello_pact_mock_server:
 
 perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
-php_install_deps:
+php_deps:
 	cd php && composer update && composer install
 php_run_hello_work:
 	cd php && composer hello_ffi
-php: php_install_deps php_run_hello_work
+php: php_deps php_run_hello_work
 
-python_install_deps:
+python_deps:
 	cd python/cffi && pip install -r requirements.txt
 
 python_cffi:
@@ -50,7 +50,7 @@ python: python_cffi python_ctypes
 ruby_fiddle:
 	ruby ruby/fiddle/hello_ffi.rb
 
-ruby_ffi_install:
+ruby_deps:
 	cd ruby/ffi && bundle install
 
 ruby_ffi:
@@ -158,10 +158,10 @@ swift_hello_grpc:
 	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && ./swift/hello_grpc
 
 lua_hello_grpc:
-	cd lua && LUA_PATH=$$PWD/pactLua.lua luajit hello_grpc.lua
+	cd lua && luajit hello_grpc.lua
 
 lua_hello_ffi:
-	cd lua && LUA_PATH=$$PWD/pactLua.lua luajit hello_ffi.lua
+	cd lua && luajit hello_ffi.lua
 
 lua: lua_hello_ffi lua_hello_grpc
 

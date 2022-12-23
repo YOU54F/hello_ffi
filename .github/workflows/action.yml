@@ -27,6 +27,7 @@ jobs:
           ruby-version: "2.7.6"
       - run: make get_pact_ffi
       - run: ls
+      - run: make ruby_deps
       - run: make ruby
   julia:
     timeout-minutes: 10
@@ -161,6 +162,7 @@ jobs:
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: ls
+      - run: make python_deps
       - run: make python
   php:
     timeout-minutes: 10
@@ -247,10 +249,6 @@ jobs:
           echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
       - run: make get_pact_ffi
-      - run: mv libpact_ffi.dylib bun
-        if: runner.os == 'macOS'
-      - run: mv libpact_ffi.so bun
-        if: runner.os != 'macOS'
       - run: make get_pact_plugins
       - run: make bun
   zig:
