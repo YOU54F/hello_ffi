@@ -32,7 +32,7 @@ export const helloFfi = () => {
   } as const);
   const version = decode(dylib.symbols.pactffi_version());
 
-  console.log("Hello from Pact Deno FFI - Version", version);
+  // console.log("Hello from Pact Deno FFI - Version", version);
 
   // ## Setup Loggers
 
@@ -42,7 +42,7 @@ export const helloFfi = () => {
   dylib.symbols.pactffi_log_message(
     encode("pact-deno-ffi"),
     encode("INFO"),
-    encode("hello from ffi version")
+    encode(`hello from ffi version: ${version}`)
   );
 };
 

@@ -30,10 +30,10 @@ pactffi_log_message = Fiddle::Function.new(
 )
 
 
-puts pactffi_version.call #=> 0.3.14
+# puts pactffi_version.call #=> 0.3.14
 
 pactffi_logger_init.call
 pactffi_logger_attach_sink.call('stdout', 5)
-pactffi_logger_attach_sink.call('stderr', 5)
+# pactffi_logger_attach_sink.call('stderr', 5)
 pactffi_logger_apply.call
 pactffi_log_message.call('pact-ruby-fiddle', 'INFO', "hello from ffi version: #{pactffi_version.call}")

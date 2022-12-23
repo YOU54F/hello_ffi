@@ -59,7 +59,7 @@ return getPactFfiLib(ffi)
 end
 
 local pactLua = pactLua(ffi)
-local version = ffi.string(pactLua.pactffi_version())
-print(version)
+-- local version = ffi.string(pactLua.pactffi_version())
+-- print(version)
 
 return pactLua	

@@ -20,6 +20,6 @@ libc.pactffi_version.restype = ctypes.c_char_p
 version = libc.pactffi_version()    
 libc.pactffi_logger_init()
 libc.pactffi_logger_attach_sink(b'stdout', 5)
-libc.pactffi_logger_attach_sink(b'stderr', 5)
+# libc.pactffi_logger_attach_sink(b'stderr', 5)
 libc.pactffi_logger_apply()
 libc.pactffi_log_message(b'pact-python-ctypes', b'INFO', b'hello from ffi version: ' + version)

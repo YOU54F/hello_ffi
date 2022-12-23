@@ -75,4 +75,4 @@ module DetectOS
   end
 end
 
-puts DetectOS.get_bin_path
+# puts DetectOS.get_bin_path

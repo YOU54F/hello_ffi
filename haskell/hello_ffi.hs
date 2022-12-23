@@ -2,10 +2,12 @@
 import Data.Word (Word8)
 import Foreign.Ptr (nullPtr)
 import Foreign.C.String (CString(..), peekCString)
+import Foreign.C
+import Foreign.ForeignPtr
+
 
 foreign import ccall "pact-cpp.h pactffi_version"
-     c_pactffi_version :: IO (CString)
-
+     c_pactffi_version :: IO (CString) 
 
 getFFIVersion :: IO (Maybe (String))
 getFFIVersion = do
@@ -17,9 +19,10 @@ getFFIVersion = do
     else
       return Nothing
 
+
 main :: IO ()
 main = do
   version <- getFFIVersion
   case version of
     Nothing -> putStrLn "Unable to get version of ffi"
-    Just str -> putStrLn str
+    Just str -> putStrLn $ "Haskell - hello from ffi version:" ++ show (str)

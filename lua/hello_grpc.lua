@@ -1,7 +1,7 @@
 
-lib = require("pactLua")
+pactLua = require("pactLua")
 local ffi = require("ffi")
-JSON = require("JSON")
+local JSON = require("JSON").encode
 local version = ffi.string(lib.pactffi_version())
 local appName = ffi.string(lib.pactffi_version())
 
@@ -28,20 +28,20 @@ pact_contents =  {
       value = { "matching(number, 12)" }
     }
   }
-local contents = JSON:encode(pact_contents)
+-- local contents = JSON:encode(pact_contents)
 
-lib.pactffi_log_message(appName, 'INFO', "Loading pact contents: "..contents)
+-- lib.pactffi_log_message(appName, 'INFO', "Loading pact contents: "..contents)
 
 -- Setup pact for testing
-pact = lib.pactffi_new_pact('grpc-consumer-python', 'area-calculator-provider')
-lib.pactffi_with_pact_metadata(pact, 'pact-python', 'ffi', version)
+pact = lib.pactffi_new_pact('grpc-consumer-lua', 'area-calculator-lua')
+lib.pactffi_with_pact_metadata(pact, 'pact-lua', 'ffi', version)
 message_pact = lib.pactffi_new_sync_message_interaction(pact, 'A gRPC calculateOne request')
 lib.pactffi_with_specification(pact, 5)
 
 
 -- Start mock server
 lib.pactffi_using_plugin(pact, 'protobuf', '0.1.17')
-lib.pactffi_interaction_contents(message_pact, 0, 'application/grpc',contents)
+-- lib.pactffi_interaction_contents(message_pact, 0, 'application/grpc',contents)
 mock_server_port = lib.pactffi_create_mock_server_for_transport(pact , '0.0.0.0',0,'grpc',ffi.cast("void *", 0))
 lib.pactffi_log_message(appName, 'INFO', "Mock server started: "..mock_server_port)
 

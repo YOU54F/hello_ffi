@@ -1,0 +1,9 @@
+run = "make repl"
+
+[nix]
+channel = "stable-22_11"
+
+[env]
+pact_do_not_track = "true"
+LD_LIBRARY_PATH = "$HOME/$REPL_SLUG"
+PATH = "/home/runner/.local/opt/zig"

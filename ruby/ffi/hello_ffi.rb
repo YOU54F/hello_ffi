@@ -92,9 +92,9 @@ module PactRubyFfi
     attach_function :pactffi_interaction_contents, %i[pointer int string string], :int
 end
 
-p PactRubyFfi.pactffi_version
+# p PactRubyFfi.pactffi_version
 PactRubyFfi.pactffi_logger_init
 PactRubyFfi.pactffi_logger_attach_sink('stdout', 5)
-PactRubyFfi.pactffi_logger_attach_sink('stderr', 5)
+# PactRubyFfi.pactffi_logger_attach_sink('stderr', 5)
 PactRubyFfi.pactffi_logger_apply
 PactRubyFfi.pactffi_log_message('pact-ruby-ffi', 'INFO', "hello from ffi version: #{PactRubyFfi.pactffi_version}")

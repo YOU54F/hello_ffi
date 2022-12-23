@@ -8,4 +8,4 @@ elif defined(MacOsX):
 
 proc pactFfiVersion(): cstring {.importc: "pactffi_version", dynlib: libName.}
 
-echo fmt"Hello from Pact Nim: {pactFfiVersion()}"
+echo fmt"Nim - hello from ffi version: {pactFfiVersion()}"

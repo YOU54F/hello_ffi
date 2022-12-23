@@ -170,7 +170,7 @@ const PactTestHttp = () => {
 const PactTestGrpc = async() => {
   console.log("🚀 Running Pact Protobuf Plugin Test with gRPC 🚀");
   const contents = {
-    "pact:proto": `${process.cwd()}/../proto/area_calculator.proto`,
+    "pact:proto": `${process.cwd()}/proto/area_calculator.proto`,
     "pact:proto-service": "Calculator/calculateOne",
     "pact:content-type": "application/protobuf",
     request: {
@@ -215,7 +215,7 @@ const PactTestGrpc = async() => {
   console.log(pactffi_interaction_contents_res)
   const mock_server_port = pactffi_create_mock_server_for_transport(
     pact,
-    s2b("0.0.0.0"),
+    s2b("localhost"),
     0,
     s2b("grpc"),
     null
@@ -269,7 +269,7 @@ const PactTestGrpc = async() => {
   console.log("🧹 Cleaned up Pact processes");
 };
 
-console.log("Hello from Pact Bun FFI - Version", pactffi_version());
+// console.log("Hello from Pact Bun FFI - Version", pactffi_version());
 
 pactffi_logger_init();
 pactffi_logger_attach_sink(s2b("stdout"), 3);
@@ -280,6 +280,6 @@ pactffi_log_message(
   s2b(`hello from ffi version: ${pactffi_version()}`)
 );
 
-PactTestHttp();
+// PactTestHttp();
 
-PactTestGrpc()
+// PactTestGrpc()

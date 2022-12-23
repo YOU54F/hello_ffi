@@ -1,4 +1,6 @@
 *.dylib
+*.so
+*.o
 *.h
 .DS_Store
 target

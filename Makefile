@@ -39,7 +39,7 @@ php: php_install_deps php_run_hello_work
 python_install_deps:
 	cd python/cffi && pip install -r requirements.txt
 
-python_cffi: python_install_deps
+python_cffi:
 	python python/cffi/hello_ffi.py
 
 python_ctypes:
@@ -53,7 +53,7 @@ ruby_fiddle:
 ruby_ffi_install:
 	cd ruby/ffi && bundle install
 
-ruby_ffi: ruby_ffi_install
+ruby_ffi:
 	ruby ruby/ffi/hello_ffi.rb
 
 ruby: ruby_fiddle ruby_ffi
@@ -80,7 +80,6 @@ clean_haskell:
 
 clean: clean_haskell
 
-all: haskell perl php python ruby raku julia deno bun
 
 deno_gen_proto:
 	deno run --allow-read https://deno.land/x/grpc_basic@0.4.6/gen/dts.ts ./proto/area_calculator.proto > ./deno/gRPC/area_calculator/area_calculator.d.ts
@@ -118,9 +117,12 @@ deno_compile_plugin_and_test:
 deno: deno_run_download_ffi deno_run_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
 bun_hello_ffi:
-	cd bun && bun index.ts
+	bun bun/index.ts
 
 bun: bun_hello_ffi
+
+zig_get:
+	curl -sS https://webi.sh/zig| sh
 
 zig_hello:
 	zig run zig/hello.zig
@@ -139,7 +141,10 @@ dart_gen_bindings:
 dart_hello_ffi:
 	dart dart/hello_ffi.dart
 
-dart: dart_hello_ffi
+dart_setup: 
+	cd dart && dart pub get > /dev/null
+
+dart: dart_setup dart_hello_ffi
 
 c_hello_ffi:
 	gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi && ./c/hello_ffi
@@ -153,10 +158,10 @@ swift_hello_grpc:
 	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && ./swift/hello_grpc
 
 lua_hello_grpc:
-	cd lua && luajit hello_grpc.lua
+	cd lua && LUA_PATH=$$PWD/pactLua.lua luajit hello_grpc.lua
 
 lua_hello_ffi:
-	cd lua && luajit hello_ffi.lua
+	cd lua && LUA_PATH=$$PWD/pactLua.lua luajit hello_ffi.lua
 
 lua: lua_hello_ffi lua_hello_grpc
 
@@ -177,10 +182,10 @@ scala: scala_hello_world
 swift: swift_hello_ffi swift_hello_grpc
 
 nim_hello_ffi:
-	nim$(EXE) c -r nim/hello_ffi.nim
+	nim$(EXE) c -r --hints:off nim/hello_ffi.nim
 
 nim_hello_world:
-	nim$(EXE) c -r nim/hello.nim
+	nim$(EXE) c -r --hints:off nim/hello.nim
 
 nim: nim_hello_world nim_hello_ffi
 	
@@ -198,3 +203,10 @@ else
         pactffi_filename = 'libpact_ffi.dylib'
     endif
 endif
+
+
+
+
+hello_ffi: get_pact_ffi python ruby bun c deno_run_hello_ffi julia haskell lua_hello_ffi nim_hello_ffi raku_hello_ffi dart
+
+all: haskell perl php python ruby raku julia deno bun

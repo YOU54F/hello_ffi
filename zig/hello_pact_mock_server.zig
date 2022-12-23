@@ -1,7 +1,3 @@
-
-
-
-
 const c = @cImport({
     @cInclude("pact.h");
 });
