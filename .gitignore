@@ -6,3 +6,5 @@
 target
 hello_ffi
 logs
+.metals
+.vscode

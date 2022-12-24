@@ -16,8 +16,10 @@ get_plugin_cli:
 install_protobuf_plugin:
 	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
 
-haskell:
+haskell_hello_ffi:
 	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell && ./haskell/hello_ffi_haskell
+
+haskell: haskell_hello_ffi
 
 perl_hello_ffi:
 	perl perl/hello_ffi.pl
@@ -30,33 +32,38 @@ perl_hello_pact_mock_server:
 
 perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
-php_deps:
-	cd php && composer update && composer install
-php_run_hello_work:
-	cd php && composer hello_ffi
-php: php_deps php_run_hello_work
+php_hello_ffi:
+	php php/hello_ffi.php
 
-python_deps:
+php_run_hello_grpc:
+	php php/hello_grpc.php
+
+php: php_hello_ffi
+
+python_install_deps:
 	cd python/cffi && pip install -r requirements.txt
 
-python_cffi:
+python_hello_ffi_cffi:
 	python python/cffi/hello_ffi.py
 
-python_ctypes:
+python_hello_ffi_ctypes:
 	python python/ctypes/hello_ffi.py
 
-python: python_cffi python_ctypes
+python_hello_ffi: python_hello_ffi_cffi python_hello_ffi_ctypes
+python: python_hello_ffi
 
-ruby_fiddle:
+ruby_hello_ffi_fiddle:
 	ruby ruby/fiddle/hello_ffi.rb
 
-ruby_deps:
+ruby_hello_ffi_ffi_deps:
 	cd ruby/ffi && bundle install
 
-ruby_ffi:
+ruby_hello_ffi_ffi:
 	ruby ruby/ffi/hello_ffi.rb
 
-ruby: ruby_fiddle ruby_ffi
+ruby_hello_ffi: ruby_hello_ffi_fiddle ruby_hello_ffi_ffi 
+
+ruby: ruby_hello_ffi
 
 raku_hello_ffi:
 	raku raku/hello_ffi.raku
@@ -102,7 +109,7 @@ deno_run_area_calculator_server:
 deno_run_download_ffi:
 	deno run --allow-all --unstable deno/downloadFfi.ts
 
-deno_run_hello_ffi:
+deno_hello_ffi:
 	deno run --allow-ffi --unstable deno/hello_ffi.ts
 
 deno_run_pact_mock_server:
@@ -114,7 +121,7 @@ deno_run_pact_grpc:
 deno_compile_plugin_and_test:
 	deno compile --allow-all --unstable deno/gRPC/pact_plugin/pactPluginServer.ts && mv pactPluginServer ~/.pact/plugins/denopactplugin-0.0.1 && deno run --allow-all --unstable deno/gRPC/pact_plugin/testPactPluginWithProtobuf.ts
 
-deno: deno_run_download_ffi deno_run_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
+deno: deno_run_download_ffi deno_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
 bun_hello_ffi:
 	bun bun/index.ts
@@ -128,17 +135,17 @@ zig_hello:
 	zig run zig/hello.zig
 
 zig_hello_ffi:
-	zig run zig/hello_ffi.zig -L./ -lpact_ffi 
+	zig run zig/hello_ffi.zig -L./ -lpact_ffi -lc
 
 zig_run_pact_mock_server:
-	zig run zig/hello_pact_mock_server.zig -L./ -lpact_ffi --library curl --library c $(pkg-config --cflags libcurl) 
+	zig run zig/hello_pact_mock_server.zig -L./ -lpact_ffi --library curl --library c $(pkg-config --cflags libcurl) -lc
 
 zig: zig_hello zig_hello_ffi zig_run_pact_mock_server
 
 dart_gen_bindings:
 	dart pub add --dev ffigen && dart pub add ffi && dart run ffigen
 
-dart_hello_ffi:
+dart_hello_ffi: dart_setup
 	dart dart/hello_ffi.dart
 
 dart_setup: 
@@ -164,6 +171,11 @@ lua_hello_ffi:
 	cd lua && luajit hello_ffi.lua
 
 lua: lua_hello_ffi lua_hello_grpc
+
+scala_native_hello_ffi:
+	cd scala-native && sbt nativeLink && target/scala-2.12/scala-native-out
+
+scala_native: scala_native_hello_ffi
 
 scala_hello_world:
 	cd scala && scala$(BAT) hello.scala
@@ -207,6 +219,42 @@ endif
 
 
 
-hello_ffi: get_pact_ffi python ruby bun c deno_run_hello_ffi julia haskell lua_hello_ffi nim_hello_ffi raku_hello_ffi dart
+
+hello_ffi: \
+get_pact_ffi \
+bun_hello_ffi \
+c_hello_ffi \
+dart_hello_ffi \
+deno_hello_ffi  \
+haskell_hello_ffi \
+julia_hello_ffi \
+lua_hello_ffi \
+nim_hello_ffi \
+perl_hello_ffi \
+php_hello_ffi \
+python_hello_ffi \
+raku_hello_ffi \
+ruby_hello_ffi \
+scala_native_hello_ffi \
+swift_hello_ffi \
+zig_hello_ffi
+
+# bun ✅ 
+# c ✅ 
+# dart ✅ 
+# deno ✅ 
+# haskell 🚧 (pactffi_version only)
+# julia ✅ 
+# lua ✅ 
+# nim ✅ 
+# perl✅ local  🚧 repl
+# php  ✅
+# python ✅ 
+# raku ✅
+# ruby ✅ 
+# scala 🚧 (Hello world)
+# scala-native ✅
+# swift ✅
+# zig ✅
 
 all: haskell perl php python ruby raku julia deno bun

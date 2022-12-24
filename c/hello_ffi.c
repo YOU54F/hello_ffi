@@ -19,7 +19,7 @@ int main(void) {
   pactffi_logger_init();
   pactffi_logger_attach_sink("stdout",3);
   pactffi_logger_apply();
-  char message[50] = "Hello from ffi version: ";
+  char message[50] = "hello from ffi version: ";
   strcat(message,version);
   pactffi_log_message("pact-c-ffi","INFO",message);
 }
