@@ -3,7 +3,7 @@ import Foundation
 
 let app_name: String = "pact-swift-ffi"
 let version: String? = String(validatingUTF8: pactffi_version())
-print("Hello from Pact Swift FFI: \(version!)")
+// print("Hello from Pact Swift FFI: \(version!)")
 
 // Setup Loggers
 pactffi_logger_init()

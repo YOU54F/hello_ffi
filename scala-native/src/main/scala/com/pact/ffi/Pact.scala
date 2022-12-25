@@ -29,7 +29,7 @@ object Pact {
   }
 
   def main(args: Array[String]): Unit = {
-    version
+    // version
     helloPactFfi
   }
 

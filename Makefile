@@ -17,10 +17,14 @@ install_protobuf_plugin:
 	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
 
 haskell_hello_ffi:
-	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell && ./haskell/hello_ffi_haskell
+	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell > /dev/null && ./haskell/hello_ffi_haskell
 
 haskell: haskell_hello_ffi
 
+ada_hello_ffi:
+	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi && helloFfi
+
+ada: ada_hello_ffi
 perl_hello_ffi:
 	perl perl/hello_ffi.pl
 
@@ -123,6 +127,11 @@ deno_compile_plugin_and_test:
 
 deno: deno_run_download_ffi deno_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
+csharp_hello_ffi:
+	cd csharp && mcs helloPact.cs && mono helloPact.exe
+
+csharp: csharp_hello_ffi
+
 bun_hello_ffi:
 	bun bun/index.ts
 
@@ -173,7 +182,7 @@ lua_hello_ffi:
 lua: lua_hello_ffi lua_hello_grpc
 
 scala_native_hello_ffi:
-	cd scala-native && sbt nativeLink && target/scala-2.12/scala-native-out
+	cd scala-native && sbt nativeLink > /dev/null && target/scala-2.12/scala-native-out
 
 scala_native: scala_native_hello_ffi
 
@@ -219,11 +228,18 @@ endif
 
 
 
+# ada_hello_ffi \
+# get_pact_ffi \
+
+visual_basic_hello_ffi:
+	cd vb && vbc helloPact.vb  > /dev/null && mono helloPact.exe
+
+visual_basic: visual_basic_hello_ffi
 
 hello_ffi: \
-get_pact_ffi \
 bun_hello_ffi \
 c_hello_ffi \
+csharp_hello_ffi  \
 dart_hello_ffi \
 deno_hello_ffi  \
 haskell_hello_ffi \
@@ -237,17 +253,20 @@ raku_hello_ffi \
 ruby_hello_ffi \
 scala_native_hello_ffi \
 swift_hello_ffi \
+visual_basic_hello_ffi \
 zig_hello_ffi
 
+# ada 🚧 ffi version only, (also only linux)
 # bun ✅ 
 # c ✅ 
 # dart ✅ 
 # deno ✅ 
-# haskell 🚧 (pactffi_version only)
+# csharp ✅
+# haskell ✅
 # julia ✅ 
 # lua ✅ 
 # nim ✅ 
-# perl✅ local  🚧 repl
+# perl ✅ local  🚧 repl
 # php  ✅
 # python ✅ 
 # raku ✅
@@ -255,6 +274,7 @@ zig_hello_ffi
 # scala 🚧 (Hello world)
 # scala-native ✅
 # swift ✅
+# visual basic 🚧 ffi version only, (also only linux)
 # zig ✅
 
 all: haskell perl php python ruby raku julia deno bun
