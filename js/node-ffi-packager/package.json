@@ -1,0 +1,16 @@
+{
+  "name": "ffi-packager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "generate": "DYLD_LIBRARY_PATH='/Library/Developer/CommandLineTools/usr/lib' node ./node_modules/.bin/ffi-generate --file ../../pact.h --library libpact_ffi > libpact_ffi.h.js",
+    "generate:debug": "DEBUG='ffi-generate:*' npm run generate"
+  },
+  "author": "Yousaf Nabi",
+  "license": "ISC",
+  "dependencies": {
+    "@ffi-packager/ffi-generate": "github:node-ffi-packager/node-ffi-generate"
+  }
+}

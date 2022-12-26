@@ -77,6 +77,11 @@ raku_hello_pact_mock_server:
 
 raku: raku_hello_ffi raku_hello_pact_mock_server
 
+racket_hello_ffi:
+	racket racket/helloFfi.rkt
+
+racket: racket_hello_ffi
+
 julia_hello_ffi:
 	julia julia/hello_ffi.jl
 
@@ -236,6 +241,20 @@ visual_basic_hello_ffi:
 
 visual_basic: visual_basic_hello_ffi
 
+go_hello_ffi:
+	cd go && go build && ./hello_ffi
+
+go: go_hello_ffi
+
+js_ffi_napi_hello_ffi:
+	cd js/node-ffi-napi && npm i && node index.js 
+
+js_ffi_packager_hello_ffi:
+	cd js/node-ffi-packager && npm run generate && node index.js
+
+.PHONY: js
+js: js_ffi_napi_hello_ffi js_ffi_packager_hello_ffi
+
 hello_ffi: \
 bun_hello_ffi \
 c_hello_ffi \
@@ -243,12 +262,14 @@ csharp_hello_ffi  \
 dart_hello_ffi \
 deno_hello_ffi  \
 haskell_hello_ffi \
+go_hello_ffi \
 julia_hello_ffi \
 lua_hello_ffi \
 nim_hello_ffi \
 perl_hello_ffi \
 php_hello_ffi \
 python_hello_ffi \
+racket_hello_ffi \
 raku_hello_ffi \
 ruby_hello_ffi \
 scala_native_hello_ffi \
@@ -259,9 +280,10 @@ zig_hello_ffi
 # ada 🚧 ffi version only, (also only linux)
 # bun ✅ 
 # c ✅ 
+# csharp ✅
 # dart ✅ 
 # deno ✅ 
-# csharp ✅
+# go ✅
 # haskell ✅
 # julia ✅ 
 # lua ✅ 
@@ -269,6 +291,7 @@ zig_hello_ffi
 # perl ✅ local  🚧 repl
 # php  ✅
 # python ✅ 
+# racket ✅
 # raku ✅
 # ruby ✅ 
 # scala 🚧 (Hello world)

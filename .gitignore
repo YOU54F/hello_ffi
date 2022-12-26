@@ -8,3 +8,4 @@ hello_ffi
 logs
 .metals
 .vscode
+node_modules
