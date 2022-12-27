@@ -258,12 +258,9 @@ kotlin_hello_ffi:
 kotlin: kotlin_hello_ffi
 
 ocaml_hello_ffi:
-	cd ocaml && ocamlc -o hello_ffi -I +pact_ffi -cclib -lpact_ffi -cclib -L. hello_ffi.ml && ./hello_ffi
+	./ocaml/helloffi.ml
 
-ocaml_hello:
-	cd ocaml && ocamlc -o hello hello.ml && ./hello
-
-
+ocaml: ocaml_hello_ffi
 .PHONY: js
 js: js_ffi_napi_hello_ffi js_ffi_packager_hello_ffi
 
@@ -273,7 +270,7 @@ bun_hello_ffi \
 c_hello_ffi \
 csharp_hello_ffi  \
 dart_hello_ffi \
-deno_hello_ffi  \
+deno_hello_ffi \
 haskell_hello_ffi \
 go_hello_ffi \
 julia_hello_ffi \
@@ -282,6 +279,7 @@ js_ffi_packager_hello_ffi \
 kotlin_hello_ffi \
 lua_hello_ffi \
 nim_hello_ffi \
+ocaml_hello_ffi \
 perl_hello_ffi \
 php_hello_ffi \
 python_hello_ffi \

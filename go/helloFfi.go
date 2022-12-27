@@ -1,7 +1,7 @@
 package main
 
-// #cgo CFLAGS: -g
-// #cgo LDFLAGS: -lpact_ffi
+// #cgo CFLAGS: -g -I./..
+// #cgo LDFLAGS: -lpact_ffi -L./..
 // #include <stdlib.h>
 // #include "../pact.h"
 import "C"
