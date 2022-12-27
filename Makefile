@@ -22,7 +22,7 @@ haskell_hello_ffi:
 haskell: haskell_hello_ffi
 
 ada_hello_ffi:
-	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi && helloFfi
+	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L../osxx86 && DYLD_LIBRARY_PATH=$$PWD/../osxx86 ./helloffi
 
 ada: ada_hello_ffi
 perl_hello_ffi:
@@ -187,7 +187,7 @@ lua_hello_ffi:
 lua: lua_hello_ffi lua_hello_grpc
 
 scala_native_hello_ffi:
-	cd scala-native && sbt nativeLink > /dev/null && target/scala-2.12/scala-native-out
+	cd scala-native && sbt nativeLink > /dev/null && DYLD_LIBRARY_PATH=$$PWD/.. target/scala-2.12/scala-native-out
 
 scala_native: scala_native_hello_ffi
 
@@ -242,24 +242,33 @@ visual_basic_hello_ffi:
 visual_basic: visual_basic_hello_ffi
 
 go_hello_ffi:
-	cd go && go build && ./hello_ffi
+	cd go && go build && DYLD_LIBRARY_PATH=$$PWD/.. ./hello_ffi
 
 go: go_hello_ffi
 
 js_ffi_napi_hello_ffi:
-	cd js/node-ffi-napi && npm i  > /dev/null && node index.js 
+	cd js/node-ffi-napi && npm i  > /dev/null && DYLD_LIBRARY_PATH=$$PWD/../.. node index.js 
 
 js_ffi_packager_hello_ffi:
-	cd js/node-ffi-packager && npm run generate && node index.js
+	cd js/node-ffi-packager && npm run generate && DYLD_LIBRARY_PATH=$$PWD/../.. node index.js
 
 kotlin_hello_ffi:
-	cd kotlin && gradle nativeBinaries > /dev/null  && build/bin/native/debugExecutable/kotlin.kexe
+	cd kotlin && gradle nativeBinaries > /dev/null && DYLD_LIBRARY_PATH=$$PWD/.. build/bin/native/debugExecutable/kotlin.kexe
+
+kotlin: kotlin_hello_ffi
+
+ocaml_hello_ffi:
+	cd ocaml && ocamlc -o hello_ffi -I +pact_ffi -cclib -lpact_ffi -cclib -L. hello_ffi.ml && ./hello_ffi
+
+ocaml_hello:
+	cd ocaml && ocamlc -o hello hello.ml && ./hello
 
 
 .PHONY: js
 js: js_ffi_napi_hello_ffi js_ffi_packager_hello_ffi
 
 hello_ffi: \
+ada_hello_ffi \
 bun_hello_ffi \
 c_hello_ffi \
 csharp_hello_ffi  \

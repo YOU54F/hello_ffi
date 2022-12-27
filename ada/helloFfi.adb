@@ -49,7 +49,7 @@ procedure HelloFfi is
 
 begin
    V := pactffi_version;
-   Put_Line ("Hello from Ada. Ffi version: " & Value (V));
+   -- Put_Line ("Hello from Ada. Ffi version: " & Value (V));
    pactffi_logger_init;
    R := pactffi_logger_attach_sink(V,LevelFilter_Info);
    P := pactffi_logger_apply;
