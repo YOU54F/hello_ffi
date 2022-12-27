@@ -247,10 +247,14 @@ go_hello_ffi:
 go: go_hello_ffi
 
 js_ffi_napi_hello_ffi:
-	cd js/node-ffi-napi && npm i && node index.js 
+	cd js/node-ffi-napi && npm i  > /dev/null && node index.js 
 
 js_ffi_packager_hello_ffi:
 	cd js/node-ffi-packager && npm run generate && node index.js
+
+kotlin_hello_ffi:
+	cd kotlin && gradle nativeBinaries > /dev/null  && build/bin/native/debugExecutable/kotlin.kexe
+
 
 .PHONY: js
 js: js_ffi_napi_hello_ffi js_ffi_packager_hello_ffi
@@ -264,6 +268,9 @@ deno_hello_ffi  \
 haskell_hello_ffi \
 go_hello_ffi \
 julia_hello_ffi \
+js_ffi_napi_hello_ffi \
+js_ffi_packager_hello_ffi \
+kotlin_hello_ffi \
 lua_hello_ffi \
 nim_hello_ffi \
 perl_hello_ffi \

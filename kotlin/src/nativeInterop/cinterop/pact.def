@@ -1,0 +1,5 @@
+headers = /Users/saf/dev/you54f/hello_ffi/pact.h
+
+compilerOpts.linux = -I/Users/saf/dev/you54f/hello_ffi/ -lpact_ffi
+linkerOpts.osx = -L/Users/saf/dev/you54f/hello_ffi/  -lpact_ffi
+linkerOpts.linux = -L/Users/saf/dev/you54f/hello_ffi/ -lpact_ffi
