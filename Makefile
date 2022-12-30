@@ -261,6 +261,36 @@ ocaml_hello_ffi:
 	./ocaml/helloffi.ml
 
 ocaml: ocaml_hello_ffi
+
+tcl_hello:
+	tclsh tcl/hello.tcl
+
+tcl: tcl_hello
+
+java_jna_hello_ffi:
+	java -cp java/jna/jna-5.12.1.jar java/jna/src/ffi/example/jna/HelloFfi.java
+
+java_panama_ffi_gen:
+	cd java/panama && jextract-19/bin/jextract \
+		--output src \
+		-t org.pact \
+		-I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include \
+		-l$$PWD/../../libpact_ffi.dylib ../../pact.h
+	cd java/panama && jextract-19/bin/jextract \
+		--source \
+		--output src \
+		-t org.pact \
+		-I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include \
+		-l$$PWD/../../libpact_ffi.dylib ../../pact.h
+
+java_panama_hello_ffi:
+	java -classpath ./java/panama/src --enable-native-access=ALL-UNNAMED --enable-preview --source 19 java/panama/Panama.java
+
+java_jna_hello:
+	java -cp java/jna/jna-5.12.1.jar java/jna/src/ffi/example/jna/Hello.java
+
+java: java_jna_hello java_jna_hello_ffi
+
 .PHONY: js
 js: js_ffi_napi_hello_ffi js_ffi_packager_hello_ffi
 
@@ -274,6 +304,7 @@ deno_hello_ffi \
 haskell_hello_ffi \
 go_hello_ffi \
 julia_hello_ffi \
+java_jna_hello_ffi \
 js_ffi_napi_hello_ffi \
 js_ffi_packager_hello_ffi \
 kotlin_hello_ffi \

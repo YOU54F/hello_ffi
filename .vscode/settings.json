@@ -1,7 +1,4 @@
 {
-    "yaml.schemas": {
-        "https://json.schemastore.org/github-workflow.json": "file:///Users/saf/dev/R_examples/.github/workflows/action.yml"
-    },
     "deno.enable": true,
     "deno.unstable": true,
     "files.watcherExclude": {
