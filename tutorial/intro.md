@@ -42,10 +42,10 @@ https://www.mono-project.com/docs/getting-started/install/
 
 https://dart.dev/get-dart
 
-1. `wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg`
-2. `echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list`
-3. `apt-get update`
-4. `apt-get install dart`
+1. `wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg`{{exec}}
+2. `echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list`{{exec}}
+3. `apt-get update`{{exec}}
+4. `apt-get install dart`{{exec}}
 2. `dart --version`{{exec}}
 3. `make dart_hello_ffi`{{exec}}
 
@@ -53,9 +53,9 @@ https://dart.dev/get-dart
 
 https://deno.land/manual@v1.29.1/getting_started/installation
 
-1. `curl -fsSL https://deno.land/x/install/install.sh | sh`
-2. `export DENO_INSTALL="/root/.deno"`
-3. `export PATH="$DENO_INSTALL/bin:$PATH"`
+1. `curl -fsSL https://deno.land/x/install/install.sh | sh`{{exec}}
+2. `export DENO_INSTALL="/root/.deno"`{{exec}}
+3. `export PATH="$DENO_INSTALL/bin:$PATH"`{{exec}}
 2. `source /root/.bashrc`{{exec}}
 2. `deno --version`{{exec}}
 3. `make deno_hello_ffi`{{exec}}
@@ -65,55 +65,55 @@ https://deno.land/manual@v1.29.1/getting_started/installation
 
 https://go.dev/doc/install
 
-1. `go version`
-2. `make go_hello_ffi`
+1. `go version`{{exec}}
+2. `make go_hello_ffi`{{exec}}
 
 ## Haskell
 
 https://www.haskell.org/downloads/
 
-1. `apt-get install --yes ghc`
-2. `ghc --version`
-3. `make haskell_hello_ffi`
+1. `apt-get install --yes ghc`{{exec}}
+2. `ghc --version`{{exec}}
+3. `make haskell_hello_ffi`{{exec}}
 
 ## Java
 
-1. `wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/java/19/latest/jdk-19_linux-x64_bin.tar.gz`
-2. `mkdir /usr/lib/jvm`
-3. `cd /usr/lib/jvm`
-4. `tar -xvzf ~/hello_ffi/jdk-19_linux-x64_bin.tar.gz`
-5. `export JAVA_HOME="/usr/lib/jvm/jdk-19.0.1"`
-6. `export PATH="/usr/lib/jvm/jdk-19.0.1/bin:$PATH"`
-7. `cd ~/hello_ffi`
+1. `wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/java/19/latest/jdk-19_linux-x64_bin.tar.gz`{{exec}}
+2. `mkdir /usr/lib/jvm`{{exec}}
+3. `cd /usr/lib/jvm`{{exec}}
+4. `tar -xvzf ~/hello_ffi/jdk-19_linux-x64_bin.tar.gz`{{exec}}
+5. `export JAVA_HOME="/usr/lib/jvm/jdk-19.0.1"`{{exec}}
+6. `export PATH="/usr/lib/jvm/jdk-19.0.1/bin:$PATH"`{{exec}}
+7. `cd ~/hello_ffi`{{exec}}
 
 
 ### Java Native Access
 
-1. `make java_jna_hello_ffi`
+1. `make java_jna_hello_ffi`{{exec}}
 
 ### Java Panama
 
 https://openjdk.org/projects/panama/
 https://jdk.java.net/jextract/
 
-1. `wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.java.net/java/early_access/jextract/2/openjdk-19-jextract+2-3_linux-x64_bin.tar.gz`
-2. `tar -xzf openjdk-19-jextract+2-3_linux-x64_bin.tar.gz -C java/panama`
-3. `make java_panama_ffi_gen`
-4. `make java_panama_hello_ffi`
+1. `wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.java.net/java/early_access/jextract/2/openjdk-19-jextract+2-3_linux-x64_bin.tar.gz`{{exec}}
+2. `tar -xzf openjdk-19-jextract+2-3_linux-x64_bin.tar.gz -C java/panama`{{exec}}
+3. `make java_panama_ffi_gen`{{exec}}
+4. `make java_panama_hello_ffi`{{exec}}
    
 
 ## JavaScript
 
-1. `wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash`
-1. `source ~/.bashrc`
-2. `nvm install 16`
+1. `wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash`{{exec}}
+1. `source ~/.bashrc`{{exec}}
+2. `nvm install 16`{{exec}}
 
 
 ### node-addon-api
 
 ### node-ffi-napi
 
-3. `make js_ffi_napi_hello_ffi`
+3. `make js_ffi_napi_hello_ffi`{{exec}}
 
 ### node-ffi-packager
 
@@ -124,15 +124,15 @@ https://github.com/node-ffi-packager/node-ffi-generate
 2. `ln -s /usr/lib/llvm-10/lib/libclang.so.1 /usr/lib/llvm-10/lib/libclang.so`
 3. `apt-get install -y libclang-dev`
 4. `LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu` -->
-5. `make js_ffi_packager_hello_ffi`
+5. `make js_ffi_packager_hello_ffi`{{exec}}
 
 
 ## Julia
 
 https://julialang.org/downloads/
 
-1. `apt-get install --yes julia`
-2. `make julia_hello_ffi`
+1. `apt-get install --yes julia`{{exec}}
+2. `make julia_hello_ffi`{{exec}}
 
 
 <!-- ## Kotlin
@@ -146,17 +146,17 @@ https://kotlinlang.org/docs/native-c-interop.htm
 
 https://luajit.org/install.html
 
-1. `apt-get install --yes luajit`
-2. `luajit --version`
-3. `make lua_hello_ffi`
+1. `apt-get install --yes luajit`{{exec}}
+2. `luajit --version`{{exec}}
+3. `make lua_hello_ffi`{{exec}}
 
 ## Nim
 
 https://nim-lang.org/install.html
 
-1. `apt-get install --yes nim`
-2. `nim --version`
-3. `make nim_hello_ffi`
+1. `apt-get install --yes nim`{{exec}}
+2. `nim --version`{{exec}}
+3. `make nim_hello_ffi`{{exec}}
 
 ## OCaml
 
@@ -180,7 +180,7 @@ https://nim-lang.org/install.html
 
 ## Zig
 
-## Install Deno
+<!-- ## Install Deno
 
 2. `curl -fsSL https://deno.land/x/install/install.sh | sh`{{exec}}
 3. `echo 'export DENO_INSTALL="/root/.deno"' >> ~/.bashrc`{{exec}}
@@ -245,4 +245,4 @@ console.log(denoPact.getPactFfiVersion());
     3. Restart the container if there was any issues `docker restart mybroker_pact_broker_1`{{exec}}
 
 5. `./run get_broker`{{exec}}
-6. Open the [Pact Broker]({{TRAFFIC_HOST1_9292}})
+6. Open the [Pact Broker]({{TRAFFIC_HOST1_9292}}) -->
