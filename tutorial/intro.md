@@ -154,56 +154,76 @@ https://kotlinlang.org/docs/native-c-interop.htm
 
 ## OCaml
 
+1. `apt-get install --yes ocaml utop opam`{{exec}}
+2. `ocaml --version`{{exec}}
+3. `opam init`{{exec}}
+4. `opam install ctypes ctypes-foreign utop`{{exec}}
+5. `make ocaml_hello_ffi`{{exec}}
+
 ## Perl
 
 https://metacpan.org/pod/FFI::Platypus
 
-1. `cpan FFI::Platypus` or `make perl_install_deps`
-2. `make perl_hello_ffi`
+1. `cpan FFI::Platypus`{{exec}} or `make perl_install_deps`{{exec}}
+2. `make perl_hello_ffi`{{exec}}
 
 ## PHP
 
 https://www.php.net/manual/en/book.ffi.php
 
-1. `php -v`
-2. `make php_hello_ffi`
+1. `php -v`{{exec}}
+2. `make php_hello_ffi`{{exec}}
    
 ## Python
 
-1. `python --version`
+1. `python --version`{{exec}}
 
 ### CTypes
 
 https://docs.python.org/3/library/ctypes.html
 
-1. `make python_hello_ffi_ctypes`
+1. `make python_hello_ffi_ctypes`{{exec}}
 
 ### CFfi
 
 https://cffi.readthedocs.io/en/latest/
 
-1. `make python_install_deps`
-2. `make python_hello_ffi_cffi`
+1. `make python_install_deps`{{exec}}
+2. `make python_hello_ffi_cffi`{{exec}}
 
 ## Racket
 
+1. `apt-get install --yes racket`{{exec}}
+2. `racket --version`{{exec}}
+3. `make racket_hello_ffi`{{exec}}
+
+
 ## Raku
+
+https://course.raku.org/essentials/how-to-install-rakudo/
+
+1. `apt-get install --yes rakudo`{{exec}}
+2. `rakudo --version`{{exec}}
+3. `make raku_hello_ffi`{{exec}}
 
 ## Ruby
 
-1. `curl -sSL https://rvm.io/mpapis.asc | gpg --import - && \
-curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - && \
-curl -sSL https://get.rvm.io | bash -s stable && \
-source /etc/profile.d/rvm.sh && rvm install 2.7.6`{{exec}}
-2. `ruby --version`
+1. `curl -sSL https://rvm.io/mpapis.asc | gpg --import -`{{exec}}
+2. `curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -`{{exec}}
+3. `curl -sSL https://get.rvm.io | bash -s stable`{{exec}}
+4. `source /etc/profile.d/rvm.sh`{{exec}}
+5. `rvm install 2.7.6`{{exec}}
+6. `ruby --version`{{exec}}
 
 ### Fiddle
 
-1. `make ruby_hello_ffi_fiddle`
+1. `make ruby_hello_ffi_fiddle`{{exec}}
 
 ### CFfi
 
-1. `ruby_hello_ffi_ffi_deps`
+1. `ruby_hello_ffi_ffi_deps`{{exec}}
+2. `make ruby_hello_ffi_ffi`{{exec}}
+
 ## Scala-Native
 
 ## Swift

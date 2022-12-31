@@ -79,10 +79,10 @@ ruby_hello_ffi: ruby_hello_ffi_fiddle ruby_hello_ffi_ffi
 ruby: ruby_hello_ffi
 
 raku_hello_ffi:
-	raku raku/hello_ffi.raku
+	$(LOAD_PATH) rakudo raku/hello_ffi.raku
 
 raku_hello_pact_mock_server:
-	raku raku/hello_pact_mock_server.raku
+	$(LOAD_PATH) rakudo raku/hello_pact_mock_server.raku
 
 raku: raku_hello_ffi raku_hello_pact_mock_server
 
