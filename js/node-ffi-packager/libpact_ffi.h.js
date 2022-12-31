@@ -2,7 +2,7 @@
  * This file was automatically generated. It is better to run the generator again, than to manually edit.
  *
  * @ffi-packager/ffi-generate v2.0.2
- * - git commit 41b657c-dirty on branch main
+ * - git commit 9c9eb47-dirty on branch main
  * - Apple clang version 14.0.0 (clang-1400.0.29.102)
  * https://github.com/node-ffi-packager/node-ffi-generate
  *

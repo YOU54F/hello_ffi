@@ -17,12 +17,17 @@ install_protobuf_plugin:
 	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
 
 haskell_hello_ffi:
-	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell > /dev/null && ./haskell/hello_ffi_haskell
+	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell > /dev/null && $(LOAD_PATH) ./haskell/hello_ffi_haskell
 
 haskell: haskell_hello_ffi
 
 ada_hello_ffi:
-	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L../osxx86 && DYLD_LIBRARY_PATH=$$PWD/../osxx86 ./helloffi
+	if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
+	then \
+		cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L../osxx86 && $(LOAD_PATH)/../osxx86 ./helloffi; \
+	else \
+		cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L.. && $(LOAD_PATH)/.. ./helloffi; \
+	fi; \
 
 ada: ada_hello_ffi
 perl_hello_ffi:
@@ -83,7 +88,7 @@ racket_hello_ffi:
 racket: racket_hello_ffi
 
 julia_hello_ffi:
-	julia julia/hello_ffi.jl
+	$(LOAD_PATH) julia julia/hello_ffi.jl
 
 julia: julia_hello_ffi
 
@@ -119,7 +124,7 @@ deno_run_download_ffi:
 	deno run --allow-all --unstable deno/downloadFfi.ts
 
 deno_hello_ffi:
-	deno run --allow-ffi --unstable deno/hello_ffi.ts
+	$(LOAD_PATH) deno run --allow-ffi --unstable deno/hello_ffi.ts
 
 deno_run_pact_mock_server:
 	deno run --allow-all --unstable deno/hello_pact_mock_server.ts
@@ -133,7 +138,13 @@ deno_compile_plugin_and_test:
 deno: deno_run_download_ffi deno_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
 csharp_hello_ffi:
-	cd csharp && mcs helloPact.cs && mono helloPact.exe
+	if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
+	then \
+		cd csharp && mcs helloPact.cs && $(LOAD_PATH)/../osxx86 mono helloPact.exe; \
+	else \
+		cd csharp && mcs helloPact.cs && $(LOAD_PATH)/.. mono helloPact.exe; \
+	fi; \
+	
 
 csharp: csharp_hello_ffi
 
@@ -168,7 +179,7 @@ dart_setup:
 dart: dart_setup dart_hello_ffi
 
 c_hello_ffi:
-	gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi && ./c/hello_ffi
+	gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi &&  $(LOAD_PATH) ./c/hello_ffi
 
 c: c_hello_ffi
 
@@ -187,7 +198,7 @@ lua_hello_ffi:
 lua: lua_hello_ffi lua_hello_grpc
 
 scala_native_hello_ffi:
-	cd scala-native && sbt nativeLink > /dev/null && DYLD_LIBRARY_PATH=$$PWD/.. target/scala-2.12/scala-native-out
+	cd scala-native && sbt nativeLink > /dev/null && $(LOAD_PATH)/.. target/scala-2.12/scala-native-out
 
 scala_native: scala_native_hello_ffi
 
@@ -208,10 +219,10 @@ scala: scala_hello_world
 swift: swift_hello_ffi swift_hello_grpc
 
 nim_hello_ffi:
-	nim$(EXE) c -r --hints:off nim/hello_ffi.nim
+	$(LOAD_PATH) nim$(EXE) c -r --hints:off nim/hello_ffi.nim
 
 nim_hello_world:
-	nim$(EXE) c -r --hints:off nim/hello.nim
+	$(LOAD_PATH) nim$(EXE) c -r --hints:off nim/hello.nim
 
 nim: nim_hello_world nim_hello_ffi
 	
@@ -219,14 +230,20 @@ ifeq ($(OS),Windows_NT)
     pactffi_filename = 'pact_ffi.dll'
 	DLL=.dll
 	EXE=.exe
-	BAT=.bat 
+	BAT=.bat
+	LOAD_PATH=LD_LIBRARY_PATH=$$PWD
+	STD_LIB_DIR=TODO
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         pactffi_filename = 'libpact_ffi.so'
+		LOAD_PATH=LD_LIBRARY_PATH=$$PWD
+		STD_LIB_DIR=/usr/include
     endif
     ifeq ($(UNAME_S),Darwin)
         pactffi_filename = 'libpact_ffi.dylib'
+		LOAD_PATH=DYLD_LIBRARY_PATH=$$PWD
+		STD_LIB_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
     endif
 endif
 
@@ -242,18 +259,23 @@ visual_basic_hello_ffi:
 visual_basic: visual_basic_hello_ffi
 
 go_hello_ffi:
-	cd go && go build && DYLD_LIBRARY_PATH=$$PWD/.. ./hello_ffi
+	cd go && go build && $(LOAD_PATH)/.. ./hello_ffi
 
 go: go_hello_ffi
 
 js_ffi_napi_hello_ffi:
-	cd js/node-ffi-napi && npm i  > /dev/null && DYLD_LIBRARY_PATH=$$PWD/../.. node index.js 
+	cd js/node-ffi-napi && npm i  > /dev/null
+	$(LOAD_PATH) node js/node-ffi-napi/index.js 
+
+js_ffi_packager_gen_bindings:
+	cd js/node-ffi-packager && npm run generate
 
 js_ffi_packager_hello_ffi:
-	cd js/node-ffi-packager && npm run generate && DYLD_LIBRARY_PATH=$$PWD/../.. node index.js
+	cd js/node-ffi-packager && npm i
+	$(LOAD_PATH) node js/node-ffi-packager/index.js
 
 kotlin_hello_ffi:
-	cd kotlin && gradle nativeBinaries > /dev/null && DYLD_LIBRARY_PATH=$$PWD/.. build/bin/native/debugExecutable/kotlin.kexe
+	cd kotlin && gradle nativeBinaries > /dev/null && $(LOAD_PATH)/.. build/bin/native/debugExecutable/kotlin.kexe
 
 kotlin: kotlin_hello_ffi
 
@@ -268,20 +290,20 @@ tcl_hello:
 tcl: tcl_hello
 
 java_jna_hello_ffi:
-	java -cp java/jna/jna-5.12.1.jar java/jna/src/ffi/example/jna/HelloFfi.java
+	$(LOAD_PATH) java -cp java/jna/jna-5.12.1.jar java/jna/src/ffi/example/jna/HelloFfi.java
 
 java_panama_ffi_gen:
 	cd java/panama && jextract-19/bin/jextract \
 		--output src \
 		-t org.pact \
-		-I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include \
-		-l$$PWD/../../libpact_ffi.dylib ../../pact.h
+		-I $(STD_LIB_DIR) \
+		-l$$PWD/../../$(pactffi_filename) ../../pact.h
 	cd java/panama && jextract-19/bin/jextract \
 		--source \
 		--output src \
 		-t org.pact \
-		-I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include \
-		-l$$PWD/../../libpact_ffi.dylib ../../pact.h
+		-I $(STD_LIB_DIR) \
+		-l$$PWD/../../$(pactffi_filename) ../../pact.h
 
 java_panama_hello_ffi:
 	java -classpath ./java/panama/src --enable-native-access=ALL-UNNAMED --enable-preview --source 19 java/panama/Panama.java

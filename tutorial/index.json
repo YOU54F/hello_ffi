@@ -1,0 +1,35 @@
+{
+  "title": "Deno Pact - Tutorial",
+  "description": "Teach the basics of usage of Deno Pact",
+  "difficulty": "Beginner",
+  "time": "15",
+  "details": {
+    "steps": [],
+    "intro": {
+      "text": "intro.md",
+      "foreground": "intro-start.sh"
+    },
+    "finish": {
+      "text": "finish.md"
+    },
+    "assets": {
+      "host01": []
+    },
+    "files": []
+  },
+  "environment": {
+    "hidefinish": true,
+    "uilayout": "vscode-terminal-split",
+    "dashboards": [
+      { "name": "Postgres DB", "port": 5432 },
+      { "name": "Pact Broker", "port": 8000 },
+      { "name": "Pact Broker 2", "port": 9292 }
+    ]
+  },
+  "backend": {
+    "imageid": "ubuntu"
+  },
+  "interface": {
+    "layout": "ide"
+  }
+}
