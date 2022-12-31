@@ -241,6 +241,7 @@ https://www.scala-sbt.org/release/docs/Setup.html
 1. `apt install --yes sbt`{{exec}}
 1. `sbt --version`{{exec}}
 1. `apt install clang`{{exec}}
+1. `make scala_native_deps`{{exec}}
 1. `make scala_native_hello_ffi`{{exec}}
 ## Swift
 

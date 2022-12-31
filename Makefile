@@ -201,8 +201,12 @@ lua_hello_ffi:
 
 lua: lua_hello_ffi lua_hello_grpc
 
+scala_native_deps:
+	mkdir -p scala-native/src/main/resources/scala-native/
+	cp pact.h scala-native/src/main/resources/scala-native/pact.h
+
 scala_native_hello_ffi:
-	cd scala-native && sbt nativeLink > /dev/null && $(LOAD_PATH)/.. target/scala-2.12/scala-native-out
+	cd scala-native && sbt nativeLink && $(LOAD_PATH)/.. target/scala-2.12/scala-native-out
 
 scala_native: scala_native_hello_ffi
 
