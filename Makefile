@@ -30,8 +30,12 @@ ada_hello_ffi:
 	fi; \
 
 ada: ada_hello_ffi
+
+perl_install_deps:
+	cpan FFI::Platypus 
+
 perl_hello_ffi:
-	perl perl/hello_ffi.pl
+	$(LOAD_PATH) perl perl/hello_ffi.pl
 
 perl_hello_grpc:
 	perl perl/hello_grpc.pl

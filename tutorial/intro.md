@@ -8,7 +8,7 @@
 
 ## Ada
 
-https://www.adacore.com/download
+<https://www.adacore.com/download>
 
 1. `apt-cache search gnat-10`{{exec}}
 1. `apt-get --yes install gnat-10`{{exec}}
@@ -17,7 +17,7 @@ https://www.adacore.com/download
 
 ## Bun
 
-https://bun.sh/
+<https://bun.sh/>
 
 1. `curl -fsSL https://bun.sh/install | bash`{{exec}}
 2. `source /root/.bashrc`{{exec}}
@@ -26,21 +26,20 @@ https://bun.sh/
 
 ## C
 
-1.  `gcc --version`{{exec}}
-2.  `make c_hello_ffi`{{exec}}
+1. `gcc --version`{{exec}}
+2. `make c_hello_ffi`{{exec}}
 
 ## C #
 
-https://www.mono-project.com/docs/about-mono/languages/csharp/
-https://www.mono-project.com/docs/getting-started/install/
+<https://www.mono-project.com/docs/about-mono/languages/csharp/>
+<https://www.mono-project.com/docs/getting-started/install/>
 
 1. `apt-get install --yes mono-mcs`{{exec}}
 2. `make csharp_hello_ffi`{{exec}}
 
-
 ## Dart
 
-https://dart.dev/get-dart
+<https://dart.dev/get-dart>
 
 1. `wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg`{{exec}}
 2. `echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list`{{exec}}
@@ -51,7 +50,7 @@ https://dart.dev/get-dart
 
 ## Deno
 
-https://deno.land/manual@v1.29.1/getting_started/installation
+<https://deno.land/manual@v1.29.1/getting_started/installation>
 
 1. `curl -fsSL https://deno.land/x/install/install.sh | sh`{{exec}}
 2. `export DENO_INSTALL="/root/.deno"`{{exec}}
@@ -60,17 +59,16 @@ https://deno.land/manual@v1.29.1/getting_started/installation
 2. `deno --version`{{exec}}
 3. `make deno_hello_ffi`{{exec}}
 
-
 ## GoLang
 
-https://go.dev/doc/install
+<https://go.dev/doc/install>
 
 1. `go version`{{exec}}
 2. `make go_hello_ffi`{{exec}}
 
 ## Haskell
 
-https://www.haskell.org/downloads/
+<https://www.haskell.org/downloads/>
 
 1. `apt-get install --yes ghc`{{exec}}
 2. `ghc --version`{{exec}}
@@ -86,21 +84,19 @@ https://www.haskell.org/downloads/
 6. `export PATH="/usr/lib/jvm/jdk-19.0.1/bin:$PATH"`{{exec}}
 7. `cd ~/hello_ffi`{{exec}}
 
-
 ### Java Native Access
 
 1. `make java_jna_hello_ffi`{{exec}}
 
-### Java Panama
+### Java Panama
 
-https://openjdk.org/projects/panama/
-https://jdk.java.net/jextract/
+<https://openjdk.org/projects/panama/>
+<https://jdk.java.net/jextract/>
 
 1. `wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.java.net/java/early_access/jextract/2/openjdk-19-jextract+2-3_linux-x64_bin.tar.gz`{{exec}}
 2. `tar -xzf openjdk-19-jextract+2-3_linux-x64_bin.tar.gz -C java/panama`{{exec}}
 3. `make java_panama_ffi_gen`{{exec}}
 4. `make java_panama_hello_ffi`{{exec}}
-   
 
 ## JavaScript
 
@@ -108,16 +104,15 @@ https://jdk.java.net/jextract/
 1. `source ~/.bashrc`{{exec}}
 2. `nvm install 16`{{exec}}
 
+### node-addon-api
 
-### node-addon-api
-
-### node-ffi-napi
+### node-ffi-napi
 
 3. `make js_ffi_napi_hello_ffi`{{exec}}
 
-### node-ffi-packager
+### node-ffi-packager
 
-https://github.com/node-ffi-packager/node-ffi-generate
+<https://github.com/node-ffi-packager/node-ffi-generate>
 
 <!-- 1. `apt-get install clang`
 1. `apt install llvm`
@@ -126,14 +121,13 @@ https://github.com/node-ffi-packager/node-ffi-generate
 4. `LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu` -->
 5. `make js_ffi_packager_hello_ffi`{{exec}}
 
-
 ## Julia
 
-https://julialang.org/downloads/
+<https://julialang.org/downloads/>
 
 1. `apt-get install --yes julia`{{exec}}
-2. `make julia_hello_ffi`{{exec}}
-
+2. `julia --version`{{exec}}
+3. `make julia_hello_ffi`{{exec}}
 
 <!-- ## Kotlin
 
@@ -144,15 +138,15 @@ https://kotlinlang.org/docs/native-c-interop.htm
 
 ## Lua
 
-https://luajit.org/install.html
+<https://luajit.org/install.html>
 
 1. `apt-get install --yes luajit`{{exec}}
-2. `luajit --version`{{exec}}
+2. `luajit -v`{{exec}}
 3. `make lua_hello_ffi`{{exec}}
 
 ## Nim
 
-https://nim-lang.org/install.html
+<https://nim-lang.org/install.html>
 
 1. `apt-get install --yes nim`{{exec}}
 2. `nim --version`{{exec}}
@@ -162,9 +156,34 @@ https://nim-lang.org/install.html
 
 ## Perl
 
+https://metacpan.org/pod/FFI::Platypus
+
+1. `cpan FFI::Platypus` or `make perl_install_deps`
+2. `make perl_hello_ffi`
+
 ## PHP
 
+https://www.php.net/manual/en/book.ffi.php
+
+1. `php -v`
+2. `make php_hello_ffi`
+   
 ## Python
+
+1. `python --version`
+
+### CTypes
+
+https://docs.python.org/3/library/ctypes.html
+
+1. `make python_hello_ffi_ctypes`
+
+### CFfi
+
+https://cffi.readthedocs.io/en/latest/
+
+1. `make python_install_deps`
+2. `make python_hello_ffi_cffi`
 
 ## Racket
 
@@ -172,6 +191,19 @@ https://nim-lang.org/install.html
 
 ## Ruby
 
+1. `curl -sSL https://rvm.io/mpapis.asc | gpg --import - && \
+curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - && \
+curl -sSL https://get.rvm.io | bash -s stable && \
+source /etc/profile.d/rvm.sh && rvm install 2.7.6`{{exec}}
+2. `ruby --version`
+
+### Fiddle
+
+1. `make ruby_hello_ffi_fiddle`
+
+### CFfi
+
+1. `ruby_hello_ffi_ffi_deps`
 ## Scala-Native
 
 ## Swift
@@ -201,7 +233,6 @@ console.log(denoPact.getPactFfiVersion());
 7. `deno run -A --unstable helloPactDeno.ts`{{exec}}
 
 ## Run the Examples
-
 
 2. `git clone https://github.com/YOU54F/deno-pact`{{exec}}
 3. `cd deno-pact`{{exec}}
