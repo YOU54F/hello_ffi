@@ -32,7 +32,7 @@ ada_hello_ffi:
 ada: ada_hello_ffi
 
 perl_install_deps:
-	cpan FFI::Platypus 
+	cpan FFI::Platypus<<<yes
 
 perl_hello_ffi:
 	$(LOAD_PATH) perl perl/hello_ffi.pl
@@ -338,6 +338,7 @@ haskell_hello_ffi \
 go_hello_ffi \
 julia_hello_ffi \
 java_jna_hello_ffi \
+java_panama_hello_ffi \
 js_ffi_napi_hello_ffi \
 js_ffi_packager_hello_ffi \
 kotlin_hello_ffi \

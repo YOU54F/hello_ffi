@@ -130,12 +130,13 @@
 2. `julia --version`{{exec}}
 3. `make julia_hello_ffi`{{exec}}
 
-<!-- ## Kotlin
+## Kotlin
 
 https://kotlinlang.org/docs/native-c-interop.htm
 
-1. `apt install --yes gradle`
-2. `make kotlin_hello_ffi` -->
+1. `snap install --classic kotlin`{{exec}}
+2. `sdk install gradle 7.6`{{exec}}
+3. `make kotlin_hello_ffi`{{exec}}
 
 ## Lua
 
@@ -157,10 +158,8 @@ https://kotlinlang.org/docs/native-c-interop.htm
 
 1. `apt install --yes ocaml opam`{{exec}}
 2. `ocaml --version`{{exec}}
-3. `opam init`{{exec}}
-   1. press `yes` and `yes` at both prompts
-4. `opam install ctypes ctypes-foreign utop`{{exec}}
-   1. press `yes` at the install prompt
+3. `opam init --auto-setup`{{exec}}
+4. `opam install --yes ctypes ctypes-foreign utop`{{exec}}
 5. `eval $(opam env)`{{exec}}
 6. `make ocaml_hello_ffi`{{exec}}
 
@@ -168,7 +167,7 @@ https://kotlinlang.org/docs/native-c-interop.htm
 
 https://metacpan.org/pod/FFI::Platypus
 
-1. `cpan FFI::Platypus`{{exec}} or `make perl_install_deps`{{exec}}
+1. `cpan FFI::Platypus<<<yes`{{exec}} or `make perl_install_deps`{{exec}}
    1. press `yes` at the install prompt
 2. `make perl_hello_ffi`{{exec}}
 
@@ -238,11 +237,11 @@ https://www.scala-sbt.org/release/docs/Setup.html
 1. `curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import`{{exec}}
 1. `chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg`{{exec}}
 1. `apt update`{{exec}}
-1. `apt install --yes sbt`{{exec}}
+1. `apt install --yes sbt clang`{{exec}}
 1. `sbt --version`{{exec}}
-1. `apt install clang`{{exec}}
 1. `make scala_native_deps`{{exec}}
 1. `make scala_native_hello_ffi`{{exec}}
+
 ## Swift
 
 https://www.swift.org/download/
@@ -250,17 +249,13 @@ https://www.swift.org/download/
 1. `wget https://swift.org/builds/swift-5.7.2-release/ubuntu2004/swift-5.7.2-RELEASE/swift-5.7.2-RELEASE-ubuntu20.04.tar.gz`{{exec}}
 2. `tar xzf swift-5.7.2-RELEASE-ubuntu20.04.tar.gz`{{exec}}
 3. `mv swift-5.7.2-RELEASE-ubuntu20.04 /usr/share/swift`{{exec}}
-4. `echo "export PATH=/usr/share/swift/usr/bin:$PATH" >> ~/.bashrc`{{exec}}
+4. `export PATH=/usr/share/swift/usr/bin:$PATH`{{exec}}
 5. `source ~/.bashrc`{{exec}}
 6. `swift -v`{{exec}}
 7. `swiftc -v`{{exec}}
 8. `make swift_hello_ffi`{{exec}}
 
 ## Visual Basic
-
-1. `apt install --yes rakudo`{{exec}}
-2. `rakudo --version`{{exec}}
-3. `make raku_hello_ffi`{{exec}}
 
 https://learn.microsoft.com/en-us/dotnet/visual-basic/reference/command-line-compiler/
 
@@ -344,3 +339,5 @@ console.log(denoPact.getPactFfiVersion());
 
 5. `./run get_broker`{{exec}}
 6. Open the [Pact Broker]({{TRAFFIC_HOST1_9292}}) -->
+
+
