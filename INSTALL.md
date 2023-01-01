@@ -1,5 +1,10 @@
+# Pre-requisities
 
-## Pre-requestives
+### Clone the repo
+
+```sh
+git clone https://github.com/YOU54F/hello_ffi.git
+```
 
 ### Linux
 
@@ -12,8 +17,6 @@ apt --version
 ```sh
 snap --version
 ```
-
-
 
 ### MacOS
 
@@ -31,13 +34,11 @@ TODO
 
 - `make`
 
-
 ```sh
 make --version
 ```
 
 - `jq`
-
 
 ```sh
 jq --version
@@ -49,13 +50,11 @@ sudo apt-get install --yes jq
 
 - `grep`
 
-
 ```sh
 grep --version
 ```
 
 - `jenv`
-
 
 ```sh
 jenv --version
@@ -67,8 +66,11 @@ jenv --version
 make get_pact_ffi
 ```
 
-
 ## Run - Hello FFI
+
+```sh
+make hello_ffi | grep -e INFO
+```
 
 ```sh
 make -i hello_ffi
@@ -103,7 +105,6 @@ bun --version
 make bun_hello_ffi
 ```
 
-
 ## C#
 
 ```sh
@@ -121,7 +122,6 @@ sudo apt-get install --yes mono-mcs
 ```sh
 make csharp_hello_ffi
 ```
-
 
 ## Dart
 
@@ -242,7 +242,6 @@ julia --version
 ```sh
 make julia_hello_ffi
 ```
-
 
 ## Kotlin
 
