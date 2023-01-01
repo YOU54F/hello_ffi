@@ -11,9 +11,9 @@
 <https://www.adacore.com/download>
 
 1. `apt-cache search gnat-10`{{exec}}
-1. `apt-get --yes install gnat-10`{{exec}}
-1. `gnat --version`{{exec}}
-2. `make ada_hello_ffi`{{exec}}
+2. `apt-get --yes install gnat-10`{{exec}}
+3. `gnat --version`{{exec}}
+4. `make ada_hello_ffi`{{exec}}
 
 ## Bun
 
@@ -29,7 +29,7 @@
 1. `gcc --version`{{exec}}
 2. `make c_hello_ffi`{{exec}}
 
-## C #
+## C
 
 <https://www.mono-project.com/docs/about-mono/languages/csharp/>
 <https://www.mono-project.com/docs/getting-started/install/>
@@ -45,8 +45,8 @@
 2. `echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list`{{exec}}
 3. `apt-get update`{{exec}}
 4. `apt-get install dart`{{exec}}
-2. `dart --version`{{exec}}
-3. `make dart_hello_ffi`{{exec}}
+5. `dart --version`{{exec}}
+6. `make dart_hello_ffi`{{exec}}
 
 ## Deno
 
@@ -55,9 +55,9 @@
 1. `curl -fsSL https://deno.land/x/install/install.sh | sh`{{exec}}
 2. `export DENO_INSTALL="/root/.deno"`{{exec}}
 3. `export PATH="$DENO_INSTALL/bin:$PATH"`{{exec}}
-2. `source /root/.bashrc`{{exec}}
-2. `deno --version`{{exec}}
-3. `make deno_hello_ffi`{{exec}}
+4. `source /root/.bashrc`{{exec}}
+5. `deno --version`{{exec}}
+6. `make deno_hello_ffi`{{exec}}
 
 ## GoLang
 
@@ -101,8 +101,8 @@
 ## JavaScript
 
 1. `wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash`{{exec}}
-1. `source ~/.bashrc`{{exec}}
-2. `nvm install 16`{{exec}}
+2. `source ~/.bashrc`{{exec}}
+3. `nvm install 16`{{exec}}
 
 ### node-addon-api
 
@@ -118,7 +118,7 @@
 1. `apt install llvm`
 2. `ln -s /usr/lib/llvm-10/lib/libclang.so.1 /usr/lib/llvm-10/lib/libclang.so`
 3. `apt-get install -y libclang-dev`
-4. `LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu` -->
+
 5. `make js_ffi_packager_hello_ffi`{{exec}}
 
 ## Julia
@@ -134,7 +134,6 @@
 https://kotlinlang.org/docs/native-c-interop.htm
 
 1. `apt-get install --yes gradle`
-2. `make kotlin_hello_ffi` -->
 
 ## Lua
 
@@ -173,7 +172,7 @@ https://www.php.net/manual/en/book.ffi.php
 
 1. `php -v`{{exec}}
 2. `make php_hello_ffi`{{exec}}
-   
+
 ## Python
 
 1. `python --version`{{exec}}
@@ -196,7 +195,6 @@ https://cffi.readthedocs.io/en/latest/
 1. `apt-get install --yes racket`{{exec}}
 2. `racket --version`{{exec}}
 3. `make racket_hello_ffi`{{exec}}
-
 
 ## Raku
 
@@ -296,4 +294,3 @@ console.log(denoPact.getPactFfiVersion());
     3. Restart the container if there was any issues `docker restart mybroker_pact_broker_1`{{exec}}
 
 5. `./run get_broker`{{exec}}
-6. Open the [Pact Broker]({{TRAFFIC_HOST1_9292}}) -->
