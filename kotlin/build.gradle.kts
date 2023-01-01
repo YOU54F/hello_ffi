@@ -1,11 +1,12 @@
 // build.gradle.kts
 plugins {
-    kotlin("multiplatform") version "1.7.21"
-}
+        kotlin("multiplatform") version "1.7.21"
+    }
 
 repositories {
-    mavenCentral()
-}
+        mavenCentral()
+        }
+
 
 kotlin {
     val hostOs = System.getProperty("os.name")
@@ -19,20 +20,25 @@ kotlin {
     }
 
     nativeTarget.apply {
-            compilations.getByName("main") {    // NL
-        cinterops {                     // NL
-            val pact by creating     // NL
-        }                               // NL
-    }                                   // NL
+        compilations.getByName("main") { 
+        cinterops {                     
+            val pact by creating {
+                headers(System.getenv("PWD")+"/../pact.h")
+                compilerOpts("-I"+System.getenv("PWD")+"/../"+"-lpact_ffi")
+            }    
+        }                               
+    }                                   
         binaries {
             executable {
                 entryPoint = "main"
+                linkerOpts("-L"+System.getenv("PWD")+"/../", "-lpact_ffi")
+
             }
         }
     }
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "6.7.1"
+    gradleVersion = "7.2"
     distributionType = Wrapper.DistributionType.BIN
 }

@@ -8,7 +8,7 @@ open Foreign
 
 (* TODO: library needs to be .so for unix / ocaml cannot detect between linux/darwin *)
 
-let pact = Dl.dlopen ~filename: "libpact_ffi.dylib" ~flags:[Dl.RTLD_LAZY; Dl.RTLD_GLOBAL];;
+let pact = Dl.dlopen ~filename: "libpact_ffi.so" ~flags:[Dl.RTLD_LAZY; Dl.RTLD_GLOBAL];;
 
 let pactffi_version = foreign "pactffi_version" (void @-> returning string)
 let pactffi_logger_init = foreign "pactffi_logger_init" (void @-> returning void)
