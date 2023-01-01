@@ -32,7 +32,7 @@ ada_hello_ffi:
 ada: ada_hello_ffi
 
 perl_install_deps:
-	cpan FFI::Platypus 
+	cpan FFI::Platypus<<<yes
 
 perl_hello_ffi:
 	$(LOAD_PATH) perl perl/hello_ffi.pl
@@ -57,10 +57,10 @@ python_install_deps:
 	cd python/cffi && pip install -r requirements.txt
 
 python_hello_ffi_cffi:
-	python python/cffi/hello_ffi.py
+	python3 python/cffi/hello_ffi.py
 
 python_hello_ffi_ctypes:
-	python python/ctypes/hello_ffi.py
+	python3 python/ctypes/hello_ffi.py
 
 python_hello_ffi: python_hello_ffi_cffi python_hello_ffi_ctypes
 python: python_hello_ffi
@@ -188,10 +188,10 @@ c_hello_ffi:
 c: c_hello_ffi
 
 swift_hello_ffi:
-	swiftc swift/hello_ffi.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_ffi && ./swift/hello_ffi
+	swiftc swift/hello_ffi.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_ffi && $(LOAD_PATH) ./swift/hello_ffi
 
 swift_hello_grpc:
-	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && ./swift/hello_grpc
+	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && $(LOAD_PATH) ./swift/hello_grpc
 
 lua_hello_grpc:
 	cd lua && luajit hello_grpc.lua
@@ -201,8 +201,12 @@ lua_hello_ffi:
 
 lua: lua_hello_ffi lua_hello_grpc
 
+scala_native_deps:
+	mkdir -p scala-native/src/main/resources/scala-native/
+	cp pact.h scala-native/src/main/resources/scala-native/pact.h
+
 scala_native_hello_ffi:
-	cd scala-native && sbt nativeLink > /dev/null && $(LOAD_PATH)/.. target/scala-2.12/scala-native-out
+	cd scala-native && sbt nativeLink && $(LOAD_PATH)/.. target/scala-2.12/scala-native-out
 
 scala_native: scala_native_hello_ffi
 
@@ -237,17 +241,20 @@ ifeq ($(OS),Windows_NT)
 	BAT=.bat
 	LOAD_PATH=LD_LIBRARY_PATH=$$PWD
 	STD_LIB_DIR=TODO
+	VBC_COMPILER=vbc
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         pactffi_filename = 'libpact_ffi.so'
 		LOAD_PATH=LD_LIBRARY_PATH=$$PWD
 		STD_LIB_DIR=/usr/include
+		VBC_COMPILER=vbnc
     endif
     ifeq ($(UNAME_S),Darwin)
         pactffi_filename = 'libpact_ffi.dylib'
 		LOAD_PATH=DYLD_LIBRARY_PATH=$$PWD
 		STD_LIB_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+		VBC_COMPILER=vbc
     endif
 endif
 
@@ -258,7 +265,7 @@ endif
 # get_pact_ffi \
 
 visual_basic_hello_ffi:
-	cd vb && vbc helloPact.vb  > /dev/null && mono helloPact.exe
+	cd vb && $(VBC_COMPILER) helloPact.vb  > /dev/null && $(LOAD_PATH)/.. mono helloPact.exe
 
 visual_basic: visual_basic_hello_ffi
 
@@ -284,7 +291,7 @@ kotlin_hello_ffi:
 kotlin: kotlin_hello_ffi
 
 ocaml_hello_ffi:
-	./ocaml/helloffi.ml
+	$(LOAD_PATH) ./ocaml/helloffi.ml
 
 ocaml: ocaml_hello_ffi
 
@@ -327,12 +334,13 @@ c_hello_ffi \
 csharp_hello_ffi  \
 dart_hello_ffi \
 deno_hello_ffi \
-haskell_hello_ffi \
 go_hello_ffi \
-julia_hello_ffi \
+haskell_hello_ffi \
 java_jna_hello_ffi \
+java_panama_hello_ffi \
 js_ffi_napi_hello_ffi \
 js_ffi_packager_hello_ffi \
+julia_hello_ffi \
 kotlin_hello_ffi \
 lua_hello_ffi \
 nim_hello_ffi \

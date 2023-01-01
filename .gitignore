@@ -10,3 +10,4 @@ logs
 .vscode
 node_modules
 scratchpad
+*.gz
