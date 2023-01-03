@@ -2,7 +2,8 @@
 (require ffi/unsafe
          racket/runtime-path
          (for-syntax racket/base))
-(define pact_ffi (ffi-lib "libpact_ffi" '("2" #f)))
+(define pact_ffi (ffi-lib "pact_ffi" '("2" #f))) ;;; windows using pact_ffi.dll
+;;; (define pact_ffi (ffi-lib "libpact_ffi" '("2" #f)))
 
 (define pactffi_version
     (get-ffi-obj "pactffi_version" pact_ffi

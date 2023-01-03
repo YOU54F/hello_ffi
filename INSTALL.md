@@ -4,6 +4,7 @@
 
 ```sh
 git clone https://github.com/YOU54F/hello_ffi.git
+cd hello_ffi
 ```
 
 ### Linux
@@ -12,10 +13,11 @@ git clone https://github.com/YOU54F/hello_ffi.git
 
 ```sh
 apt --version
+
 ```
 
 ```sh
-snap --version
+snap --version 
 ```
 
 ### MacOS
@@ -28,7 +30,9 @@ brew --version
 
 ### Windows
 
-TODO
+```sh
+choco --version
+```
 
 ### All Platforms
 
@@ -48,10 +52,18 @@ jq --version
 sudo apt-get install --yes jq
 ```
 
+```sh
+choco install --yes jq
+```
+
 - `grep`
 
 ```sh
 grep --version
+```
+
+```sh
+choco install --yes grep
 ```
 
 - `jenv`
@@ -66,6 +78,11 @@ jenv --version
 make get_pact_ffi
 ```
 
+```sh
+deno run -A --unstable https://deno.land/x/pact/src/downloadFfi.ts --run
+ls $HOME\.pact\ffi\v0.3.15 .
+```
+
 ## Run - Hello FFI
 
 ```sh
@@ -78,19 +95,37 @@ make -i hello_ffi
 
 ```sh
 make -i hello_ffi | grep -e INFO
-
 ```
 
 ## Ada
 
 ```sh
 sudo apt-get --yes install gnat-10
+```
+
+```sh
+choco install --yes gnat-gpl
+```
+
+```sh
 gnat --version
 gnatmake --version
 ```
 
 ```sh
 make ada_hello_ffi
+```
+
+```sh
+cd ada && gnatmake helloffi.adb -largs -lpact_ffi -L../.
+```
+
+```sh
+cd ada; gnatmake helloffi.adb -largs -lpact_ffi -L../.
+```
+
+```sh
+./ada/helloffi
 ```
 
 ## Bun
@@ -102,18 +137,43 @@ source ~/.zshrc
 
 ```sh
 bun --version
+```
+
+```sh
 make bun_hello_ffi
 ```
 
-## C#
+## C
 
 ```sh
 sudo apt install --yes gcc
 ```
 
 ```sh
+choco install --yes mingw
+```
+
+```sh
+gcc --version
+```
+
+```sh
 make c_hello_ffi
 ```
+
+```sh
+gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi
+```
+
+```sh
+$$env:LD_LIBRARY_PATH=$env:PWD.Path; ./c/hello_ffi
+```
+
+```sh
+./c/hello_ffi
+```
+
+## C#
 
 ```sh
 sudo apt-get install --yes mono-mcs
@@ -123,6 +183,18 @@ sudo apt-get install --yes mono-mcs
 make csharp_hello_ffi
 ```
 
+```sh
+cd csharp; & 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\csc.exe' helloPact.cs; 
+```
+
+```sh
+$$env:LD_LIBRARY_PATH=$env:PWD.Path; csharp/helloPact
+```
+
+```sh
+csharp/helloPact
+```
+
 ## Dart
 
 ```sh
@@ -130,6 +202,10 @@ wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dea
 echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list
 sudo apt-get update
 sudo apt-get install dart
+```
+
+```sh
+choco install --yes dart-sdk
 ```
 
 ```sh
@@ -149,6 +225,10 @@ export PATH="$DENO_INSTALL/bin:$PATH"`
 ```
 
 ```sh
+choco install --yes deno
+```
+
+```sh
 deno --version
 ```
 
@@ -156,10 +236,30 @@ deno --version
 make deno_hello_ffi
 ```
 
+### Powershell
+
+drop the first `$` if copy/pasting into a shell
+
+```sh
+$$env:LD_LIBRARY_PATH=$env:PWD.Path; deno run --allow-ffi --unstable deno/hello_ffi.ts
+```
+
+```sh
+deno run --allow-ffi --unstable deno/hello_ffi.ts
+```
+
 ## GoLang
 
 ```sh
 sudo apt-get install --yes golang
+```
+
+```sh
+choco install --yes golang 
+```
+
+```sh
+choco install --yes mingw
 ```
 
 ```sh
@@ -170,10 +270,43 @@ go version
 make go_hello_ffi
 ```
 
+### Windows
+
+```sh
+cd go; go build
+```
+
+```sh
+go/hello_ffi
+```
+
+There is a failure with the latest go 1.19.4 on windows, so you can use the following instructions to install an rc1
+see https://github.com/golang/go/issues/51007
+
+```sh
+go install golang.org/dl/go1.20rc1@latest
+```
+
+```sh
+go1.20rc1 download
+```
+
+```sh
+cd go; go1.20rc1 build
+```
+
 ## Haskell
 
 ```sh
 sudo apt-get install --yes ghc
+```
+
+```sh
+choco install --yes ghc
+```
+
+```sh
+choco install --yes llvm
 ```
 
 ```sh
@@ -182,6 +315,18 @@ ghc --version
 
 ```sh
 make haskell_hello_ffi
+```
+
+```sh
+ghc haskell/hello_ffi.hs pact_ffi.dll -o haskell/hello_ffi_haskell
+```
+
+```sh
+$$env:LD_LIBRARY_PATH=$env:PWD.Path; ./haskell/hello_ffi_haskell
+```
+
+```sh
+./haskell/hello_ffi_haskell
 ```
 
 ## Java
@@ -196,13 +341,35 @@ jenv global 19
 ```
 
 ```sh
+choco install --yes temurin19
+```
+
+```sh
+java --version
+```
+
+```sh
 make java_jna_hello_ffi
 ```
+
+linux
 
 ```sh
 wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.java.net/java/early_access/jextract/2/openjdk-19-jextract+2-3_linux-x64_bin.tar.gz
 tar -xzf openjdk-19-jextract+2-3_linux-x64_bin.tar.gz -C java/panama
 ```
+
+windows
+
+```sh
+wget -Headers @{'Cookie'='oraclelicense=accept-securebackup-cookie'} https://download.java.net/java/early_access/jextract/2/openjdk-19-jextract+2-3_windows-x64_bin.tar.gz -Outfile openjdk-19-jextract+2-3_windows-x64_bin.tar.gz
+tar -xzf openjdk-19-jextract+2-3_windows-x64_bin.tar.gz -C java/panama
+```
+
+mac
+
+wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.java.net/java/early_access/jextract/2/openjdk-19-jextract+2-3_macos-x64_bin.tar.gz
+tar -xzf openjdk-19-jextract+2-3_macos-x64_bin.tar.gz -C java/panama
 
 ```sh
 make java_panama_ffi_gen
@@ -222,11 +389,34 @@ nvm install 16
 ```
 
 ```sh
+node -v
+npm -v
+```
+
+```sh
 make js_ffi_napi_hello_ffi
+```
+
+Below is for powershell, drop the first $ if copy/pasting into your own shell
+
+```sh
+$$env:LD_LIBRARY_PATH = $env:PWD.Path; node js/node-ffi-napi/index.js
+```
+
+```sh
+node js/node-ffi-napi/index.js
 ```
 
 ```sh
 make js_ffi_packager_hello_ffi
+```
+
+```sh
+$$env:LD_LIBRARY_PATH = $env:PWD.Path; node js/node-ffi-packager/index.js
+```
+
+```sh
+node js/node-ffi-packager/index.js
 ```
 
 ## Julia
@@ -236,11 +426,23 @@ sudo snap install julia --classic
 ```
 
 ```sh
+choco install --yes julia
+```
+
+```sh
 julia --version
 ```
 
 ```sh
 make julia_hello_ffi
+```
+
+```sh
+julia julia/hello_ffi.jl
+```
+
+```sh
+$$env:LD_LIBRARY_PATH=$env:PWD.Path; julia julia/hello_ffi.jl
 ```
 
 ## Kotlin
@@ -283,11 +485,19 @@ export PATH=$HOME/.nimble/bin:$PATH
 ```
 
 ```sh
+choco install --yes nim
+```
+
+```sh
 nim --version
 ```
 
 ```sh
 make nim_hello_ffi
+```
+
+```sh
+nim c -r --hints:off nim/hello_ffi.nim
 ```
 
 ## OCaml
@@ -323,11 +533,35 @@ perl -v
 ```
 
 ```sh
-cpan FFI::Platypus
+perl -e 'use FFI::Platypus;;'
+```
+
+## Pre-requisites
+
+```sh
+cpanm FFI::Platypus
 ```
 
 ```sh
+cpanm Capture::Tiny ExtUtils::ParseXS ExtUtils::MakeMaker IPC::Cmd
+```
+
+### Windows
+
+Strawberry perl comes with FFI:Platypus pre-installed
+
+```sh
+choco install --yes strawberryperl
+```
+
+### Hello Ffi - Perl
+
+```sh
 make perl_hello_ffi
+```
+
+```sh
+perl perl/hello_ffi.pl
 ```
 
 ## PHP
@@ -336,6 +570,36 @@ make perl_hello_ffi
 
 ```sh
 sudo apt-get install --yes php
+```
+
+```sh
+choco install --yes php
+```
+
+```sh
+scoop bucket add php
+scoop install php/php8.1
+```
+
+```sh
+php -m
+```
+
+```sh
+code $HOME\scoop\apps\php8.1\8.1.13\conf.d\extensions.ini
+```
+
+```sh
+extension_dir = ext
+extension = php_ffi.dll
+```
+
+```sh
+php -m | grep -e FFI
+```
+
+```sh
+make php_hello_ffi
 ```
 
 ## Python
@@ -348,6 +612,12 @@ python3 --version
 
 ```sh
 sudo apt-get install --yes pip
+```
+
+### Windows
+
+```sh
+choco install --yes pip
 ```
 
 ```sh
@@ -369,6 +639,23 @@ sudo apt-get install --yes racket
 ```
 
 ```sh
+choco install --yes racket
+```
+
+```sh
+(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).path
+```
+
+```sh
+$$env:Path -split ';'
+```
+
+```sh
+$$Env:Path += [IO.Path]::PathSeparator + 'C:\Program Files\Racket\'
+racket --version
+```
+
+```sh
 racket --version
 ```
 
@@ -380,6 +667,10 @@ make racket_hello_ffi
 
 ```sh
 sudo apt-get install --yes rakudo
+```
+
+```sh
+choco install --yes rakudostar
 ```
 
 ```sh
@@ -395,6 +686,10 @@ sudo mkdir -p short; sudo chmod -R 777 short
 
 ```sh
 make raku_hello_ffi
+```
+
+```sh
+$env:LD_LIBRARY_PATH = $env:PWD.Path; rakudo raku/hello_ffi.raku
 ```
 
 ## Ruby
@@ -427,6 +722,20 @@ gem install bundler
 source /etc/profile.d/rvm.sh
 rvm list
 rvm --default use ruby-2.7.6
+ruby --version
+```
+
+### Windows
+
+```sh
+scoop install ruby msys2
+```
+
+```sh
+ridk install
+```
+
+```sh
 ruby --version
 ```
 
@@ -506,6 +815,14 @@ sudo apt-get install --yes mono-vbnc
 ```
 
 ```sh
+choco install --yes mono
+```
+
+```sh
+choco install --yes dotnet
+```
+
+```sh
 make visual_basic_hello_ffi
 ```
 
@@ -513,6 +830,10 @@ make visual_basic_hello_ffi
 
 ```sh
 sudo snap install zig --classic --beta
+```
+
+```sh
+choco install --yes zig
 ```
 
 ```sh

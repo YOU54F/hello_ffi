@@ -235,8 +235,8 @@ types["uint16_t"] = uint16_t;
 types["uint32_t"] = uint32_t;
 types["uint8_t"] = uint8_t;
 types["uint8_tPointer"] = uint8_tPointer;
-
-const functions = new FFI.Library("libpact_ffi", {
+// todo set to libpact_ffi on darwin/linux
+const functions = new FFI.Library("pact_ffi", {
   pactffi_check_regex: [js_byte, [js_CString, js_CString]],
   pactffi_cleanup_mock_server: [js_byte, [int32_t]],
   pactffi_cleanup_plugins: [js_void, [PactHandle]],

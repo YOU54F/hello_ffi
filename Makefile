@@ -17,17 +17,21 @@ install_protobuf_plugin:
 	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
 
 haskell_hello_ffi:
-	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell > /dev/null && $(LOAD_PATH) ./haskell/hello_ffi_haskell
+	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell > /dev/null
+	$(LOAD_PATH) ./haskell/hello_ffi_haskell
 
 haskell: haskell_hello_ffi
 
 ada_hello_ffi:
-	if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
-	then \
-		cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L../osxx86 && $(LOAD_PATH)/../osxx86 ./helloffi; \
-	else \
-		cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L.. && $(LOAD_PATH)/.. ./helloffi; \
-	fi; \
+	cd ada && gnatmake helloffi.adb -largs -lpact_ffi -L../.
+	./ada/helloffi
+
+# if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
+# then \
+# 	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L../osxx86 && $(LOAD_PATH)/../osxx86 ./helloffi; \
+# else \
+# 	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L.. && $(LOAD_PATH)/.. ./helloffi; \
+# fi; \
 
 ada: ada_hello_ffi
 
@@ -128,7 +132,7 @@ deno_run_download_ffi:
 	deno run --allow-all --unstable deno/downloadFfi.ts
 
 deno_hello_ffi:
-	$(LOAD_PATH) deno run --allow-ffi --unstable deno/hello_ffi.ts
+	deno run --allow-ffi --unstable deno/hello_ffi.ts
 
 deno_run_pact_mock_server:
 	deno run --allow-all --unstable deno/hello_pact_mock_server.ts
@@ -142,12 +146,15 @@ deno_compile_plugin_and_test:
 deno: deno_run_download_ffi deno_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
 csharp_hello_ffi:
-	if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
-	then \
-		cd csharp && mcs helloPact.cs && $(LOAD_PATH)/../osxx86 mono helloPact.exe; \
-	else \
-		cd csharp && mcs helloPact.cs && $(LOAD_PATH)/.. mono helloPact.exe; \
-	fi; \
+	cd csharp && $(MCS_COMPILER) helloPact.cs
+	$(MONO) csharp/helloPact
+
+# if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
+# then \
+# 	cd csharp && $(MCS_COMPILER) helloPact.cs && $(LOAD_PATH)/../osxx86 mono helloPact.exe; \
+# else \
+# 	cd csharp && $(MCS_COMPILER) helloPact.cs && $(LOAD_PATH)/.. mono helloPact.exe; \
+# fi; \
 	
 
 csharp: csharp_hello_ffi
@@ -164,10 +171,10 @@ zig_hello:
 	zig run zig/hello.zig
 
 zig_hello_ffi:
-	zig run zig/hello_ffi.zig -L./ -lpact_ffi -lc
+	zig run zig/hello_ffi.zig -L./ -l$(pactffi_filename) -lc
 
 zig_run_pact_mock_server:
-	zig run zig/hello_pact_mock_server.zig -L./ -lpact_ffi --library curl --library c $(pkg-config --cflags libcurl) -lc
+	zig run zig/hello_pact_mock_server.zig -L./ -l$(pactffi_filename) --library curl --library c $(pkg-config --cflags libcurl) -lc
 
 zig: zig_hello zig_hello_ffi zig_run_pact_mock_server
 
@@ -183,12 +190,14 @@ dart_setup:
 dart: dart_setup dart_hello_ffi
 
 c_hello_ffi:
-	gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi &&  $(LOAD_PATH) ./c/hello_ffi
+	gcc c/hello_ffi.c -L./ -lpact_ffi -o c/hello_ffi
+	$(LOAD_PATH) ./c/hello_ffi
 
 c: c_hello_ffi
 
 swift_hello_ffi:
-	swiftc swift/hello_ffi.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_ffi && $(LOAD_PATH) ./swift/hello_ffi
+	swiftc swift/hello_ffi.swift -import-objc-header pact.h -L./.. -lpact_ffi$(DLL) -o swift/hello_ffi
+	$(LOAD_PATH) ./swift/hello_ffi
 
 swift_hello_grpc:
 	swiftc swift/hello_grpc.swift -import-objc-header pact.h -L${PWD} -lpact_ffi$(DLL) -o swift/hello_grpc && $(LOAD_PATH) ./swift/hello_grpc
@@ -233,28 +242,47 @@ nim_hello_world:
 	$(LOAD_PATH) nim$(EXE) c -r --hints:off nim/hello.nim
 
 nim: nim_hello_world nim_hello_ffi
-	
+
+GO_CMD=go	
+
+
+ABS_PATH_FFI_LIB=$(PWD)/$(pactffi_filename)
 ifeq ($(OS),Windows_NT)
-    pactffi_filename = 'pact_ffi.dll'
+	# This will allow powershell to use PWD
+	# it will reverse slashes to backslashes
+	# only seems to be relevant to java panama linking
+	ifndef ${PWD}
+	override PWD := $(subst /,\,$(CURDIR))
+	endif
+	ABS_PATH_FFI_LIB=$(subst /,\,$(PWD)/$(pactffi_filename))
+	
+    pactffi_filename = pact_ffi.dll
 	DLL=.dll
 	EXE=.exe
 	BAT=.bat
-	LOAD_PATH=LD_LIBRARY_PATH=$$PWD
+	# LOAD_PATH=$$env:LD_LIBRARY_PATH=$$env:PWD.Path;
 	STD_LIB_DIR=TODO
-	VBC_COMPILER=vbc
+	VBC_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\vbc.exe"
+	MCS_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\csc.exe"
+	# VBC_COMPILER=vbc.exe
+	GO_CMD=go1.20rc1
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
-        pactffi_filename = 'libpact_ffi.so'
+        pactffi_filename = libpact_ffi.so
 		LOAD_PATH=LD_LIBRARY_PATH=$$PWD
 		STD_LIB_DIR=/usr/include
 		VBC_COMPILER=vbnc
+		MCS_COMPILER=mcs
+		MONO=mono
     endif
     ifeq ($(UNAME_S),Darwin)
-        pactffi_filename = 'libpact_ffi.dylib'
+        pactffi_filename = libpact_ffi.dylib
 		LOAD_PATH=DYLD_LIBRARY_PATH=$$PWD
 		STD_LIB_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
 		VBC_COMPILER=vbc
+		MCS_COMPILER=mcs
+		MONO=mono
     endif
 endif
 
@@ -265,17 +293,19 @@ endif
 # get_pact_ffi \
 
 visual_basic_hello_ffi:
-	cd vb && $(VBC_COMPILER) helloPact.vb  > /dev/null && $(LOAD_PATH)/.. mono helloPact.exe
+	cd vb && $(VBC_COMPILER) helloPact.vb
+	$(MONO) vb/helloPact
 
 visual_basic: visual_basic_hello_ffi
 
 go_hello_ffi:
-	cd go && go build && $(LOAD_PATH)/.. ./hello_ffi
+	cd go && $(GO_CMD) build
+	go/hello_ffi
 
 go: go_hello_ffi
 
 js_ffi_napi_hello_ffi:
-	cd js/node-ffi-napi && npm i  > /dev/null
+	cd js/node-ffi-napi && npm i
 	$(LOAD_PATH) node js/node-ffi-napi/index.js 
 
 js_ffi_packager_gen_bindings:
@@ -303,18 +333,11 @@ tcl: tcl_hello
 java_jna_hello_ffi:
 	$(LOAD_PATH) java -cp java/jna/jna-5.12.1.jar java/jna/src/ffi/example/jna/HelloFfi.java
 
+
+
 java_panama_ffi_gen:
-	cd java/panama && jextract-19/bin/jextract \
-		--output src \
-		-t org.pact \
-		-I $(STD_LIB_DIR) \
-		-l$$PWD/../../$(pactffi_filename) ../../pact.h
-	cd java/panama && jextract-19/bin/jextract \
-		--source \
-		--output src \
-		-t org.pact \
-		-I $(STD_LIB_DIR) \
-		-l$$PWD/../../$(pactffi_filename) ../../pact.h
+	cd java/panama && .\jextract-19\bin\jextract --output src -t org.pact -l$(ABS_PATH_FFI_LIB) ../../pact.h
+	cd java/panama && .\jextract-19\bin\jextract --source --output src -t org.pact -l$(ABS_PATH_FFI_LIB) ../../pact.h
 
 java_panama_hello_ffi:
 	java -classpath ./java/panama/src --enable-native-access=ALL-UNNAMED --enable-preview --source 19 java/panama/Panama.java

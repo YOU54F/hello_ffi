@@ -11,3 +11,6 @@ logs
 node_modules
 scratchpad
 *.gz
+*.exe
+*.dll
+*.dll.lib
