@@ -346,7 +346,7 @@ console.log(denoPact.getPactFfiVersion());
 
 ```sh
 git clone 
-
+```
 ### Linux
 
 - Assumed Ubuntu 20.04 / 22.04

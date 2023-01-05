@@ -75,6 +75,8 @@ ruby_hello_ffi_fiddle:
 ruby_hello_ffi_ffi_deps:
 	cd ruby/ffi && bundle install
 
+ruby_install_deps: ruby_hello_ffi_ffi_deps
+
 ruby_hello_ffi_ffi:
 	ruby ruby/ffi/hello_ffi.rb
 
