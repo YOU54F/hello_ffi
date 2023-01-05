@@ -3,5 +3,6 @@
     "deno.unstable": true,
     "files.watcherExclude": {
         "**/target": true
-    }
+    },
+    "files.eol": "\n"
 }

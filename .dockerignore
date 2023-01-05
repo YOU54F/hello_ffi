@@ -1,0 +1,17 @@
+*.dylib
+*.so
+*.o
+*.h
+.DS_Store
+target
+hello_ffi
+hello_ffi.exe
+logs
+.metals
+.vscode
+node_modules
+scratchpad
+*.gz
+*.exe
+*.dll
+*.dll.lib

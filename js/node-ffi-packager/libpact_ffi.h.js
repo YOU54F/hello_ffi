@@ -22,6 +22,7 @@ const ref = require("ref-napi");
 const ArrayType = require("ref-array-di")(ref);
 const Struct = require("ref-struct-di")(ref);
 const Union = require("ref-union-di")(ref);
+const platform =  require('process').platform;
 
 const constants = {
   ExpressionValueType: {
@@ -236,7 +237,7 @@ types["uint32_t"] = uint32_t;
 types["uint8_t"] = uint8_t;
 types["uint8_tPointer"] = uint8_tPointer;
 // todo set to libpact_ffi on darwin/linux
-const functions = new FFI.Library("pact_ffi", {
+const functions = new FFI.Library(platform === "win32"?"pact_ffi":"libpact_ffi", {
   pactffi_check_regex: [js_byte, [js_CString, js_CString]],
   pactffi_cleanup_mock_server: [js_byte, [int32_t]],
   pactffi_cleanup_plugins: [js_void, [PactHandle]],
