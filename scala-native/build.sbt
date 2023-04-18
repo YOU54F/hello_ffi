@@ -1,3 +1,5 @@
-libraryDependencies += "com.lihaoyi" %%% "fansi" % "0.4.0"
 enablePlugins(ScalaNativePlugin)
 nativeLinkStubs := true
+nativeConfig ~= { c =>
+  c.withLinkingOptions(c.linkingOptions ++ Seq("-L"++sys.env.getOrElse("PWD",".")++"/.."))
+}

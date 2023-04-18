@@ -9,7 +9,7 @@ import com.sun.jna.Platform;
 public class HelloFfi {
 
     public interface PactFfi extends Library {
-        PactFfi INSTANCE = (PactFfi) Native.load((Platform.isWindows() ? "pactffi.dll" : Platform.isLinux() ? "libpact_ffi.so" : "libpact_ffi.dylib"),
+        PactFfi INSTANCE = (PactFfi) Native.load((Platform.isWindows() ? "pact_ffi.dll" : Platform.isLinux() ? "libpact_ffi.so" : "libpact_ffi.dylib"),
                 PactFfi.class);
 
         String pactffi_version();

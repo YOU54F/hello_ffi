@@ -1,6 +1,6 @@
 {
-  "title": "Deno Pact - Tutorial",
-  "description": "Teach the basics of usage of Deno Pact",
+  "title": "Pact FFI Omnibus",
+  "description": "This project aims to showcase the Pact FFI in as many languages as possible using Foreign Function Interfaces",
   "difficulty": "Beginner",
   "time": "15",
   "details": {

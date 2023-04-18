@@ -11,7 +11,7 @@ namespace PInvokeTest
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            var version = Marshal.PtrToStringUTF8(pactffi_version());
+            var version = Marshal.PtrToStringAnsi(pactffi_version());
             // Console.WriteLine("Hello, from C#. pact ffi version: {0} ", version);
             pactffi_logger_init();
             pactffi_logger_attach_sink("stdout", 3);

@@ -5,6 +5,7 @@
 .DS_Store
 target
 hello_ffi
+hello_ffi.exe
 logs
 .metals
 .vscode

@@ -1,6 +1,10 @@
 const ffi = require("ffi-napi");
+const platform =  require('process').platform;
 
-const pact = ffi.Library("libpact_ffi", {
+// name needs to be 
+// libpact_ffi on linux/darwin
+// pact_ffi on windows
+const pact = ffi.Library( platform === "win32"?"pact_ffi":"libpact_ffi", {
   pactffi_version: ["string", []],
   pactffi_logger_init: ["void", []],
   pactffi_logger_attach_sink: ["int", ['string','int']],

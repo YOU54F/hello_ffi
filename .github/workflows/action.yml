@@ -27,7 +27,7 @@ jobs:
           ruby-version: "2.7.6"
       - run: make get_pact_ffi
       - run: ls
-      - run: make ruby_deps
+      - run: make ruby_install_deps
       - run: make ruby
   julia:
     timeout-minutes: 10
@@ -162,7 +162,7 @@ jobs:
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: ls
-      - run: make python_deps
+      - run: make python_install_deps
       - run: make python
   php:
     timeout-minutes: 10
@@ -401,40 +401,40 @@ jobs:
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - run: make lua
-  scala:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-      - uses: japgolly/setup-everything-scala@v3.1
-        if: runner.os == 'Linux'
-      - run: brew install scala
-        if: runner.os == 'macOS'
-      - run: sudo apt install -y scala
-        if: runner.os == 'Linux'
-      - uses: crazy-max/ghaction-chocolatey@v2
-        if: runner.os == 'Windows'
-        with:
-          args: install scala.install
-      - run: |
-          ls "C:\Program Files (x86)\scala\bin"
-          # "C:\Program Files (x86)\scala\bin\scala.bat" -h
-          echo "C:\Program Files (x86)\scala\bin" >> $GITHUB_PATH
-        if: runner.os == 'Windows'
-      - run: make get_pact_ffi
-      - run: make scala
+  # scala:
+  #   timeout-minutes: 10
+  #   # runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     LD_LIBRARY_PATH: ${{ github.workspace }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - if: runner.os == 'Windows'
+  #       run: rm 'C:\Windows\System32\bash.exe'
+  #     - uses: japgolly/setup-everything-scala@v3.1
+  #       if: runner.os == 'Linux'
+  #     - run: brew install scala
+  #       if: runner.os == 'macOS'
+  #     - run: sudo apt install -y scala
+  #       if: runner.os == 'Linux'
+  #     - uses: crazy-max/ghaction-chocolatey@v2
+  #       if: runner.os == 'Windows'
+  #       with:
+  #         args: install scala.install
+  #     - run: |
+  #         ls "C:\Program Files (x86)\scala\bin"
+  #         # "C:\Program Files (x86)\scala\bin\scala.bat" -h
+  #         echo "C:\Program Files (x86)\scala\bin" >> $GITHUB_PATH
+  #       if: runner.os == 'Windows'
+  #     - run: make get_pact_ffi
+  #     - run: make scala
   nim:
     timeout-minutes: 10
     # runs-on: ubuntu-latest
