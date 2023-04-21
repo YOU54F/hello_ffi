@@ -30,7 +30,7 @@ jobs:
       - name: Create PR with updated ffi version
         run: |
             echo "⚗️  Sorting out the ffi version... "
-            git checkout -b version/v$version
+            git checkout -b version/v${{ inputs.PACT_FFI_VERSION }}
             rm -rf FFI_VERSION
             echo '${{ inputs.PACT_FFI_VERSION }}' >> FFI_VERSION
             git add FFI_VERSION
@@ -45,4 +45,3 @@ jobs:
             echo "🎉 Done!"
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-          FFI_VERSION: ${{ inputs.PACT_FFI_VERSION }}
