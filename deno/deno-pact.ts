@@ -39,7 +39,7 @@ const dylib = Deno.dlopen(libName, {
     result: "i32"
   },
   pactffi_create_mock_server_for_transport: {
-    parameters: ["pointer", "buffer", "i32", "buffer", "pointer"],
+    parameters: ["pointer", "buffer", "i32", "buffer", "buffer"],
     result: "i32"
   },
   pactffi_mock_server_matched: { parameters: ["i32"], result: "i32" },
@@ -77,7 +77,7 @@ interface DenoPactService {
     pact: Deno.PointerValue,
     description: string
   ): Deno.PointerValue;
-  setPactSpecification(pact: Deno.PointerValue, specifcation?: number): void;
+  setPactSpecification(pact: Deno.PointerValue, specification?: number): void;
   usingPactPlugin(
     pact: Deno.PointerValue,
     pluginName: string,
@@ -94,7 +94,7 @@ interface DenoPactService {
     transport: string,
     address?: string,
     port?: number,
-    transportOptions?: 0 | any
+    transportOptions?: string | null
   ): number;
 }
 
@@ -199,8 +199,8 @@ export const DenoPact: DenoPactService = {
       this.encode(description)
     );
   },
-  setPactSpecification(pact: Deno.PointerValue, specifcation = 5) {
-    this.ffi.pactffi_with_specification(pact, specifcation);
+  setPactSpecification(pact: Deno.PointerValue, specification = 5) {
+    this.ffi.pactffi_with_specification(pact, specification);
   },
   usingPactPlugin(
     pact: Deno.PointerValue,
@@ -231,14 +231,14 @@ export const DenoPact: DenoPactService = {
     transport: string,
     address = "0.0.0.0",
     port = 0,
-    transportOptions: 0 | any = 0
+    transportOptions = null
   ) {
     return this.ffi.pactffi_create_mock_server_for_transport(
       pact,
       this.encode(address),
       port,
       this.encode(transport),
-      transportOptions
+      this.encode(transportOptions)
     );
   }
 };
