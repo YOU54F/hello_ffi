@@ -32,17 +32,17 @@ jobs:
             echo "⚗️  Sorting out the ffi version... "
             git checkout -b version/v$version
             rm -rf FFI_VERSION
-            echo '${{ github.workflow.inputs.PACT_FFI_VERSION }}' >> FFI_VERSION
+            echo '${{ inputs.PACT_FFI_VERSION }}' >> FFI_VERSION
             git add FFI_VERSION
-            git commit -m "chore(version): update version to v$FFI_VERSION"
-            git push --set-upstream origin version/v$FFI_VERSION
+            git commit -m "chore(version): update version to v${{ inputs.PACT_FFI_VERSION }}"
+            git push --set-upstream origin version/v${{ inputs.PACT_FFI_VERSION }}
         
             echo "👏  Go and open that PR now:"
-            echo "🔗  $homepage/compare/master...version/v$FFI_VERSION"
+            echo "🔗  $homepage/compare/master...version/v${{ inputs.PACT_FFI_VERSION }}"
         
-            hub pull-request --message "ci(test): Update version to v${FFI_VERSION}"
+            hub pull-request --message "ci(test): Update version to v${{ inputs.PACT_FFI_VERSION }}"
         
             echo "🎉 Done!"
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-          FFI_VERSION: ${{ github.workflow.inputs.PACT_FFI_VERSION }}
+          FFI_VERSION: ${{ inputs.PACT_FFI_VERSION }}
