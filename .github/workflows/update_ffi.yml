@@ -1,0 +1,48 @@
+name: test version
+
+on:
+  repository_dispatch:
+    types:
+      - pact-ffi-released
+  workflow_dispatch:
+    inputs:
+        PACT_FFI_VERSION:
+            description: Tag from https://github.com/you54f/pact-reference/releases for libpact_ffi
+            required: true
+            default: 0.3.15
+            type: string
+
+jobs:
+  release:
+    name: Release update
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Config github actor
+        run: |
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config pull.ff only
+
+      - name: Create PR with updated ffi version
+        run: |
+            echo "⚗️  Sorting out the ffi version... "
+            git checkout -b version/v$version
+            rm -rf FFI_VERSION
+            echo '${{ github.workflow.inputs.PACT_FFI_VERSION }}' >> FFI_VERSION
+            git add FFI_VERSION
+            git commit -m "chore(version): update version to v$FFI_VERSION"
+            git push --set-upstream origin version/v$FFI_VERSION
+        
+            echo "👏  Go and open that PR now:"
+            echo "🔗  $homepage/compare/master...version/v$FFI_VERSION"
+        
+            hub pull-request --message "ci(test): Update version to v${FFI_VERSION}"
+        
+            echo "🎉 Done!"
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          FFI_VERSION: ${{ github.workflow.inputs.PACT_FFI_VERSION }}
