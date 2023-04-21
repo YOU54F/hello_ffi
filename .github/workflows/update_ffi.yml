@@ -38,11 +38,10 @@ jobs:
             git push --set-upstream origin version/v${{ inputs.PACT_FFI_VERSION }}
         
             echo "👏  Go and open that PR now:"
-            echo "🔗  ${{ env.HOMEPAGE }}/compare/master...version/v${{ inputs.PACT_FFI_VERSION }}"
+            echo "🔗  ${{ env.HOMEPAGE }}/compare/main...version/v${{ inputs.PACT_FFI_VERSION }}"
         
             hub pull-request --message "ci(test): Update version to v${{ inputs.PACT_FFI_VERSION }}"
         
             echo "🎉 Done!"
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           HOMEPAGE: "https://github.com/you54f/hello_ffi"
