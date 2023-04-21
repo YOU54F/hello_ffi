@@ -24,7 +24,7 @@ const test = async () => {
     pact,
     "A gRPC calculateOne request"
   );
-  DenoPact.setPactSpecification(5);
+  DenoPact.setPactSpecification(pact, 5);
   DenoPact.usingPactPlugin(pact, "denopactplugin");
   DenoPact.usingPactPlugin(pact, "protobuf");
   DenoPact.withInteractionContents(message_pact, 0, "application/protobuf", pact_contents);
