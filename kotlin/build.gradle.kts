@@ -1,6 +1,6 @@
 // build.gradle.kts
 plugins {
-        kotlin("multiplatform") version "1.7.21"
+        kotlin("multiplatform") version "1.8.21"
     }
 
 repositories {
