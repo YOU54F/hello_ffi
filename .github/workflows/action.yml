@@ -363,7 +363,7 @@ jobs:
           luarocks_versions: 5.1.5:3.7.0 5.4.3:3.8.0
       - run: brew install lua luajit luarocks
         if: runner.os == 'macOS'
-      - uses: leafo/gh-actions-lua@v9.1.0
+      - uses: leafo/gh-actions-lua@v10.0.0
         if: runner.os == 'Windows'
         with:
           luaVersion: "luajit-2.1.0-beta3"
