@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "bun-types": "^0.3.0"
+    "bun-types": "^0.6.0"
   },
   "dependencies": {
     "ffi": "^2.3.0"
