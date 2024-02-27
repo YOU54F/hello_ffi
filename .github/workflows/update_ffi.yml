@@ -45,3 +45,4 @@ jobs:
             echo "🎉 Done!"
         env:
           HOMEPAGE: "https://github.com/you54f/hello_ffi"
+          GH_TOKEN: ${{ github.token }}
