@@ -6,6 +6,8 @@
 .DS_Store
 target
 hello_ffi
+helloFfi
+helloFfiPureGo
 logs
 .metals
 .vscode

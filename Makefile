@@ -1,6 +1,8 @@
 ifeq ($(DOCKER_DEFAULT_PLATFORM),)
     ifeq ($(shell uname -m),aarch64)
         DOCKER_DEFAULT_PLATFORM = linux/arm64
+	else ifeq ($(shell uname -m),arm64)
+        DOCKER_DEFAULT_PLATFORM = linux/arm64
     else
         DOCKER_DEFAULT_PLATFORM = linux/amd64
     endif
@@ -383,10 +385,16 @@ visual_basic: visual_basic_hello_ffi
 
 alpine_go:
 	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make go gcc musl-dev && cd /app && CGO_ENABLED=1 make go'
+alpine_go_purego:
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make go && cd /app && CGO_ENABLED=0 make go_purego'
 go_hello_ffi:
-	cd go && $(GO_CMD) build
-	$(LOAD_PATH) go/hello_ffi
+	cd go && $(GO_CMD) build helloFfi.go
+	$(LOAD_PATH) go/helloFfi
+go_purego_hello_ffi:
+	cd go && $(GO_CMD) build helloFfiPureGo.go
+	$(LOAD_PATH) go/helloFfiPureGo
 
+go_purego: go_purego_hello_ffi
 go: go_hello_ffi
 
 alpine_js:
