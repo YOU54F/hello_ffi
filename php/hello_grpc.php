@@ -25,6 +25,11 @@ $ffi->pactffi_with_specification($pact, $ffi->PactSpecification_V4);
 
 $proto_file_path = __DIR__ . '/../proto/area_calculator.proto';
 
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ){
+    $proto_file_path = str_replace('/','\\',$proto_file_path);
+    $proto_file_path = str_replace('\\','\\\\',$proto_file_path);
+}
+
 $contents = '{
     "pact:proto":  "'. $proto_file_path . '",
     "pact:proto-service": "Calculator/calculateOne",
