@@ -49,7 +49,7 @@ pactffi_with_specification($pact, 5);
 # Start mock server
 pactffi_log_message('pact-perl-ffi', 'INFO', "using plugin");
 $ffi->attach('pactffi_using_plugin', ['pact','string','string'] => 'int');
-pactffi_using_plugin($pact, 'protobuf', '0.1.17');
+pactffi_using_plugin($pact, 'protobuf', '0.3.14');
 pactffi_log_message('pact-perl-ffi', 'INFO', "got plugin");
 pactffi_log_message('pact-perl-ffi', 'INFO', "setting interaction contents");
 $ffi->attach('pactffi_interaction_contents', ['message_pact','int','string','string'] => 'int');

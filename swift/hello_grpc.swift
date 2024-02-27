@@ -92,7 +92,7 @@ pactffi_with_specification(pact!!, PactSpecification_V4)
 
 // Start mock server
 pactffi_log_message(app_name, "INFO", "using plugin")
-pactffi_using_plugin(pact!!, "protobuf", "0.1.17")
+pactffi_using_plugin(pact!!, "protobuf", "0.3.14")
 pactffi_log_message(app_name, "INFO", "got plugin, setting interaction contents: \(contents!)")
 pactffi_interaction_contents(message_pact!!, InteractionPart_Request, "application/grpc", contents!)
 pactffi_log_message(app_name, "INFO", "set interaction contents")

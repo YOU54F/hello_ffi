@@ -42,7 +42,7 @@ $contents = '{
 
 // Start mock server
 
-$ffi->pactffi_using_plugin($pact, 'protobuf', '0.1.17');
+$ffi->pactffi_using_plugin($pact, 'protobuf', '0.3.14');
 $ffi->pactffi_interaction_contents($message_pact, 0, 'application/grpc', $contents);
 $port = $ffi->pactffi_create_mock_server_for_transport($pact , '0.0.0.0',0,'grpc', null);
 
@@ -50,7 +50,7 @@ echo sprintf("Mock server port=%d\n", $port);
 
 // This is where we would call our client, gRPC in this example plugin demo
 // PHP gRPC is client only, so would need to use a provider from the following
-// https://github.com/pact-foundation/pact-plugins/tree/main/examples/gRPC/area_calculator
+// https://github.com/you54f/pact-plugins/tree/main/examples/gRPC/area_calculator
 // TODO build out an area calculator PHP example
 // https://grpc.io/docs/languages/php/
 

@@ -14,7 +14,7 @@ get_plugin_cli:
 	./script/download-plugin-cli.sh
 
 install_protobuf_plugin:
-	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
+	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/you54f/pact-protobuf-plugin/releases/latest
 
 haskell_hello_ffi:
 	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell

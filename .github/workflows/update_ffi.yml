@@ -9,7 +9,7 @@ on:
         PACT_FFI_VERSION:
             description: Tag from https://github.com/you54f/pact-reference/releases for libpact_ffi
             required: true
-            default: 0.4.5
+            default: 0.4.18
             type: string
 
 jobs:

@@ -40,7 +40,7 @@ lib.pactffi_with_specification(pact, 5)
 
 
 -- Start mock server
-lib.pactffi_using_plugin(pact, 'protobuf', '0.1.17')
+lib.pactffi_using_plugin(pact, 'protobuf', '0.3.14')
 lib.pactffi_interaction_contents(message_pact, 0, 'application/grpc',contents)
 mock_server_port = lib.pactffi_create_mock_server_for_transport(pact , '0.0.0.0',0,'grpc',ffi.cast("void *", 0))
 lib.pactffi_log_message(appName, 'INFO', "Mock server started: "..mock_server_port)

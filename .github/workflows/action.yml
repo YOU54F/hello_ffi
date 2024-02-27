@@ -110,7 +110,7 @@ jobs:
           rm -rf /usr/bin/perl.exe
       - run: cpanm FFI::Platypus
       - run: make get_pact_ffi
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: ls
       - run: make perl
   haskell:
@@ -162,7 +162,7 @@ jobs:
         with:
           python-version: "3.10"
       - run: make get_pact_ffi
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: ls
       - run: make python_install_deps
       - run: make python
@@ -195,7 +195,7 @@ jobs:
           php-version: 8.1
           extensions: ffi
       - run: make get_pact_ffi
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: ls
       - run: make php
   deno:
@@ -225,7 +225,7 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: make deno
   bun:
     timeout-minutes: 10
@@ -251,7 +251,7 @@ jobs:
           echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
       - run: make get_pact_ffi
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: make bun
   zig:
     timeout-minutes: 10
@@ -338,7 +338,7 @@ jobs:
           branch: swift-5.7.1-release
           tag: 5.7.1-RELEASE
       - run: make get_pact_ffi
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: make swift
   lua:
     timeout-minutes: 10
@@ -402,7 +402,7 @@ jobs:
         with:
           args: install protoc
       - run: make get_pact_ffi
-      - run: make get_pact_plugins
+      # - run: make get_pact_plugins
       - run: make lua
   # scala:
   #   timeout-minutes: 10
