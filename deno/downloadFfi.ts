@@ -50,8 +50,8 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.5") => {
       `We do not have a binary for your platform ${platform}`;
       break;
   }
-  const ffiLibDownloadLocation = `https://github.com/you54f/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
-  const ffiHeaderDownloadLocation = `https://github.com/you54f/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
+  const ffiLibDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
+  const ffiHeaderDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
   console.log(ffiLibDownloadLocation);
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
