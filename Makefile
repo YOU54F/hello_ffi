@@ -42,7 +42,7 @@ clean_haskell:
 
 
 alpine_ada:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add gcc-gnat make && cd /app && make ada_hello_ffi'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add gcc-gnat make musl-dev && cd /app && make ada_hello_ffi'
 
 ada_hello_ffi:
 	cd ada && gnatmake helloffi.adb -largs -lpact_ffi -L../.

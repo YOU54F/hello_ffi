@@ -28,19 +28,18 @@ jobs:
           zig,
           dart,
           c,
-          swift,
           lua,
-          scala_native,
-          scala,
           nim,
-          visual_basic,
           go,
           js,
-          kotlin,
-          ocaml,
-          tcl,
           java,
-          java_panama
+          # swift,
+          # scala_native,
+          # scala,
+          # visual_basic,
+          # kotlin, // TODO
+          # ocaml,
+          # java_panama
         ]
         arch: [amd64]
         # arch: [arm64, amd64]
