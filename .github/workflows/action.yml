@@ -11,7 +11,7 @@ jobs:
     # runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-12, macos-14]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     defaults:
