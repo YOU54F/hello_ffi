@@ -13,52 +13,51 @@ pub extern fn pactffi_version() [*c]u8;
 pub extern fn pactffi_logger_init() void;
 pub extern fn pactffi_logger_attach_sink([*c]const u8, i32) i32;
 pub extern fn pactffi_logger_apply() i32;
-pub extern fn pactffi_log_message([*c]const u8,[*c]const u8,[*c]const u8) void;
+pub extern fn pactffi_log_message([*c]const u8, [*c]const u8, [*c]const u8) void;
 
-// Mock server 
-pub extern fn pactffi_create_mock_server([*c]const u8,[*c]const u8,i32) i32;
+// Mock server
+pub extern fn pactffi_create_mock_server([*c]const u8, [*c]const u8, i32) i32;
 pub extern fn pactffi_cleanup_mock_server(i32) i32;
 pub extern fn pactffi_mock_server_matched(i32) bool;
-pub extern fn pactffi_write_pact_file(i32,[*c]const u8,bool) i32;
+pub extern fn pactffi_write_pact_file(i32, [*c]const u8, bool) i32;
 
 pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
-    var version: [*c]u8 = pactffi_version();
+    const version: [*c]u8 = pactffi_version();
     try stdout.print("{s}\n", .{version});
     pactffi_logger_init();
-    var pactffi_logger_attach_sink_res: i32 =  pactffi_logger_attach_sink("stdout",3);
+    const pactffi_logger_attach_sink_res: i32 = pactffi_logger_attach_sink("stdout", 3);
     try stdout.print("pactffi_logger_attach_sink result {}\n", .{pactffi_logger_attach_sink_res});
-    var pactffi_logger_apply_res: i32 =  pactffi_logger_apply();
-    pactffi_log_message("pact-zig-ffi","INFO","Pact Zig FFI is alive");
+    const pactffi_logger_apply_res: i32 = pactffi_logger_apply();
+    pactffi_log_message("pact-zig-ffi", "INFO", "Pact Zig FFI is alive");
     try stdout.print("pactffi_logger_apply_res {}\n", .{pactffi_logger_apply_res});
 
     const pact =
         \\ {"consumer":{"name":"pact-raku-ffi"},"interactions":[{"description":"a retrieve Mallory request","request":{"method":"GET","path":"/mallory","query":"name=ron&status=good"},"response":{"body":"That is some good Mallory.","headers":{"Content-Type":"text/html"},"status":200}}],"metadata":{"pact-zig":{"ffi":"0.3.15","version":"1.0.0"},"pactRust":{"mockserver":"0.9.5","models":"1.0.0"},"pactSpecification":{"version":"1.0.0"}},"provider":{"name":"Alice Service"}}
     ;
-    var mock_server_port: i32 = pactffi_create_mock_server(pact,"127.0.0.1:4432",0);
+    const mock_server_port: i32 = pactffi_create_mock_server(pact, "127.0.0.1:4432", 0);
     pactffi_log_message("pact-zig-ffi", "INFO", "mock_server_port: $mock_server_port");
     try stdout.print("mock_server_port result {}\n", .{mock_server_port});
-    var result = make_request("http://127.0.0.1:4432/mallory?name=ron&status=good");
+    const result = make_request("http://127.0.0.1:4432/mallory?name=ron&status=good");
     try stdout.print("matched result {!}\n", .{result});
 
-    var matched: bool =  pactffi_mock_server_matched(mock_server_port);
+    const matched: bool = pactffi_mock_server_matched(mock_server_port);
     pactffi_log_message("pact-zig-ffi", "INFO", "pactffi_mock_server_matched: $matched");
     try stdout.print("matched result {}\n", .{matched});
 
-  if (matched){
-            var PACT_FILE_DIR = "./pacts";
-    var res_write_pact: i32 =  pactffi_write_pact_file(mock_server_port, PACT_FILE_DIR, false);
-    pactffi_log_message("pact-zig-ffi", "INFO", "pactffi_write_pact_file: $res_write_pact");
-    try stdout.print("res_write_pact result {}\n", .{res_write_pact});
+    if (matched) {
+        const PACT_FILE_DIR = "./pacts";
+        const res_write_pact: i32 = pactffi_write_pact_file(mock_server_port, PACT_FILE_DIR, false);
+        pactffi_log_message("pact-zig-ffi", "INFO", "pactffi_write_pact_file: $res_write_pact");
+        try stdout.print("res_write_pact result {}\n", .{res_write_pact});
     }
 
-
-    var pactffi_cleanup_mock_server_result: i32 =  pactffi_cleanup_mock_server(mock_server_port);
-    pactffi_log_message("pact-zig-ffi", "INFO", "pactffi_cleanup_mock_server" );
+    const pactffi_cleanup_mock_server_result: i32 = pactffi_cleanup_mock_server(mock_server_port);
+    pactffi_log_message("pact-zig-ffi", "INFO", "pactffi_cleanup_mock_server");
     try stdout.print("pactffi_cleanup_mock_server_result result {}\n", .{pactffi_cleanup_mock_server_result});
 }
 
-pub fn make_request(url:[*c]const u8) !void {
+pub fn make_request(url: [*c]const u8) !void {
     var arena_state = std.heap.ArenaAllocator.init(std.heap.c_allocator);
     defer arena_state.deinit();
 
@@ -99,8 +98,9 @@ pub fn make_request(url:[*c]const u8) !void {
 }
 
 fn writeToArrayListCallback(data: *anyopaque, size: c_uint, nmemb: c_uint, user_data: *anyopaque) callconv(.C) c_uint {
-    var buffer = @intToPtr(*std.ArrayList(u8), @ptrToInt(user_data));
-    var typed_data = @intToPtr([*]u8, @ptrToInt(data));
+    // note casted built-ins changed in 0.11.0 https://ziglang.org/download/0.11.0/release-notes.html#Rename-Casting-Builtins
+    var buffer = @as(*std.ArrayList(u8), @ptrFromInt(@intFromPtr(user_data)));
+    var typed_data = @as([*]u8, @ptrFromInt(@intFromPtr(data)));
     buffer.appendSlice(typed_data[0 .. nmemb * size]) catch return 0;
     return nmemb * size;
 }
