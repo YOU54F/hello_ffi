@@ -12,37 +12,38 @@ jobs:
     strategy:
       matrix:
         language: [
-          # haskell,
-          # ada,
-          # perl,
-          # php,
-          # python,
+          haskell,
+          ada,
+          perl,
+          php,
+          python,
           ruby,
-          # raku,
-          # racket,
-          # julia,
-          # deno,
-          # csharp,
-          # bun,
-          # bun,
-          # zig,
-          # dart,
-          # c,
-          # swift,
-          # lua,
-          # scala_native,
-          # scala,
-          # nim,
-          # visual_basic,
-          # go,
-          # js,
-          # kotlin,
-          # ocaml,
-          # tcl,
-          # java,
-          # java_panama
+          raku,
+          racket,
+          julia,
+          deno,
+          csharp,
+          bun,
+          bun,
+          zig,
+          dart,
+          c,
+          swift,
+          lua,
+          scala_native,
+          scala,
+          nim,
+          visual_basic,
+          go,
+          js,
+          kotlin,
+          ocaml,
+          tcl,
+          java,
+          java_panama
         ]
-        arch: [arm64, amd64]
+        arch: [amd64]
+        # arch: [arm64, amd64]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
