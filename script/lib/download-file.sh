@@ -14,7 +14,7 @@ function download_to {
   debug_log "about to download"
   URL="$1"
   OUTPUT_FILE="$2"
-  debug_log "doing curl of: '$URL', saving in $OUTPUT_FILE"
+  echo "doing curl of: '$URL', saving in $OUTPUT_FILE"
 
   HTTP_CODE="$(curl --silent --output "$OUTPUT_FILE" --write-out "%{http_code}" --location "$URL")"
   debug_log "did curl, http code was '${HTTP_CODE}'"

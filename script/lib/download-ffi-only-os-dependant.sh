@@ -46,7 +46,6 @@ function download_ffi {
 }
 
 detected_os=$(uname -sm)
-echo detected_os = $detected_os
 case ${detected_os} in
 'Darwin arm64')
     echo "downloading of osx aarch64 FFI libs"
@@ -60,22 +59,53 @@ case ${detected_os} in
     ;;
 "Linux aarch64"* | "Linux arm64"*)
     echo "downloading of linux aarch64 FFI libs"
-    download_ffi "linux-aarch64.so.gz" "lib" "libpact_ffi.so.gz"
-    os='linux-aarch64'
+    if ldd /bin/ls >/dev/null 2>&1; then
+        ldd_output=$(ldd /bin/ls)
+        case "$ldd_output" in
+            *musl*) 
+                os='linux-aarch64-musl'
+                download_ffi "linux-aarch64-musl.so.gz" "lib" "libpact_ffi.so.gz"
+                download_ffi "linux-aarch64-musl.a.gz" "lib" "libpact_ffi.a.gz"
+                ;;
+            *) 
+                os='linux-aarch64'
+                download_ffi "linux-aarch64.so.gz" "lib" "libpact_ffi.so.gz"
+                ;;
+        esac
+    else
+      os='linux-aarch64'
+      download_ffi "linux-aarch64.so.gz" "lib" "libpact_ffi.so.gz"
+    fi
     ;;
 'Linux x86_64' | "Linux"*)
     echo "downloading of linux x86_64 FFI libs"
-    download_ffi "linux-x86_64.so.gz" "lib" "libpact_ffi.so.gz"
-    os='linux-x86_64'
+    if ldd /bin/ls >/dev/null 2>&1; then
+        ldd_output=$(ldd /bin/ls)
+        case "$ldd_output" in
+            *musl*) 
+                os='linux-x86_64-musl'
+                download_ffi "linux-x86_64-musl.so.gz" "lib" "libpact_ffi.so.gz"
+                download_ffi "linux-x86_64-musl.a.gz" "lib" "libpact_ffi.a.gz"
+                ;;
+            *) 
+                os='linux-x86_64'
+                download_ffi "linux-x86_64.so.gz" "lib" "libpact_ffi.so.gz"
+                ;;
+        esac
+    else
+      os='linux-x86_64'
+      download_ffi "linux-x86_64.so.gz" "lib" "libpact_ffi.so.gz"
+    fi
     ;;
 "Windows"* | "MINGW64"*)
     echo "downloading of windows x86_64 FFI libs"
     download_ffi "windows-x86_64.dll.gz" "" "pact_ffi.dll.gz"
     download_ffi "windows-x86_64.dll.lib.gz" "" "pact_ffi.dll.lib.gz"
+    # swift, lua fail if dll.lib is not present
     os='win32'
     ;;
   *)
-  echo "Sorry, you'll need to install the pact-ffi manually."
+  echo "Sorry, you'll need to install the pact-ruby-standalone manually."
   echo "or add your os to the list"
   exit 1
     ;;
