@@ -47,7 +47,7 @@ lib.pactffi_with_specification(pact, 5)
 
 
 # Start mock server
-lib.pactffi_using_plugin(pact, b'protobuf', b'0.1.17')
+lib.pactffi_using_plugin(pact, b'protobuf', b'0.3.14')
 lib.pactffi_interaction_contents(message_pact, 0, b'application/grpc', ffi.new("char[]", json.dumps(contents).encode('ascii')))
 mock_server_port = lib.pactffi_create_mock_server_for_transport(pact , b'0.0.0.0',0,b'grpc',ffi.cast("void *", 0))
 print(f"Mock server started: {mock_server_port}")

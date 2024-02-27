@@ -207,7 +207,7 @@ const PactTestGrpc = async() => {
   console.log('pactffi_with_specification_res')
   console.log(pactffi_with_specification_res)
   // Start mock server
-  const pactffi_using_plugin_res = pactffi_using_plugin(pact, s2b("protobuf"), s2b("0.1.17"));
+  const pactffi_using_plugin_res = pactffi_using_plugin(pact, s2b("protobuf"), s2b("0.3.14"));
   console.log('pactffi_using_plugin_res')
   console.log(pactffi_using_plugin_res)
   const pactffi_interaction_contents_res = pactffi_interaction_contents(message_pact, s2b('InteractionPart_Request'), s2b("application/grpc"), s2b(JSON.stringify(contents)));
