@@ -41,8 +41,8 @@ jobs:
           # ocaml,
           # java_panama
         ]
-        arch: [amd64]
-        # arch: [arm64, amd64]
+        # arch: [amd64]
+        arch: [arm64, amd64]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
