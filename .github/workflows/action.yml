@@ -12,39 +12,40 @@ jobs:
     strategy:
       matrix:
         language: [
-          haskell,
-          ada,
-          perl,
-          php,
-          python,
+          # haskell,
+          # ada,
+          # perl,
+          # php,
+          # python,
           ruby,
-          raku,
-          racket,
-          julia,
-          deno,
-          csharp,
-          bun,
-          bun,
-          zig,
-          dart,
-          c,
-          swift,
-          lua,
-          scala_native,
-          scala,
-          nim,
-          visual_basic,
-          go,
-          js,
-          kotlin,
-          ocaml,
-          tcl,
-          java,
-          java_panama
+          # raku,
+          # racket,
+          # julia,
+          # deno,
+          # csharp,
+          # bun,
+          # bun,
+          # zig,
+          # dart,
+          # c,
+          # swift,
+          # lua,
+          # scala_native,
+          # scala,
+          # nim,
+          # visual_basic,
+          # go,
+          # js,
+          # kotlin,
+          # ocaml,
+          # tcl,
+          # java,
+          # java_panama
         ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
+      - run: docker run --rm -v $PWD:/home alpine 'apk add --no-cache make bash curl && cd /home && make get_pact_ffi'
       - run: make alpine_${{ matrix.language }}
 
   # ruby:
