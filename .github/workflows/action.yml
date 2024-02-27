@@ -50,7 +50,6 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: "v1.8.3"
-          arch: x64
       - run: make get_pact_ffi
       - run: ls
       - run: make julia
@@ -72,6 +71,9 @@ jobs:
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
       - uses: Raku/setup-raku@v1
+        if: runner.os != 'MacOS'
+      - run: brew install rakudo
+        if: runner.os == 'MacOS'
       - run: make get_pact_ffi
       - run: ls
       - run: make raku
@@ -130,7 +132,7 @@ jobs:
       - uses: actions/checkout@v3
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
-      - uses: haskell/actions/setup@v2
+      - uses: haskell-actions/setup@v2
       - run: make get_pact_ffi
       - run: ls
       - run: make haskell
@@ -194,6 +196,9 @@ jobs:
         with:
           php-version: 8.1
           extensions: ffi
+        if: matrix.os != 'macos-14'
+      - run: brew install php
+        if: matrix.os == 'macos-14'
       - run: make get_pact_ffi
       # - run: make get_pact_plugins
       - run: ls
@@ -272,6 +277,9 @@ jobs:
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
       - uses: goto-bus-stop/setup-zig@v2
+        if: matrix.os != 'macos-14'
+      - run: brew install zig
+        if: matrix.os == 'macos-14'
       - run: make get_pact_ffi
       - run: make zig
   dart:
@@ -291,7 +299,7 @@ jobs:
       - uses: actions/checkout@v3
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1
       - run: make get_pact_ffi
       - run: dart pub get
         working-directory: dart
@@ -337,6 +345,8 @@ jobs:
         with:
           branch: swift-5.7.1-release
           tag: 5.7.1-RELEASE
+      - run: brew install protoc
+        if: matrix.os == 'macos-14'
       - run: make get_pact_ffi
       # - run: make get_pact_plugins
       - run: make swift
