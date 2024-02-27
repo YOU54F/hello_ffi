@@ -1,44 +1,41 @@
 module DetectOS
   def self.windows?
-    if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RbConfig::CONFIG['arch']) != nil
-      # puts 'detected windows'
-      true
-    end
+    return if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RbConfig::CONFIG['arch']).nil?
+    true
   end
 
   def self.mac_arm?
-    if (/darwin/ =~ RbConfig::CONFIG['arch']) != nil and (/arm64/ =~ RbConfig::CONFIG['arch']) != nil
-      # puts 'detected macos arm'
-      true
-    end
+    return unless !(/darwin/ =~ RbConfig::CONFIG['arch']).nil? && !(/arm64/ =~ RbConfig::CONFIG['arch']).nil?
+    true
   end
 
   def self.mac?
-    if (/darwin/ =~ RbConfig::CONFIG['arch']) != nil
-      # puts 'detected macos'
-      true
-    end
+    return unless !(/darwin/ =~ RbConfig::CONFIG['arch']).nil? && !(/x86_64/ =~ RbConfig::CONFIG['arch']).nil?
+    true
   end
 
+  def self.linux_arm_musl?
+    return unless !(/linux/ =~ RbConfig::CONFIG['arch']).nil? && !(/aarch64/ =~ RbConfig::CONFIG['arch']).nil? && !(/musl/ =~ RbConfig::CONFIG['arch']).nil?
+    true
+  end
+
+  def self.linux_musl?
+    return unless !(/linux/ =~ RbConfig::CONFIG['arch']).nil? && !(/x86_64/ =~ RbConfig::CONFIG['arch']).nil?&& !(/musl/ =~ RbConfig::CONFIG['arch']).nil?
+    true
+  end
   def self.linux_arm?
-    if (/linux/ =~ RbConfig::CONFIG['arch']) != nil and (/arm64/ =~ RbConfig::CONFIG['arch']) != nil
-      # puts 'detected linux arm'
-      true
-    end
+    return unless !(/linux/ =~ RbConfig::CONFIG['arch']).nil? && !(/aarch64/ =~ RbConfig::CONFIG['arch']).nil?
+    true
   end
 
   def self.linux?
-    if (/linux/ =~ RbConfig::CONFIG['arch']) != nil
-      # puts 'detected linux'
-      true
-    end
+    return unless !(/linux/ =~ RbConfig::CONFIG['arch']).nil? && !(/x86_64/ =~ RbConfig::CONFIG['arch']).nil?
+    true
   end
 
   def self.debug?
-    if ENV['DEBUG_TARGET'] != nil
-      # puts 'detected debug target' + ENV['DEBUG_TARGET']
-      true
-    end
+    return if ENV['DEBUG_TARGET'].nil?
+    true
   end
 
   def self.get_bin_path
@@ -50,6 +47,10 @@ module DetectOS
       File.expand_path("#{Dir.pwd}/libpact_ffi.dylib")
     elsif mac?
       File.expand_path("#{Dir.pwd}/libpact_ffi.dylib")
+    elsif linux_arm_musl?
+      File.expand_path("#{Dir.pwd}/libpact_ffi.so")
+    elsif linux_musl?
+      File.expand_path("#{Dir.pwd}/libpact_ffi.so")
     elsif linux_arm?
       File.expand_path("#{Dir.pwd}/libpact_ffi.so")
     elsif linux?
@@ -58,11 +59,12 @@ module DetectOS
       raise "Detected #{RbConfig::CONFIG['arch']}-- I have no idea what to do with that."
     end
   end
+
   def self.get_os
     if windows?
       'win'
     elsif mac_arm?
-      'osxaarch64'
+      'macos-arm64'
     elsif mac?
       'linux-x8664'
     elsif linux_arm?
@@ -75,4 +77,4 @@ module DetectOS
   end
 end
 
-# puts DetectOS.get_bin_path
+ENV['PACT_DEBUG'] ? (puts "Detected platform: #{RbConfig::CONFIG['arch']} \nLoad Path: #{DetectOS.get_bin_path}" ): nil
