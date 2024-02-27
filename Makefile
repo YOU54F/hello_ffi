@@ -6,6 +6,99 @@ ifeq ($(DOCKER_DEFAULT_PLATFORM),)
     endif
 endif
 
+test_ci:
+	act --container-architecture linux/amd64 --job ruby
+
+# usage: make test JOB=lua
+test: 
+	act --container-architecture linux/amd64 --job $(JOB)
+
+get_pact_ffi:
+	./script/download-libs.sh
+
+get_pact_plugins: get_plugin_cli install_protobuf_plugin
+
+get_plugin_cli:
+	./script/download-plugin-cli.sh
+
+install_protobuf_plugin:
+	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/you54f/pact-protobuf-plugin/releases/latest
+
+clean: clean_haskell
+
+alpine_haskell:
+	docker run -v ${PWD}:/app --rm alpine sh -c 'apk add ghc make musl-dev && cd /app && make haskell_hello_ffi'
+
+haskell_hello_ffi:
+	ghc haskell/hello_ffi.hs ${pactffi_filename} -o haskell/hello_ffi_haskell
+	$(LOAD_PATH) ./haskell/hello_ffi_haskell
+
+haskell: haskell_hello_ffi
+
+clean_haskell:
+	rm -rf haskell/hello_ffi_haskell
+	rm -rf haskell/hello_ffi.hi
+	rm -rf haskell/hello_ffi.o
+
+
+alpine_ada:
+	docker run -v ${PWD}:/app --rm alpine sh -c 'apk add gcc-gnat make && cd /app && make ada_hello_ffi'
+
+ada_hello_ffi:
+	cd ada && gnatmake helloffi.adb -largs -lpact_ffi -L../.
+	$(LOAD_PATH) ./ada/helloffi
+
+# if [ "$(shell uname -s)_$(shell uname -m)" = "Darwin_arm64" ]; \
+# then \
+# 	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L../osxx86 && $(LOAD_PATH)/../osxx86 ./helloffi; \
+# else \
+# 	cd ada && gnatmake -aI../ helloffi.adb -largs -lpact_ffi -L.. && $(LOAD_PATH)/.. ./helloffi; \
+# fi; \
+
+ada: ada_hello_ffi
+
+alpine_perl:
+	docker run -v ${PWD}:/app --rm alpine sh -c 'apk add perl make libgcc protoc && apk add perl-ffi-platypus perl-json --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && cd /app && make perl'
+
+perl_install_deps:
+	cpan FFI::Platypus<<<yes
+
+perl_hello_ffi:
+	$(LOAD_PATH) perl perl/hello_ffi.pl
+
+perl_hello_grpc:
+	$(LOAD_PATH) perl perl/hello_grpc.pl
+
+perl_hello_pact_mock_server:
+	$(LOAD_PATH) perl perl/hello_pact_mock_server.pl
+
+perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
+
+alpine_php:
+	docker run -v ${PWD}:/app --rm alpine sh -c 'apk add php make php82-ffi libgcc protoc && cd /app && make php'
+
+php_hello_ffi:
+	php php/hello_ffi.php
+
+php_run_hello_grpc:
+	php php/hello_grpc.php
+
+php: php_hello_ffi php_run_hello_grpc
+
+alpine_python:
+	docker run -v ${PWD}:/app --rm alpine sh -c 'apk add make python3 python3-dev py-pip gcc musl-dev libffi-dev && cd /app && python3 -m venv /home/venv && . /home/venv/bin/activate && make python_install_deps && make python'
+
+python_install_deps:
+	cd python/cffi && pip install -r requirements.txt
+
+python_hello_ffi_cffi:
+	python3 python/cffi/hello_ffi.py
+
+python_hello_ffi_ctypes:
+	python3 python/ctypes/hello_ffi.py
+
+python_hello_ffi: python_hello_ffi_cffi python_hello_ffi_ctypes
+python: python_hello_ffi
 
 alpine_ruby:
 	docker run --platform=linux/${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make ruby ruby-dev ruby-bundler build-base libffi-dev && cd /app && make ruby_install_deps && make ruby'
