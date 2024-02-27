@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
-      - run: make alpine${{ matrix.language }}
+      - run: make alpine_${{ matrix.language }}
 
   # ruby:
   #   timeout-minutes: 10
