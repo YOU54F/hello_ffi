@@ -6,6 +6,60 @@ on:
   workflow_dispatch:
 
 jobs:
+  alpine:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [
+          haskell,
+          ada,
+          perl,
+          php,
+          python,
+          ruby,
+          raku,
+          racket,
+          julia,
+          deno,
+          csharp,
+          bun,
+          bun,
+          zig,
+          dart,
+          c,
+          lua,
+          nim,
+          go,
+          js,
+          java,
+          # swift,
+          # scala_native,
+          # scala,
+          # visual_basic,
+          # kotlin, // TODO
+          # ocaml,
+          # java_panama
+        ]
+        # arch: [amd64]
+        arch: [arm64, amd64]
+        exclude:
+          - language: julia
+            arch: arm64
+          - language: csharp
+            arch: arm64
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        if: matrix.arch != 'amd64'
+      - run: docker run --platform=linux/${{ matrix.arch }} --rm -v $PWD:/home alpine sh -c 'apk add --no-cache make bash curl && cd /home && make get_pact_ffi'
+      - run: make alpine_${{ matrix.language }}
+        env:
+          DOCKER_DEFAULT_PLATFORM: linux/${{ matrix.arch }}
+  
+
   ruby:
     timeout-minutes: 10
     # runs-on: ubuntu-latest
