@@ -11,7 +11,7 @@ public class Hello {
 
     public interface CLibrary extends Library {
         CLibrary INSTANCE = (CLibrary)
-            Native.load((Platform.isWindows() ? "pactffi.dll" : "libpact_ffi.dylib"),
+            Native.load((Platform.isWindows() ? "pactffi.dll" : Platform.isLinux() ?  "libpact_ffi.so" : "libpact_ffi.dylib"),
                                 CLibrary.class);
         String pactffi_version();
     }
