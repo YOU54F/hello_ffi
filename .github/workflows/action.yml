@@ -345,7 +345,7 @@ jobs:
         with:
           branch: swift-5.7.1-release
           tag: 5.7.1-RELEASE
-      - run: brew install protoc
+      - run: brew install protobuf
         if: matrix.os == 'macos-14'
       - run: make get_pact_ffi
       # - run: make get_pact_plugins
