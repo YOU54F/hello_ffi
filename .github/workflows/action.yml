@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
-      - run: docker run --rm -v $PWD:/home alpine 'apk add --no-cache make bash curl && cd /home && make get_pact_ffi'
+      - run: docker run --rm -v $PWD:/home alpine sh -c 'apk add --no-cache make bash curl && cd /home && make get_pact_ffi'
       - run: make alpine_${{ matrix.language }}
 
   # ruby:
