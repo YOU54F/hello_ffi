@@ -25,7 +25,7 @@ async function downloadFile(src: string, dest: string) {
   await resp.body.pipeTo(file.writable);
 }
 
-export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.5") => {
+export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.17") => {
   const platform = Deno.build.os + "-" + Deno.build.arch;
   console.log(platform);
   let filename;
@@ -56,7 +56,7 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.5") => {
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
 
-export const downloadFfiForPlatform = async (ffiVersion = "v0.4.5") => {
+export const downloadFfiForPlatform = async (ffiVersion = "v0.4.17") => {
   const locs = detectFfiDownloadForPlatform(ffiVersion);
   const libraryFilename =
     Deno.build.os === "darwin"
