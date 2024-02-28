@@ -13,6 +13,8 @@ func getSystemLibrary() string {
 		return "libpact_ffi.dylib"
 	case "linux":
 		return "libpact_ffi.so"
+	case "windows":
+		return "pact_ffi.dll"
 	default:
 		panic(fmt.Errorf("GOOS=%s is not supported", runtime.GOOS))
 	}
