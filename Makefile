@@ -349,7 +349,7 @@ ifeq ($(OS),Windows_NT)
 	VBC_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\vbc.exe"
 	MCS_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\csc.exe"
 	# VBC_COMPILER=vbc.exe
-	GO_CMD=go1.20rc1
+	GO_CMD=go
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
