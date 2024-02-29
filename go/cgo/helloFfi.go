@@ -1,8 +1,8 @@
 package main
 
-// #cgo CFLAGS: -g -I./..
-// #cgo LDFLAGS: -lpact_ffi -L./..
-// #include "../pact.h"
+// #cgo CFLAGS: -g -I./../..
+// #cgo LDFLAGS: -lpact_ffi -L./../..
+// #include "../../pact.h"
 import "C"
 import (
 	"fmt"
@@ -17,10 +17,9 @@ func main() {
 	C.pactffi_log_message(C.CString("pact-go-ffi"), C.CString("INFO"), C.CString(fmt.Sprintf("hello from ffi version: %s", C.GoString(version))))
 }
 
-
 // https://github.com/golang/go/issues/51007
 
-// *  Executing task: cd go; go build 
+// *  Executing task: cd go; go build
 
 // # github.com/you54f/hello_ffi
 // C:\Program Files\Go\pkg\tool\windows_amd64\link.exe: running gcc failed: exit status 1

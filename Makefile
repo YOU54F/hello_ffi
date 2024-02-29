@@ -388,11 +388,11 @@ alpine_go:
 alpine_go_purego:
 	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make go && cd /app && CGO_ENABLED=0 make go_purego'
 go_hello_ffi:
-	cd go && $(GO_CMD) build helloFfi.go
-	$(LOAD_PATH) go/helloFfi
+	cd go/cgo && $(GO_CMD) build helloFfi.go
+	$(LOAD_PATH) go/cgo/helloFfi
 go_purego_hello_ffi:
-	cd go && $(GO_CMD) build helloFfiPureGo.go
-	$(LOAD_PATH) go/helloFfiPureGo
+	cd go/purego && $(GO_CMD) build
+	$(LOAD_PATH) go/purego/hello_ffi
 
 go_purego: go_purego_hello_ffi
 go: go_hello_ffi

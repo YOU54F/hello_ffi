@@ -560,6 +560,8 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
         name: 'remove wsl bash'
       - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
       - run: brew install protobuf
         if: matrix.os == 'macos-14'
       - run: make get_pact_ffi
@@ -583,6 +585,8 @@ jobs:
         run: rm 'C:\Windows\System32\bash.exe'
         name: 'remove wsl bash'
       - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
       - run: brew install protobuf
         if: matrix.os == 'macos-14'
       - run: make get_pact_ffi
