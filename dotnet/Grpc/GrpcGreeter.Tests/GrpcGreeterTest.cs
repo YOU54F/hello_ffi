@@ -51,9 +51,9 @@ namespace GrpcGreeter.Tests
             // Setup a cancellation token so we can shutdown the app after
             var cts = new CancellationTokenSource();
             var token = cts.Token;
-            var runAppTask = Task.Run(() =>
+            var runAppTask = Task.Run(async () =>
             {
-                GrpcGreeterService.RunApp(new string[] { }, token);
+                await GrpcGreeterService.RunApp(new string[] { }, token);
             }, token);
 
             // Act

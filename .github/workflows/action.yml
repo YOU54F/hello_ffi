@@ -247,8 +247,11 @@ jobs:
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
         name: 'remove wsl bash'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
+      - if: matrix.os == 'macos-14'
+        name: Install Protobuf
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "25.x"
       - if: runner.os == 'Windows'
         name: Choco install protoc
         uses: crazy-max/ghaction-chocolatey@v2
@@ -413,8 +416,11 @@ jobs:
         with:
           branch: swift-5.7.1-release
           tag: 5.7.1-RELEASE
-      - run: brew install protobuf
-        if: matrix.os == 'macos-14'
+      - if: matrix.os == 'macos-14'
+        name: Install Protobuf
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "25.x"
       - run: make get_pact_ffi
       # - run: make get_pact_plugins
       - run: make swift
@@ -473,8 +479,11 @@ jobs:
           luajit.exe -v
           luarocks.exe --version
         if: runner.os == 'Windows'
-      - if: runner.os == 'macOS'
-        run: brew install protobuf
+      - if: matrix.os == 'macos-14'
+        name: Install Protobuf
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "25.x"
       - if: runner.os == 'Windows'
         name: Choco install protoc
         uses: crazy-max/ghaction-chocolatey@v2
@@ -525,9 +534,11 @@ jobs:
       - if: runner.os == 'Windows'
         run: rm 'C:\Windows\System32\bash.exe'
         name: 'remove wsl bash'
-      # - uses: jiro4989/setup-nim-action@v1
-      #   if: runner.os != 'macOS'
-      # - run: brew install nim
+      - if: matrix.os == 'macos-14'
+        name: Install Protobuf
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "25.x"
       #   if: runner.os == 'macOS'
       - run: make get_pact_ffi
       - run: make dotnet
