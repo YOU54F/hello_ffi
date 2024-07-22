@@ -1,4 +1,4 @@
-import { getClient } from "https://deno.land/x/grpc_basic@0.4.6/client.ts";
+import { getClient } from "https://deno.land/x/grpc_basic@0.4.7/client.ts";
 import { Greeter } from "./greeter.d.ts";
 
 const protoPath = new URL("./greeter.proto", import.meta.url);

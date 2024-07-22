@@ -1,0 +1,329 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3095a7fcf..442e69d04 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,9 +4,9 @@ cmake_policy(SET CMP0067 NEW)
+ 
+ set(Bun_VERSION "1.0.29")
+ set(WEBKIT_TAG 089023cc9078b3aa173869fd6685f3e7bed2a994)
+-
+ set(BUN_WORKDIR "${CMAKE_CURRENT_BINARY_DIR}")
+ message(STATUS "Configuring Bun ${Bun_VERSION} in ${BUN_WORKDIR}")
++# set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+ 
+ # --- Build Type ---
+ if(NOT CMAKE_BUILD_TYPE)
+@@ -1004,7 +1004,6 @@ if(WIN32)
+     target_link_options(${bun} PUBLIC "/STACK:0x1200000,0x100000")
+ else()
+     target_compile_options(${bun} PUBLIC
+-        -fPIC
+         -mtune=${CPU_TARGET}
+         -fconstexpr-steps=1271242
+         -fconstexpr-depth=27
+@@ -1064,7 +1063,8 @@ if(UNIX AND NOT APPLE)
+         "-Wl,--wrap=statx"
+         "-Wl,--compress-debug-sections=zlib"
+         "-Bsymbolics-functions"
+-        "-rdynamic"
++        "-static"
++        "-no-pie"
+         "-Wl,--dynamic-list=${BUN_SRC}/symbols.dyn"
+         "-Wl,--version-script=${BUN_SRC}/linker.lds"
+     )
+diff --git a/Makefile b/Makefile
+index d60b70a72..c861cc77b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -101,8 +101,8 @@ ifeq (,$(findstring,$(shell which ccache 2>/dev/null),ccache))
+ 	CCACHE_CXX_FLAG = CXX=$(CCACHE_PATH) CCACHE_COMPILER=$(REAL_CXX)
+ endif
+ 
+-CXX_WITH_CCACHE = $(CCACHE_PATH) $(CXX)
+-CC_WITH_CCACHE = $(CCACHE_PATH) $(CC)
++CXX_WITH_CCACHE = $(CCACHE_PATH) $(CXX) -fPIC
++CC_WITH_CCACHE = $(CCACHE_PATH) $(CC) -fPIC
+ 
+ ifeq ($(OS_NAME),darwin)
+ # Find LLVM
+@@ -489,13 +489,11 @@ PLATFORM_LINKER_FLAGS = $(BUN_CFLAGS) \
+ 		-fno-omit-frame-pointer \
+ 		-Wl,--compress-debug-sections,zlib \
+ 		-l:libatomic.a \
+-		${STATIC_MUSL_FLAG}  \
++		-fPIC  \
+ 		-Wl,-Bsymbolic-functions \
+ 		-fno-semantic-interposition \
+ 		-flto \
+-		-Wl,--allow-multiple-definition \
+-		-rdynamic
+-
++		-Wl,--allow-multiple-definition
+ 
+ endif
+ 
+@@ -542,7 +540,7 @@ TINYCC_CFLAGS= -DTCC_LIBTCC1=\"\0\"
+ tinycc:
+ 	cd $(TINYCC_DIR) && \
+ 		make clean && \
+-		AR=$(AR) $(CCACHE_CC_FLAG) CFLAGS='$(CFLAGS_WITHOUT_MARCH) $(NATIVE_OR_OLD_MARCH) -mtune=native $(TINYCC_CFLAGS)' ./configure --enable-static --cc=$(CCACHE_CC_OR_CC) --ar=$(AR) --config-predefs=yes  && \
++		AR=$(AR) $(CCACHE_CC_FLAG) CFLAGS='$(CFLAGS_WITHOUT_MARCH) $(NATIVE_OR_OLD_MARCH) -mtune=native $(TINYCC_CFLAGS)' ./configure --enable-static --cc=$(CCACHE_CC_OR_CC) --ar=$(AR) --config-predefs=yes -config-musl  && \
+ 		make libtcc.a -j10 && \
+ 		cp $(TINYCC_DIR)/*.a $(BUN_DEPS_OUT_DIR)
+ 
+@@ -688,11 +686,11 @@ submodule: ## to init or update all submodules
+ 
+ .PHONY: build-obj
+ build-obj:
+-	$(ZIG) build obj -Doptimize=ReleaseFast -Dcpu="$(CPU_TARGET)"
++	$(ZIG) build obj -fPIC -Doptimize=ReleaseFast -Dcpu="$(CPU_TARGET)"
+ 
+ .PHONY: build-obj-small
+ build-obj-small:
+-	$(ZIG) build obj -Doptimize=ReleaseSmall -Dcpu="$(CPU_TARGET)"
++	$(ZIG) build obj -fPIC -Doptimize=ReleaseSmall -Dcpu="$(CPU_TARGET)"
+ 
+ .PHONY: dev-build-obj-wasm
+ dev-build-obj-wasm:
+@@ -713,7 +711,7 @@ build-obj-wasm:
+ 	emcc -sEXPORTED_FUNCTIONS="['_bun_free', '_cycleStart', '_cycleEnd', '_bun_malloc', '_scan', '_transform', '_init', '_getTests']" \
+ 		-s ERROR_ON_UNDEFINED_SYMBOLS=0  -DNDEBUG  \
+ 		$(BUN_DEPS_DIR)/$(MIMALLOC_FILE).wasm  \
+-		packages/bun-freestanding-wasm32/bun-wasm.o $(OPTIMIZATION_LEVEL) --no-entry --allow-undefined  -s ASSERTIONS=0  -s ALLOW_MEMORY_GROWTH=1 -s WASM_BIGINT=1  \
++		packages/bun-freestanding-wasm32/bun-wasm.o $(OPTIMIZATION_LEVEL) -fPIC --no-entry --allow-undefined  -s ASSERTIONS=0  -s ALLOW_MEMORY_GROWTH=1 -s WASM_BIGINT=1  \
+ 		-o packages/bun-freestanding-wasm32/bun-wasm.wasm
+ 	cp packages/bun-freestanding-wasm32/bun-wasm.wasm packages/bun-wasm/bun.wasm
+ 
+@@ -723,7 +721,7 @@ build-obj-wasm-small:
+ 	emcc -sEXPORTED_FUNCTIONS="['_bun_free', '_cycleStart', '_cycleEnd', '_bun_malloc', '_scan', '_transform', '_init', '_getTests']" \
+ 		-Oz -s ERROR_ON_UNDEFINED_SYMBOLS=0  -DNDEBUG  \
+ 		$(BUN_DEPS_DIR)/$(MIMALLOC_FILE).wasm  \
+-		packages/bun-freestanding-wasm32/bun-wasm.o -Oz --no-entry --allow-undefined  -s ASSERTIONS=0  -s ALLOW_MEMORY_GROWTH=1 -s WASM_BIGINT=1  \
++		packages/bun-freestanding-wasm32/bun-wasm.o -fPIC -Oz --no-entry --allow-undefined  -s ASSERTIONS=0  -s ALLOW_MEMORY_GROWTH=1 -s WASM_BIGINT=1  \
+ 		-o packages/bun-freestanding-wasm32/bun-wasm.wasm
+ 	cp packages/bun-freestanding-wasm32/bun-wasm.wasm packages/bun-wasm/bun.wasm
+ 
+@@ -748,9 +746,9 @@ wasm: api mimalloc-wasm build-obj-wasm-small
+ 
+ .PHONY: build-obj-safe
+ build-obj-safe:
+-	$(ZIG) build obj -Doptimize=ReleaseSafe -Dcpu="$(CPU_TARGET)"
++	$(ZIG) build obj -fPIC -Doptimize=ReleaseSafe -Dcpu="$(CPU_TARGET)"
+ 
+-UWS_CC_FLAGS = -pthread  -DLIBUS_USE_OPENSSL=1 -DUWS_HTTPRESPONSE_NO_WRITEMARK=1 -DLIBUS_USE_BORINGSSL=1 -DWITH_BORINGSSL=1 -Wpedantic -Wall -Wextra -Wsign-conversion -Wconversion $(UWS_INCLUDE) -DUWS_WITH_PROXY
++UWS_CC_FLAGS = -fPIC -pthread  -DLIBUS_USE_OPENSSL=1 -DUWS_HTTPRESPONSE_NO_WRITEMARK=1 -DLIBUS_USE_BORINGSSL=1 -DWITH_BORINGSSL=1 -Wpedantic -Wall -Wextra -Wsign-conversion -Wconversion $(UWS_INCLUDE) -DUWS_WITH_PROXY
+ UWS_CXX_FLAGS = $(UWS_CC_FLAGS) -std=$(CXX_VERSION) -fno-exceptions -fno-rtti
+ UWS_LDFLAGS = -I$(BUN_DEPS_DIR)/boringssl/include -I$(ZLIB_INCLUDE_DIR)
+ USOCKETS_DIR = $(BUN_DIR)/packages/bun-usockets
+@@ -758,7 +756,7 @@ USOCKETS_SRC_DIR = $(USOCKETS_DIR)/src
+ 
+ 
+ LSHPACK_SRC_DIR = $(BUN_DEPS_DIR)/ls-hpack
+-LSHPACK_CC_FLAGS = -DXXH_HEADER_NAME="<xxhash.h>"
++LSHPACK_CC_FLAGS = -fPIC -DXXH_HEADER_NAME="<xxhash.h>"
+ LSHPACK_LDFLAGS = -I$(LSHPACK_SRC_DIR) -I$(LSHPACK_SRC_DIR)/deps/xxhash
+ 
+ lshpack:
+@@ -886,10 +884,6 @@ httpbench-release: $(IO_FILES)
+ 	$(CXX) $(PACKAGE_DIR)/httpbench.o -g $(OPTIMIZATION_LEVEL) -o ./misctools/httpbench $(IO_FILES)  $(DEFAULT_LINKER_FLAGS) -lc $(MINIMUM_ARCHIVE_FILES)
+ 	rm -rf $(PACKAGE_DIR)/httpbench.o
+ 
+-.PHONY: check-glibc-version-dependency
+-check-glibc-version-dependency:
+-	@objdump -T $(RELEASE_BUN) | ((grep -qe "GLIBC_2.3[0-9]") && { echo "Glibc 2.3X detected, this will break the binary"; exit 1; }) || true
+-
+ ifeq ($(OS_NAME),darwin)
+ 
+ zig-win32:
+@@ -1044,7 +1038,6 @@ ifeq ($(OS_NAME),linux)
+ .PHONY: release-bin-check
+ release-bin-check: release-bin-check-version
+ # force it to run
+-	@make -B check-glibc-version-dependency
+ endif
+ 
+ .PHONY: release-bin-push-bin
+@@ -1204,7 +1197,7 @@ jsc-build-mac-compile:
+ 			-DUSE_PTHREAD_JIT_PERMISSIONS_API=ON \
+ 			$(WEBKIT_DIR) \
+ 			$(WEBKIT_RELEASE_DIR) && \
+-	CFLAGS="$(CFLAGS) -ffat-lto-objects" CXXFLAGS="$(CXXFLAGS)  -ffat-lto-objects" \
++	CFLAGS="-fPIC $(CFLAGS) -ffat-lto-objects" CXXFLAGS="$(CXXFLAGS)  -ffat-lto-objects" \
+ 		cmake --build $(WEBKIT_RELEASE_DIR) --config Release --target jsc
+ 
+ .PHONY: jsc-build-mac-compile-lto
+@@ -1275,6 +1268,7 @@ jsc-build-linux-compile-config:
+ 			-DALLOW_LINE_AND_COLUMN_NUMBER_IN_BUILTINS=ON \
+ 			-USE_VISIBILITY_ATTRIBUTE=1 \
+ 			-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
++			-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+ 			-G Ninja \
+ 			-DCMAKE_CXX_COMPILER=$(CXX) \
+ 			-DCMAKE_C_COMPILER=$(CC) \
+diff --git a/build.zig b/build.zig
+index 88f2e6f05..49d660f13 100644
+--- a/build.zig
++++ b/build.zig
+@@ -17,10 +17,51 @@ fn exists(path: []const u8) bool {
+ 
+ fn addInternalPackages(b: *Build, step: *CompileStep, _: std.mem.Allocator, _: []const u8, target: anytype) !void {
+     const io: *Module = brk: {
+-        if (target.isDarwin()) {
+-            break :brk b.createModule(.{
+-                .source_file = FileSource.relative("src/io/io_darwin.zig"),
+-            });
++        if (target.isDarwin()) {const BunBuildOptions = struct {
++    is_canary: bool = false,
++    canary_revision: u32 = 0,
++    sha: [:0]const u8 = "",
++    version: []const u8 = "",
++    baseline: bool = false,
++    bindgen: bool = false,
++    sizegen: bool = false,
++    base_path: [:0]const u8 = "",
++    tracy_callstack_depth: u16,
++
++    runtime_js_version: u64 = 0,
++    fallback_html_version: u64 = 0,
++
++    tinycc: bool = true,
++    project: [:0]const u8 = "",
++    pub fn updateRuntime(this: *BunBuildOptions) anyerror!void {
++        if (std.fs.cwd().openFile("src/runtime.out.js", .{ .mode = .read_only })) |file| {
++            defer file.close();
++            const runtime_hash = Wyhash.hash(
++                0,
++                try file.readToEndAlloc(std.heap.page_allocator, try file.getEndPos()),
++            );
++            this.runtime_js_version = runtime_hash;
++        } else |_| {
++            if (!is_debug_build) {
++                @panic("Runtime file was not read successfully. Please run `make setup`");
++            }
++        }
++
++        if (std.fs.cwd().openFile("src/fallback.out.js", .{ .mode = .read_only })) |file| {
++            defer file.close();
++            const fallback_hash = Wyhash.hash(
++                0,
++                try file.readToEndAlloc(std.heap.page_allocator, try file.getEndPos()),
++            );
++            this.fallback_html_version = fallback_hash;
++        } else |_| {
++            if (!is_debug_build) {
++                @panic("Fallback file was not read successfully. Please run `make setup`");
++            }
++        }
++    }
++
++    pub fn step(this: BunBuildOptions, b: anytype) *std.build.Opti        if (target.isDarwin()) {            });
+         } else if (target.isLinux()) {
+             break :brk b.createModule(.{
+                 .source_file = FileSource.relative("src/io/io_linux.zig"),
+@@ -37,6 +78,7 @@ fn addInternalPackages(b: *Build, step: *CompileStep, _: std.mem.Allocator, _: [
+     };
+ 
+     step.addModule("async_io", io);
++    step.setLinkerOption("-fPIC");
+ 
+     step.addModule("zlib-internal", brk: {
+         if (target.isWindows()) {
+@@ -128,7 +170,7 @@ const BunBuildOptions = struct {
+         opts.addOption(@TypeOf(this.tinycc), "tinycc", this.tinycc);
+         return opts;
+     }
+-};
++}
+ 
+ // relative to the prefix
+ var output_dir: []const u8 = "";
+@@ -178,7 +220,9 @@ pub fn build_(b: *Build) !void {
+     // what target to build for. Here we do not override the defaults, which
+     // means any target is allowed, and the default is native. Other options
+     // for restricting supported target set are available.
+-    var target = b.standardTargetOptions(.{});
++    var target = b.standardTargetOptions(.{
++
++    });
+     // Standard release options allow the person running `zig build` to select
+     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
+     optimize = b.standardOptimizeOption(.{});
+@@ -212,7 +256,8 @@ pub fn build_(b: *Build) !void {
+             };
+         },
+         .linux => {
+-            target.setGnuLibCVersion(2, 27, 0);
++            // target.setGnuLibCVersion(2, 27, 0);
++            
+         },
+         else => {},
+     }
+@@ -256,7 +301,6 @@ pub fn build_(b: *Build) !void {
+         target.getOsVersionMax().semver
+     else
+         .{ .major = 0, .minor = 0, .patch = 0 };
+-
+     var obj_step = b.step("obj", "Build bun as a .o file");
+     var obj = b.addObject(.{
+         .name = bun_executable_name,
+@@ -394,6 +438,7 @@ pub fn build_(b: *Build) !void {
+         obj.linkLibC();
+         obj.dll_export_fns = true;
+         obj.strip = false;
++        // obj.pic = true;
+         obj.omit_frame_pointer = optimize != .Debug;
+         obj.subsystem = .Console;
+ 
+diff --git a/scripts/setup.sh b/scripts/setup.sh
+index fb57795fc..950e95b52 100755
+--- a/scripts/setup.sh
++++ b/scripts/setup.sh
+@@ -25,12 +25,12 @@ CXX=${CXX:-$(which clang++-16 || which clang++ || which c++)}
+ test -n "$CC" || fail "missing LLVM $LLVM_VERSION (could not find clang)"
+ test -n "$CXX" || fail "missing LLVM $LLVM_VERSION (could not find clang++)"
+ 
+-for type in CC CXX; do
+-  compiler="${!type}"
+-  $(
+-    "$compiler" --version | grep "clang version ${LLVM_VERSION}." >/dev/null 2>&1
+-  ) || fail "LLVM ${LLVM_VERSION} is required. Detected $type as '$compiler'"
+-done
++# for type in CC CXX; do
++#   compiler="${!type}"
++#   $(
++#     "$compiler" --version | grep "clang version ${LLVM_VERSION}." >/dev/null 2>&1
++#   ) || fail "LLVM ${LLVM_VERSION} is required. Detected $type as '$compiler'"
++# done
+ 
+ has_exec "bun" || fail "you need an existing copy of 'bun' in your path to build bun"
+ has_exec "cmake" || fail "'cmake' is missing"
+diff --git a/src/bun.js/bindings/BunProcess.cpp b/src/bun.js/bindings/BunProcess.cpp
+index b6dc6d4e9..4ac8ceb5d 100644
+--- a/src/bun.js/bindings/BunProcess.cpp
++++ b/src/bun.js/bindings/BunProcess.cpp
+@@ -1281,8 +1281,8 @@ static JSValue constructReportObjectComplete(VM& vm, Zig::GlobalObject* globalOb
+         }
+ 
+ #if OS(LINUX)
+-        header->putDirect(vm, JSC::Identifier::fromString(vm, "glibcVersionCompiler"_s), JSC::jsString(vm, makeString(__GLIBC__, '.', __GLIBC_MINOR__)), 0);
+-        header->putDirect(vm, JSC::Identifier::fromString(vm, "glibcVersionRuntime"_s), JSC::jsString(vm, String::fromUTF8(reinterpret_cast<const LChar*>(gnu_get_libc_version())), 0));
++        // header->putDirect(vm, JSC::Identifier::fromString(vm, "glibcVersionCompiler"_s), JSC::jsString(vm, makeString(__GLIBC__, '.', __GLIBC_MINOR__)), 0);
++        // header->putDirect(vm, JSC::Identifier::fromString(vm, "glibcVersionRuntime"_s), JSC::jsString(vm, String::fromUTF8(reinterpret_cast<const LChar*>(gnu_get_libc_version())), 0));
+ #endif
+ 
+         header->putDirect(vm, Identifier::fromString(vm, "cpus"_s), JSC::constructEmptyArray(globalObject, nullptr), 0);
+diff --git a/src/bun.js/bindings/workaround-missing-symbols.cpp b/src/bun.js/bindings/workaround-missing-symbols.cpp
+index f7d5c5645..ce9f28cc2 100644
+--- a/src/bun.js/bindings/workaround-missing-symbols.cpp
++++ b/src/bun.js/bindings/workaround-missing-symbols.cpp
+@@ -115,8 +115,8 @@ extern "C" char* mkdtemp(char* template_name)
+ 
+ #if defined(__x86_64__)
+ // Force older versions of symbols
+-__asm__(".symver pow,pow@GLIBC_2.2.5");
+-__asm__(".symver log,log@GLIBC_2.2.5");
++// __asm__(".symver pow,pow@GLIBC_2.2.5");
++// __asm__(".symver log,log@GLIBC_2.2.5");
+ #endif
+ 
+ // ban statx, for now

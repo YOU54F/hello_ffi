@@ -30,7 +30,7 @@ pactffi_log_message = Fiddle::Function.new(
 )
 
 
-# puts pactffi_version.call #=> 0.3.14
+# puts pactffi_version.call #=> 0.3.15
 
 pactffi_logger_init.call
 pactffi_logger_attach_sink.call('stdout', 5)

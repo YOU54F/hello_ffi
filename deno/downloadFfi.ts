@@ -25,16 +25,16 @@ async function downloadFile(src: string, dest: string) {
   await resp.body.pipeTo(file.writable);
 }
 
-export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.18") => {
+export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.22") => {
   const platform = Deno.build.os + "-" + Deno.build.arch;
   console.log(platform);
   let filename;
   switch (platform) {
     case "darwin-aarch64":
-      filename = "libpact_ffi-osx-aarch64-apple-darwin.dylib.gz";
+      filename = "libpact_ffi-macos-aarch64.dylib.gz";
       break;
     case "darwin-x86_64":
-      filename = "libpact_ffi-osx-x86_64.dylib.gz";
+      filename = "libpact_ffi-macos-x86_64.dylib.gz";
       break;
     case "linux-aarch64":
       filename = "libpact_ffi-linux-aarch64.so.gz";
@@ -50,13 +50,13 @@ export const detectFfiDownloadForPlatform = (ffiVersion = "v0.4.18") => {
       `We do not have a binary for your platform ${platform}`;
       break;
   }
-  const ffiLibDownloadLocation = `https://github.com/you54f/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
-  const ffiHeaderDownloadLocation = `https://github.com/you54f/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
+  const ffiLibDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
+  const ffiHeaderDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
   console.log(ffiLibDownloadLocation);
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
 
-export const downloadFfiForPlatform = async (ffiVersion = "v0.4.18") => {
+export const downloadFfiForPlatform = async (ffiVersion = "v0.4.22") => {
   const locs = detectFfiDownloadForPlatform(ffiVersion);
   const libraryFilename =
     Deno.build.os === "darwin"

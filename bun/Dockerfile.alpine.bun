@@ -1,0 +1,14 @@
+FROM alpine
+
+RUN make apk add linux-headers bash patchelf curl wget lsb-release cargo ccache cmake git go libtool ninja-build pkgconf rust ruby xz llvm16 clang16 ninja automake perl lld16 autoconf python3 && \
+    apk add zig --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ 
+
+
+WORKDIR /scratch
+ENV PATH=$PATH:$HOME/.bun/bin
+RUN curl -LO https://raw.githubusercontent.com/YOU54F/bun-musl/main/bun-musl && \
+    chmod +x bun-musl && \
+    ./bun-musl install && bun -v
+RUN git clone https://github.com/oven-sh/bun.git
+WORKDIR /scratch/bun
+RUN bun setup

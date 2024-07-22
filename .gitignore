@@ -18,3 +18,5 @@ scratchpad
 *.dll
 *.dll.lib
 *.log
+obj/
+bin/

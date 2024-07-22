@@ -1,4 +1,4 @@
-import { getClient } from "https://deno.land/x/grpc_basic@0.4.6/client.ts";
+import { getClient } from "https://deno.land/x/grpc_basic@0.4.7/client.ts";
 const protoPath = new URL("../proto/plugin.proto", import.meta.url);
 const protoFile = await Deno.readTextFile(protoPath);
 

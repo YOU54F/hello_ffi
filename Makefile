@@ -60,7 +60,7 @@ ada_hello_ffi:
 ada: ada_hello_ffi
 
 alpine_perl:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add perl make libgcc protoc && apk add perl-ffi-platypus perl-json --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && cd /app && make perl'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine:edge sh -c 'apk add perl make libgcc protoc perl-json && apk add perl-ffi-platypus --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && cd /app && make perl'
 
 perl_install_deps:
 	cpan FFI::Platypus<<<yes
@@ -77,7 +77,7 @@ perl_hello_pact_mock_server:
 perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
 alpine_php:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add php make php82-ffi libgcc protoc && cd /app && make php'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add php make php83-ffi libgcc protoc && cd /app && make php'
 
 php_hello_ffi:
 	php php/hello_ffi.php
@@ -150,41 +150,40 @@ julia: julia_hello_ffi
 .PHONY: bun deno features haskell java julia perl php python raku ruby zig c dart scala lua
 
 alpine_deno:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make deno protoc && cd /app && make deno'
-
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine:3.19 sh -c 'apk add --no-cache make deno protoc && cd /app && make deno'
 
 deno_gen_proto:
-	deno run --allow-read https://deno.land/x/grpc_basic@0.4.6/gen/dts.ts ./proto/area_calculator.proto > ./deno/gRPC/area_calculator/area_calculator.d.ts
+	deno run --allow-read https://deno.land/x/grpc_basic@0.4.7/gen/dts.ts ./proto/area_calculator.proto > ./deno/gRPC/area_calculator/area_calculator.d.ts
 
 deno_gen_plugin_proto:
-	deno run --allow-read https://deno.land/x/grpc_basic@0.4.6/gen/dts.ts ./proto/plugin.proto > ./deno/gRPC/pact_plugin/plugin.d.ts
+	deno run --allow-read https://deno.land/x/grpc_basic@0.4.7/gen/dts.ts ./proto/plugin.proto > ./deno/gRPC/pact_plugin/plugin.d.ts
 
 deno_run_greeter_client:
-	deno run --allow-all --unstable deno/gRPC/greeter/greeterClient.ts
+	deno run --allow-all --unstable-ffi deno/gRPC/greeter/greeterClient.ts
 
 deno_run_greeter_server:
-	deno run --allow-all --unstable deno/gRPC/greeter/greeterServer.ts
+	deno run --allow-all --unstable-ffi deno/gRPC/greeter/greeterServer.ts
 
 deno_run_area_calculator_client:
-	deno run --allow-all --unstable deno/gRPC/area_calculator/areaCalculatorClientRun.ts
+	deno run --allow-all --unstable-ffi deno/gRPC/area_calculator/areaCalculatorClientRun.ts
 
 deno_run_area_calculator_server:
-	deno run --allow-all --unstable deno/gRPC/area_calculator/areaCalculatorServer.ts
+	deno run --allow-all --unstable-ffi deno/gRPC/area_calculator/areaCalculatorServer.ts
 
 deno_run_download_ffi:
-	deno run --allow-all --unstable deno/downloadFfi.ts
+	deno run --allow-all --unstable-ffi deno/downloadFfi.ts
 
 deno_hello_ffi:
-	$(LOAD_PATH) deno run --allow-ffi --unstable deno/hello_ffi.ts
+	$(LOAD_PATH) deno run --allow-ffi --unstable-ffi deno/hello_ffi.ts
 
 deno_run_pact_mock_server:
-	$(LOAD_PATH) deno run --allow-all --unstable deno/hello_pact_mock_server.ts
+	$(LOAD_PATH) deno run --allow-all --unstable-ffi deno/hello_pact_mock_server.ts
 
 deno_run_pact_grpc:
-	$(LOAD_PATH) deno run --allow-all --unstable deno/hello_pact_grpc.ts
+	$(LOAD_PATH) deno run --allow-all --unstable-ffi deno/hello_pact_grpc.ts
 
 deno_compile_plugin_and_test:
-	deno compile --allow-all --unstable deno/gRPC/pact_plugin/pactPluginServer.ts && mv pactPluginServer ~/.pact/plugins/denopactplugin-0.0.1 && $(LOAD_PATH) deno run --allow-all --unstable deno/gRPC/pact_plugin/testPactPluginWithProtobuf.ts
+	deno compile --allow-all --unstable-ffi deno/gRPC/pact_plugin/pactPluginServer.ts && mv pactPluginServer ~/.pact/plugins/denopactplugin-0.0.1 && $(LOAD_PATH) deno run --allow-all --unstable-ffi deno/gRPC/pact_plugin/testPactPluginWithProtobuf.ts
 
 deno: deno_hello_ffi deno_run_pact_mock_server deno_run_pact_grpc deno_compile_plugin_and_test
 
@@ -216,7 +215,7 @@ bun_hello_ffi:
 bun: bun_hello_ffi
 
 alpine_zig:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm oven/bun:alpine sh -c 'apk add make curl curl-dev && apk add zig --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && cd /app && make zig'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make curl curl-dev && apk add zig --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && cd /app && make zig'
 
 zig_get:
 	curl -sS https://webi.sh/zig| sh

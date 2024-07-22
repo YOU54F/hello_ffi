@@ -1,4 +1,4 @@
-import { GrpcServer } from "https://deno.land/x/grpc_basic@0.4.6/server.ts";
+import { GrpcServer } from "https://deno.land/x/grpc_basic@0.4.7/server.ts";
 import { Calculator, ShapeMessage } from "./area_calculator.d.ts";
 
 const server = new GrpcServer();

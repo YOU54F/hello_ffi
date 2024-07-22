@@ -1,4 +1,4 @@
-import { getClient } from "https://deno.land/x/grpc_basic@0.4.6/client.ts";
+import { getClient } from "https://deno.land/x/grpc_basic@0.4.7/client.ts";
 import { Calculator } from "./area_calculator.d.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
 

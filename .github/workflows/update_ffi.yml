@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
         PACT_FFI_VERSION:
-            description: Tag from https://github.com/you54f/pact-reference/releases for libpact_ffi
+            description: Tag from https://github.com/pact-foundation/pact-reference/releases for libpact_ffi
             required: true
-            default: 0.4.18
+            default: 0.4.22
             type: string
 
 jobs:
