@@ -32,19 +32,18 @@ namespace GrpcGreeter.Tests
             VerifierExecuteResult.Should().Be(1);
         }
         [Fact]
-        public async Task ReturnsVerificationSuccessRunningProvider()
+        public void ReturnsVerificationSuccessRunningProvider()
         {
-
             var version = Marshal.PtrToStringAnsi(Pact.Version());
             version.Should().Be("0.4.22");
             Pact.LoggerInit();
-            Pact.LoggerAttachSink("stdout",3);
+            Pact.LoggerAttachSink("stdout", 3);
             Pact.LoggerApply();
-            Pact.LogMessage("pact-dotnet","info",$"hello from ffi version: {version}");
-            var verifier = Pact.VerifierNewForApplication("pact-dotnet","0.0.0");
-            Pact.VerifierSetProviderInfo(verifier,"grpc-greeter",null,null,0,null);
-            Pact.AddProviderTransport(verifier, "grpc",5000,"/","https");
-            Pact.VerifierAddFileSource(verifier,"../../../../pacts/grpc-greeter-client-dotnet-grpc-greeter.json");
+            Pact.LogMessage("pact-dotnet", "info", $"hello from ffi version: {version}");
+            var verifier = Pact.VerifierNewForApplication("pact-dotnet", "0.0.0");
+            Pact.VerifierSetProviderInfo(verifier, "grpc-greeter", null, null, 0, null);
+            Pact.AddProviderTransport(verifier, "grpc", 5000, "/", "https");
+            Pact.VerifierAddFileSource(verifier, "../../../../pacts/grpc-greeter-client-dotnet-grpc-greeter.json");
 
             // Arrange
             // Setup our app to run before our verifier executes
