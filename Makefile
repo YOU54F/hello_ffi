@@ -447,7 +447,7 @@ ocaml: ocaml_hello_ffi
 
 # tcl: tcl_hello
 alpine_java:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make openjdk19 libgcc && cd /app && make java'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make openjdk21 libgcc && cd /app && make java'
 java_jna_hello_ffi:
 	$(LOAD_PATH) java -cp java/jna/jna-5.12.1.jar java/jna/src/ffi/example/jna/HelloFfi.java
 java_jna_hello:
