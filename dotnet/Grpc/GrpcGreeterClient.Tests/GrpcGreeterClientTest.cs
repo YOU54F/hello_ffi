@@ -5,6 +5,7 @@ using FluentAssertions;
 using Xunit;
 using PactFfi;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace GrpcGreeterClient.Tests
 {
@@ -18,28 +19,28 @@ namespace GrpcGreeterClient.Tests
             var version = Marshal.PtrToStringAnsi(Pact.Version());
             version.Should().Be("0.4.22");
             Pact.LoggerInit();
-            Pact.LoggerAttachSink("stdout",3);
+            Pact.LoggerAttachSink("stdout", 3);
             Pact.LoggerApply();
-            Pact.LogMessage("pact-dotnet","info",$"hello from ffi version: {version}");
+            Pact.LogMessage("pact-dotnet", "info", $"hello from ffi version: {version}");
             var host = "0.0.0.0";
-            var pact = Pact.NewPact("foo","bar");
-            var interaction = Pact.NewSyncMessageInteraction(pact,"a request to a plugin");
-            Pact.WithSpecification(pact,Pact.PactSpecification.V4);
-            var content = @"{
-                    ""pact:proto"": ""/Users/saf/dev/you54f/hello_ffi/dotnet/Grpc/GrpcGreeterClient/Protos/greet.proto"",
+            var pact = Pact.NewPact("foo", "bar");
+            var interaction = Pact.NewSyncMessageInteraction(pact, "a request to a plugin");
+            Pact.WithSpecification(pact, Pact.PactSpecification.V4);
+            var content = $@"{{
+                    ""pact:proto"":""{Path.Join(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "GrpcGreeterClient", "Protos", "greet.proto")}"",
                     ""pact:proto-service"": ""Greeter/SayHello"",
                     ""pact:content-type"": ""application/protobuf"",
-                    ""request"": {
+                    ""request"": {{
                     ""name"": ""matching(type, 'foo')""
-                    },
-                    ""response"": {
+                    }},
+                    ""response"": {{
                     ""message"": [""matching(type, 'Hello foo')""]
-                    }
-                }";
-            Pact.PluginAdd(pact,"protobuf","0.3.15");
-            Pact.PluginInteractionContents(interaction,0,"application/grpc",content);
+                    }}
+                }}";
+            Pact.PluginAdd(pact, "protobuf", "0.3.15");
+            Pact.PluginInteractionContents(interaction, 0, "application/grpc", content);
 
-            var port = Pact.CreateMockServerForTransport(pact,host,0,"grpc",null);
+            var port = Pact.CreateMockServerForTransport(pact, host, 0, "grpc", null);
             Console.WriteLine("Port: " + port);
 
             var matched = Pact.MockServerMatched(port);
@@ -67,35 +68,35 @@ namespace GrpcGreeterClient.Tests
             var version = Marshal.PtrToStringAnsi(Pact.Version());
             version.Should().Be("0.4.22");
             Pact.LoggerInit();
-            Pact.LoggerAttachSink("stdout",3);
+            Pact.LoggerAttachSink("stdout", 3);
             Pact.LoggerApply();
-            Pact.LogMessage("pact-dotnet","info",$"hello from ffi version: {version}");
+            Pact.LogMessage("pact-dotnet", "info", $"hello from ffi version: {version}");
             var host = "0.0.0.0";
-            var pact = Pact.NewPact("grpc-greeter-client-dotnet","grpc-greeter");
-            var interaction = Pact.NewSyncMessageInteraction(pact,"a request to a plugin");
-            Pact.WithSpecification(pact,Pact.PactSpecification.V4);
-            var content = @"{
-                    ""pact:proto"": ""/Users/saf/dev/you54f/hello_ffi/dotnet/Grpc/GrpcGreeterClient/Protos/greet.proto"",
+            var pact = Pact.NewPact("grpc-greeter-client-dotnet", "grpc-greeter");
+            var interaction = Pact.NewSyncMessageInteraction(pact, "a request to a plugin");
+            Pact.WithSpecification(pact, Pact.PactSpecification.V4);
+            var content = $@"{{
+                    ""pact:proto"":""{Path.Join(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "GrpcGreeterClient", "Protos", "greet.proto")}"",
                     ""pact:proto-service"": ""Greeter/SayHello"",
                     ""pact:content-type"": ""application/protobuf"",
-                    ""request"": {
+                    ""request"": {{
                         ""name"": ""matching(type, 'foo')""
-                    },
-                    ""response"": {
+                    }},
+                    ""response"": {{
                         ""message"": [""matching(type, 'Hello foo')""]
-                    }
-                }";
+                    }}
+                }}";
 
-// TODO - Investigate matchers
-// Failures:
-// 1) Verifying a pact between grpc-greeter-client-dotnet and grpc-greeter - a request to a plugin
-//     1.1) has a matching body
-//            $.message -> Expected 'Hello foo' to be equal to 'hello foo'
+            // TODO - Investigate matchers
+            // Failures:
+            // 1) Verifying a pact between grpc-greeter-client-dotnet and grpc-greeter - a request to a plugin
+            //     1.1) has a matching body
+            //            $.message -> Expected 'Hello foo' to be equal to 'hello foo'
 
-            Pact.PluginAdd(pact,"protobuf","0.3.15");
-            Pact.PluginInteractionContents(interaction,0,"application/grpc",content);
+            Pact.PluginAdd(pact, "protobuf", "0.3.15");
+            Pact.PluginInteractionContents(interaction, 0, "application/grpc", content);
 
-            var port = Pact.CreateMockServerForTransport(pact,host,0,"grpc",null);
+            var port = Pact.CreateMockServerForTransport(pact, host, 0, "grpc", null);
             Console.WriteLine("Port: " + port);
 
             var client = new GreeterClientWrapper("http://localhost:" + port);
