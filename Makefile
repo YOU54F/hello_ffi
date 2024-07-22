@@ -76,6 +76,16 @@ perl_hello_pact_mock_server:
 
 perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
+dotnet_grpc_client_test:
+	$(LOAD_PATH) dotnet test dotnet/Grpc/GrpcGreeterClient.Tests 
+dotnet_grpc_provider_test:
+	$(LOAD_PATH) dotnet test dotnet/Grpc/GrpcGreeter.Tests 
+dotnet_grpc_client_run:
+	dotnet run --project dotnet/Grpc/GrpcGreeterClient 
+dotnet_grpc_provider_run:
+	dotnet run --project dotnet/Grpc/GrpcGreeter 
+
+dotnet: dotnet_grpc_client_test dotnet_grpc_provider_test
 alpine_php:
 	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add php make php83-ffi libgcc protoc && cd /app && make php'
 

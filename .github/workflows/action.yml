@@ -483,6 +483,54 @@ jobs:
       - run: make get_pact_ffi
       # - run: make get_pact_plugins
       - run: make lua
+  nim:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-12, macos-14]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+        name: 'remove wsl bash'
+      - uses: jiro4989/setup-nim-action@v1
+        if: runner.os != 'macOS'
+      - run: brew install nim
+        if: runner.os == 'macOS'
+      - run: make get_pact_ffi
+      - run: make nim
+  dotnet:
+    timeout-minutes: 10
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-12, macos-14]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+      - if: runner.os == 'Windows'
+        run: rm 'C:\Windows\System32\bash.exe'
+        name: 'remove wsl bash'
+      # - uses: jiro4989/setup-nim-action@v1
+      #   if: runner.os != 'macOS'
+      # - run: brew install nim
+      #   if: runner.os == 'macOS'
+      - run: make get_pact_ffi
+      - run: make dotnet
   # scala:
   #   timeout-minutes: 10
   #   # runs-on: ubuntu-latest
@@ -517,27 +565,3 @@ jobs:
   #       if: runner.os == 'Windows'
   #     - run: make get_pact_ffi
   #     - run: make scala
-  nim:
-    timeout-minutes: 10
-    # runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-12, macos-14]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v3
-      - if: runner.os == 'Windows'
-        run: rm 'C:\Windows\System32\bash.exe'
-        name: 'remove wsl bash'
-      - uses: jiro4989/setup-nim-action@v1
-        if: runner.os != 'macOS'
-      - run: brew install nim
-        if: runner.os == 'macOS'
-      - run: make get_pact_ffi
-      - run: make nim
