@@ -1,10 +1,13 @@
 ifeq ($(DOCKER_DEFAULT_PLATFORM),)
     ifeq ($(shell uname -m),aarch64)
         DOCKER_DEFAULT_PLATFORM = linux/arm64
+		DOTNET_ARCH = arm64
 	else ifeq ($(shell uname -m),arm64)
         DOCKER_DEFAULT_PLATFORM = linux/arm64
+		DOTNET_ARCH = arm64
     else
         DOCKER_DEFAULT_PLATFORM = linux/amd64
+		DOTNET_ARCH = x64
     endif
 endif
 
@@ -75,6 +78,13 @@ perl_hello_pact_mock_server:
 	$(LOAD_PATH) perl perl/hello_pact_mock_server.pl
 
 perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
+
+# Grpc.Tools do not provide precompiled binaries for alpine/musl - https://github.com/grpc/grpc/issues/24188#issuecomment-1403435551
+alpine_dotnet:
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add dotnet8-sdk grpc-plugins make && export PROTOBUF_PROTOC=/usr/bin/protoc && export GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin && cd /app && make dotnet'
+
+debian_dotnet:
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm debian:12 bash -c 'apt-get update && apt-get install -y curl protobuf-compiler make libicu-dev && mkdir -p /root/.dotnet && curl -LO https://download.visualstudio.microsoft.com/download/pr/4bfdbe1a-e1f9-4535-8da6-6e1e7ea0994c/b110641d008b36dded561ff2bdb0f793/dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz && tar -xf dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz -C /root/.dotnet && export DOTNET_ROOT=/root/.dotnet && export PATH=$$PATH:/root/.dotnet && cd /app && make dotnet'
 
 dotnet_grpc_client_test:
 	$(LOAD_PATH) dotnet test dotnet/Grpc/GrpcGreeterClient.Tests 

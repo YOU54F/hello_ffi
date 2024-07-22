@@ -32,7 +32,7 @@ namespace GrpcGreeter.Tests
             VerifierExecuteResult.Should().Be(1);
         }
         [Fact]
-        public void ReturnsVerificationSuccessRunningProvider()
+        public async Task ReturnsVerificationSuccessRunningProviderAsync()
         {
             var version = Marshal.PtrToStringAnsi(Pact.Version());
             version.Should().Be("0.4.22");
@@ -54,6 +54,7 @@ namespace GrpcGreeter.Tests
             {
                 await GrpcGreeterService.RunApp(new string[] { }, token);
             }, token);
+            await Task.Delay(2000);
 
             // Act
             var VerifierExecuteResult = Pact.VerifierExecute(verifier);
