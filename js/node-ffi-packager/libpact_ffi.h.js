@@ -531,17 +531,9 @@ const functions = new FFI.Library(platform === "win32"?"pact_ffi":"libpact_ffi",
     js_int32,
     [SynchronousMessage, js_CString],
   ],
-  pactffi_sync_message_set_request_contents: [
-    js_void,
-    [SynchronousMessage, js_CString, js_CString],
-  ],
   pactffi_sync_message_set_request_contents_bin: [
     js_void,
     [SynchronousMessage, js_ucharPointer, js_int32, js_CString],
-  ],
-  pactffi_sync_message_set_response_contents: [
-    js_void,
-    [SynchronousMessage, js_int32, js_CString, js_CString],
   ],
   pactffi_sync_message_set_response_contents_bin: [
     js_void,

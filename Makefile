@@ -407,7 +407,7 @@ go_purego: go_purego_hello_ffi
 go: go_hello_ffi
 
 alpine_js:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add make nodejs npm python3 python3-dev gcc g++ && cd /app && make js_ffi_napi_hello_ffi'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine:3.16 sh -c 'apk add make nodejs npm python3 python3-dev gcc g++ libexecinfo-dev libexecinfo && cd /app && make js'
 js_ffi_napi_hello_ffi:
 	cd js/node-ffi-napi && npm i
 	$(LOAD_PATH) node js/node-ffi-napi/index.js 
