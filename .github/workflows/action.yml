@@ -23,8 +23,6 @@ jobs:
           julia,
           deno,
           csharp,
-          bun,
-          bun,
           zig,
           dart,
           c,
