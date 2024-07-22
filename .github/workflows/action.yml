@@ -252,6 +252,7 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           version: "25.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - if: runner.os == 'Windows'
         name: Choco install protoc
         uses: crazy-max/ghaction-chocolatey@v2
@@ -421,6 +422,7 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           version: "25.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: make get_pact_ffi
       # - run: make get_pact_plugins
       - run: make swift
@@ -484,6 +486,7 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           version: "25.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - if: runner.os == 'Windows'
         name: Choco install protoc
         uses: crazy-max/ghaction-chocolatey@v2
@@ -539,6 +542,7 @@ jobs:
         uses: arduino/setup-protoc@v3
         with:
           version: "25.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       #   if: runner.os == 'macOS'
       - run: make get_pact_ffi
       - run: make dotnet
