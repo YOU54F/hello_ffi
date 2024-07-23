@@ -27,7 +27,7 @@ namespace GrpcGreeterClient.Tests
             var interaction = Pact.NewSyncMessageInteraction(pact, "a request to a plugin");
             Pact.WithSpecification(pact, Pact.PactSpecification.V4);
             var content = $@"{{
-                    ""pact:proto"":""{Path.Join(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "GrpcGreeterClient", "Protos", "greet.proto")}"",
+                    ""pact:proto"":""{Path.Join(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "GrpcGreeterClient", "Protos", "greet.proto").Replace("\\", "\\\\")}"",
                     ""pact:proto-service"": ""Greeter/SayHello"",
                     ""pact:content-type"": ""application/protobuf"",
                     ""request"": {{
@@ -37,7 +37,7 @@ namespace GrpcGreeterClient.Tests
                     ""message"": [""matching(type, 'Hello foo')""]
                     }}
                 }}";
-            Pact.PluginAdd(pact, "protobuf", "0.3.15");
+            Pact.PluginAdd(pact, "protobuf", "0.4.0");
             Pact.PluginInteractionContents(interaction, 0, "application/grpc", content);
 
             var port = Pact.CreateMockServerForTransport(pact, host, 0, "grpc", null);
@@ -68,7 +68,7 @@ namespace GrpcGreeterClient.Tests
             var version = Marshal.PtrToStringAnsi(Pact.Version());
             version.Should().Be("0.4.22");
             Pact.LoggerInit();
-            Pact.LoggerAttachSink("stdout", 3);
+            Pact.LoggerAttachSink("file .log",3);
             Pact.LoggerApply();
             Pact.LogMessage("pact-dotnet", "info", $"hello from ffi version: {version}");
             var host = "0.0.0.0";
@@ -76,7 +76,7 @@ namespace GrpcGreeterClient.Tests
             var interaction = Pact.NewSyncMessageInteraction(pact, "a request to a plugin");
             Pact.WithSpecification(pact, Pact.PactSpecification.V4);
             var content = $@"{{
-                    ""pact:proto"":""{Path.Join(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "GrpcGreeterClient", "Protos", "greet.proto")}"",
+                    ""pact:proto"":""{Path.Join(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "GrpcGreeterClient", "Protos", "greet.proto").Replace("\\", "\\\\")}"",
                     ""pact:proto-service"": ""Greeter/SayHello"",
                     ""pact:content-type"": ""application/protobuf"",
                     ""request"": {{
@@ -93,7 +93,7 @@ namespace GrpcGreeterClient.Tests
             //     1.1) has a matching body
             //            $.message -> Expected 'Hello foo' to be equal to 'hello foo'
 
-            Pact.PluginAdd(pact, "protobuf", "0.3.15");
+            Pact.PluginAdd(pact, "protobuf", "0.4.0");
             Pact.PluginInteractionContents(interaction, 0, "application/grpc", content);
 
             var port = Pact.CreateMockServerForTransport(pact, host, 0, "grpc", null);
