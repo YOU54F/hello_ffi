@@ -36,7 +36,7 @@ namespace PInvokeTest
                     ""value"": [""matching(number, 12)""]
                     }
                 }";
-            PluginAdd(pact,"protobuf","0.3.15");
+            PluginAdd(pact,"protobuf","0.4.0");
             PluginInteractionContents(interaction,0,"application/grpc",content);
 
             var port = CreateMockServerForTransport(pact,host,0,"grpc",null);

@@ -14,11 +14,11 @@ elif defined(MacOsX):
   const pactFfi* = "libpact_ffi.dylib"
 
 # when defined(Windows):
-#   const pactFfi* = joinPath(getHomeDir(), ".pact","ffi","v0.3.15","pact_ffi.dll")
+#   const pactFfi* = joinPath(getHomeDir(), ".pact","ffi","v0.4.22","pact_ffi.dll")
 # elif defined(Linux):
-#   const pactFfi* = (getHomeDir(), ".pact","ffi","v0.3.15","libpact_ffi.so")
+#   const pactFfi* = (getHomeDir(), ".pact","ffi","v0.4.22","libpact_ffi.so")
 # elif defined(MacOsX):
-#   const pactFfi* = joinPath(getHomeDir(), ".pact","ffi","v0.3.15","libpact_ffi.dylib")
+#   const pactFfi* = joinPath(getHomeDir(), ".pact","ffi","v0.4.22","libpact_ffi.dylib")
 
 
 

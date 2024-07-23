@@ -47,7 +47,7 @@ $contents = '{
 
 // Start mock server
 
-$ffi->pactffi_using_plugin($pact, 'protobuf', '0.3.15');
+$ffi->pactffi_using_plugin($pact, 'protobuf', '0.4.0');
 $ffi->pactffi_interaction_contents($message_pact, 0, 'application/grpc', $contents);
 $port = $ffi->pactffi_create_mock_server_for_transport($pact , '0.0.0.0',0,'grpc', null);
 
