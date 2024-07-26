@@ -364,7 +364,6 @@ ifeq ($(OS),Windows_NT)
 	EXE=.exe
 	BAT=.bat
 	# LOAD_PATH=$$env:LD_LIBRARY_PATH=$$env:PWD.Path;
-	PATH=$$PATH
 	STD_LIB_DIR=TODO
 	VBC_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\vbc.exe"
 	MCS_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\csc.exe"

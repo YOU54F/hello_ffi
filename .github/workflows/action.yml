@@ -546,6 +546,10 @@ jobs:
       #     repo-token: ${{ secrets.GITHUB_TOKEN }}
       #   if: runner.os == 'macOS'
       - run: make get_pact_ffi
+      - if: matrix.os == 'windows-latest'
+        name: add ffi to path
+        run: |
+          pwd >> $env:GITHUB_PATH
       - run: make dotnet
   # scala:
   #   timeout-minutes: 10
