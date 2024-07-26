@@ -549,7 +549,7 @@ jobs:
       - if: matrix.os == 'windows-latest'
         name: add ffi to path
         run: |
-          pwd >> $env:GITHUB_PATH
+          "echo $PATH" >> $GITHUB_PATH
       - run: make dotnet
   # scala:
   #   timeout-minutes: 10
