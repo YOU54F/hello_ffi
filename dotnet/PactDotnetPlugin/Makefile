@@ -85,6 +85,14 @@ else
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
 		PLATFORM=linux
+		ifeq ($(shell ldd /bin/ls >/dev/null 2>&1; echo $$?), 0)
+			ldd_output=$(shell ldd /bin/ls)
+			ifneq ($(findstring musl,$(ldd_output)),)
+				PLATFORM=linux-musl
+			else
+				PLATFORM=linux
+			endif
+		endif
 	endif
 	ifeq ($(UNAME_S),Darwin)
 		PLATFORM=osx

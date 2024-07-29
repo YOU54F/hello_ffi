@@ -83,10 +83,10 @@ perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
 # Grpc.Tools do not provide precompiled binaries for alpine/musl - https://github.com/grpc/grpc/issues/24188#issuecomment-1403435551
 alpine_dotnet:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add dotnet8-sdk grpc-plugins make && make get_pact_plugins && export PROTOBUF_PROTOC=/usr/bin/protoc && export GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin && cd /app && make dotnet'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add dotnet8-sdk grpc-plugins bash make curl git file openjdk17-jre && export PROTOBUF_PROTOC=/usr/bin/protoc && export GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin && echo $$PATH && cd /app && make get_pact_plugins && make dotnet'
 
 debian_dotnet:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm debian:12 bash -c 'apt-get update && apt-get install -y curl protobuf-compiler make libicu-dev && make get_pact_plugins && mkdir -p /root/.dotnet && curl -LO https://download.visualstudio.microsoft.com/download/pr/4bfdbe1a-e1f9-4535-8da6-6e1e7ea0994c/b110641d008b36dded561ff2bdb0f793/dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz && tar -xf dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz -C /root/.dotnet && export DOTNET_ROOT=/root/.dotnet && export PATH=$$PATH:/root/.dotnet && cd /app && make dotnet'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm debian:12 bash -c 'apt-get update && apt-get install -y curl protobuf-compiler make libicu-dev openjdk-17-jre && mkdir -p /root/.dotnet && curl -LO https://download.visualstudio.microsoft.com/download/pr/4bfdbe1a-e1f9-4535-8da6-6e1e7ea0994c/b110641d008b36dded561ff2bdb0f793/dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz && tar -xf dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz -C /root/.dotnet && export DOTNET_ROOT=/root/.dotnet && export PATH=$$PATH:/root/.dotnet && cd /app && make get_pact_plugins && make dotnet'
 
 dotnet_grpc_client_test:
 	$(LOAD_PATH) dotnet test dotnet/Grpc/GrpcGreeterClient.Tests 
@@ -144,7 +144,12 @@ dotnet_plugin:
 	make dotnet_plugin_install_local 
 	make dotnet_plugin_client_test 
 
-dotnet: dotnet_grpc dotnet_tcp dotnet_avro dotnet_protobuf dotnet_plugin_client_test dotnet_plugin
+ifeq ($(OS),Windows_NT)
+dotnet: dotnet_grpc dotnet_tcp dotnet_protobuf dotnet_plugin
+else
+dotnet: dotnet_grpc dotnet_tcp dotnet_avro dotnet_protobuf dotnet_plugin
+endif
+
 alpine_php:
 	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add php make php83-ffi libgcc protoc && cd /app && make php'
 

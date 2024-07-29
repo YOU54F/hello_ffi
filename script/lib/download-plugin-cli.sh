@@ -8,7 +8,7 @@ require_binary gunzip
 
 require_env_var PLUGIN_CLI_VERSION
 
-BASEURL=https://github.com/you54f/pact-plugins/releases/download
+BASEURL=https://github.com/pact-foundation/pact-plugins/releases/download
 PLUGIN_CLI_DIR="${HOME}/.pact/cli/plugin"
 
 if [[ $(find "${PLUGIN_CLI_DIR}" -name "${PLUGIN_CLI_VERSION}*") ]]; then
@@ -83,41 +83,13 @@ case ${detected_os} in
     ;;
 "Linux aarch64"* | "Linux arm64"*)
     echo "downloading of linux aarch64 FFI libs"
-    if ldd /bin/ls >/dev/null 2>&1; then
-        ldd_output=$(ldd /bin/ls)
-        case "$ldd_output" in
-            *musl*) 
-                os='linux-aarch64-musl'
-                download_plugin_cli "linux-aarch64-musl.gz" "" "pact-plugin-cli.gz" "${os}"
-                ;;
-            *) 
-                os='linux-aarch64'
-                download_plugin_cli "linux-aarch64.gz" "" "pact-plugin-cli.gz" "${os}"
-                ;;
-        esac
-    else
-      os='linux-aarch64'
-      download_plugin_cli "linux-aarch64.gz" "" "pact-plugin-cli.gz" "${os}"
-    fi
+    os='linux-aarch64'
+    download_plugin_cli "linux-aarch64.gz" "" "pact-plugin-cli.gz" "${os}"
     ;;
 'Linux x86_64' | "Linux"*)
     echo "downloading of linux x86_64 FFI libs"
-    if ldd /bin/ls >/dev/null 2>&1; then
-        ldd_output=$(ldd /bin/ls)
-        case "$ldd_output" in
-            *musl*) 
-                os='linux-x86_64-musl'
-                download_plugin_cli "linux-x86_64-musl.gz" "" "pact-plugin-cli.gz" "${os}"
-                ;;
-            *) 
-                os='linux-x86_64'
-                download_plugin_cli "linux-x86_64.gz" "" "pact-plugin-cli.gz" "${os}"
-                ;;
-        esac
-    else
-      os='linux-x86_64'
-      download_plugin_cli "linux-x86_64.gz" "" "pact-plugin-cli.gz" "${os}"
-    fi
+    os='linux-x86_64'
+    download_plugin_cli "linux-x86_64.gz" "" "pact-plugin-cli.gz" "${os}"
     ;;
 "Windows"* | "MINGW64"*)
     echo "downloading of windows x86_64 FFI libs"

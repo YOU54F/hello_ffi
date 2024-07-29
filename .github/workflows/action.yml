@@ -546,6 +546,10 @@ jobs:
       #     version: "25.x"
       #     repo-token: ${{ secrets.GITHUB_TOKEN }}
       #   if: runner.os == 'macOS'
+      - uses: actions/setup-java@v4 # Needed for the Avro example
+        with:
+          distribution: 'zulu'
+          java-version: '17'
       - run: make get_pact_ffi
       - run: make get_pact_plugins
       - if: matrix.os == 'windows-latest'
