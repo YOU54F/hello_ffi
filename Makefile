@@ -21,13 +21,15 @@ test:
 get_pact_ffi:
 	./script/download-libs.sh
 
-get_pact_plugins: get_plugin_cli install_protobuf_plugin
+get_pact_plugins: get_plugin_cli install_matt_plugin
 
 get_plugin_cli:
 	./script/download-plugin-cli.sh
 
 install_protobuf_plugin:
-	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/you54f/pact-protobuf-plugin/releases/latest
+	${HOME}/.pact/cli/plugin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
+install_matt_plugin:
+	${HOME}/.pact/cli/plugin/pact-plugin-cli$(EXE) -y install https://github.com/mefellows/pact-matt-plugin/releases/latest
 
 clean: clean_haskell
 
@@ -81,10 +83,10 @@ perl: perl_hello_ffi perl_hello_grpc perl_hello_pact_mock_server
 
 # Grpc.Tools do not provide precompiled binaries for alpine/musl - https://github.com/grpc/grpc/issues/24188#issuecomment-1403435551
 alpine_dotnet:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add dotnet8-sdk grpc-plugins make && export PROTOBUF_PROTOC=/usr/bin/protoc && export GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin && cd /app && make dotnet'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add dotnet8-sdk grpc-plugins make && make get_pact_plugins && export PROTOBUF_PROTOC=/usr/bin/protoc && export GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin && cd /app && make dotnet'
 
 debian_dotnet:
-	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm debian:12 bash -c 'apt-get update && apt-get install -y curl protobuf-compiler make libicu-dev && mkdir -p /root/.dotnet && curl -LO https://download.visualstudio.microsoft.com/download/pr/4bfdbe1a-e1f9-4535-8da6-6e1e7ea0994c/b110641d008b36dded561ff2bdb0f793/dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz && tar -xf dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz -C /root/.dotnet && export DOTNET_ROOT=/root/.dotnet && export PATH=$$PATH:/root/.dotnet && cd /app && make dotnet'
+	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm debian:12 bash -c 'apt-get update && apt-get install -y curl protobuf-compiler make libicu-dev && make get_pact_plugins && mkdir -p /root/.dotnet && curl -LO https://download.visualstudio.microsoft.com/download/pr/4bfdbe1a-e1f9-4535-8da6-6e1e7ea0994c/b110641d008b36dded561ff2bdb0f793/dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz && tar -xf dotnet-sdk-8.0.303-linux-$(DOTNET_ARCH).tar.gz -C /root/.dotnet && export DOTNET_ROOT=/root/.dotnet && export PATH=$$PATH:/root/.dotnet && cd /app && make dotnet'
 
 dotnet_grpc_client_test:
 	$(LOAD_PATH) dotnet test dotnet/Grpc/GrpcGreeterClient.Tests 
