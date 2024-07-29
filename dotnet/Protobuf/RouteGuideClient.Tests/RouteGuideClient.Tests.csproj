@@ -13,7 +13,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GrpcGreeter\GrpcGreeter.csproj" />
+    <ProjectReference Include="..\RouteGuideClient\RouteGuideClient.csproj" />
     <ProjectReference Include="..\..\Pact\Pact.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,11 @@
+{
+  "pluginInterfaceVersion": 1,
+  "name": "dotnet-template",
+  "version": "0.0.0",
+  "executableType": "exec",
+  "minimumRequiredVersion": null,
+  "entryPoint": "GrpcPactPlugin",
+  "entryPoints": {},
+  "args": null,
+  "dependencies": null
+}

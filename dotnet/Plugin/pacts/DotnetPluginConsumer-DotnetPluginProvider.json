@@ -1,0 +1,67 @@
+{
+  "consumer": {
+    "name": "DotnetPluginConsumer"
+  },
+  "interactions": [
+    {
+      "description": "a HTTP request to /foobar",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the Foobar protocol exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": "aGVsbG8=",
+          "contentType": "application/foo",
+          "contentTypeHint": "DEFAULT",
+          "encoded": "base64"
+        },
+        "headers": {
+          "content-type": [
+            "application/foo"
+          ]
+        },
+        "method": "POST",
+        "path": "/foobar"
+      },
+      "response": {
+        "body": {
+          "content": "d29ybGQ=",
+          "contentType": "application/foo",
+          "contentTypeHint": "DEFAULT",
+          "encoded": "base64"
+        },
+        "headers": {
+          "content-type": [
+            "application/foo"
+          ]
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.22",
+      "mockserver": "1.2.9",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    },
+    "plugins": [
+      {
+        "configuration": {},
+        "name": "dotnet-template",
+        "version": "0.0.0"
+      }
+    ]
+  },
+  "provider": {
+    "name": "DotnetPluginProvider"
+  }
+}

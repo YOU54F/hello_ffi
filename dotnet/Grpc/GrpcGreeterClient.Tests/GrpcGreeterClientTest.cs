@@ -16,14 +16,10 @@ namespace GrpcGreeterClient.Tests
         public async Task ReturnsMismatchWhenNoGrpcClientRequestMade()
         {
 
-            var version = Marshal.PtrToStringAnsi(Pact.Version());
-            version.Should().Be("0.4.22");
-            Pact.LoggerInit();
-            Pact.LoggerAttachSink("stdout", 3);
-            Pact.LoggerApply();
-            Pact.LogMessage("pact-dotnet", "info", $"hello from ffi version: {version}");
+            _ = Pact.LogToStdOut(3);
+            // arrange
             var host = "0.0.0.0";
-            var pact = Pact.NewPact("foo", "bar");
+            var pact = Pact.NewPact("grpc-greeter-client", "grpc-greeter");
             var interaction = Pact.NewSyncMessageInteraction(pact, "a request to a plugin");
             Pact.WithSpecification(pact, Pact.PactSpecification.V4);
             var content = $@"{{
@@ -31,10 +27,10 @@ namespace GrpcGreeterClient.Tests
                     ""pact:proto-service"": ""Greeter/SayHello"",
                     ""pact:content-type"": ""application/protobuf"",
                     ""request"": {{
-                    ""name"": ""matching(type, 'foo')""
+                        ""name"": ""matching(type, 'foo')""
                     }},
                     ""response"": {{
-                    ""message"": [""matching(type, 'Hello foo')""]
+                        ""message"": ""matching(type, 'Hello foo')""
                     }}
                 }}";
             Pact.PluginAdd(pact, "protobuf", "0.4.0");
@@ -65,14 +61,10 @@ namespace GrpcGreeterClient.Tests
         public async Task WritesPactWhenGrpcClientRequestMade()
         {
 
-            var version = Marshal.PtrToStringAnsi(Pact.Version());
-            version.Should().Be("0.4.22");
-            Pact.LoggerInit();
-            Pact.LoggerAttachSink("file .log",3);
-            Pact.LoggerApply();
-            Pact.LogMessage("pact-dotnet", "info", $"hello from ffi version: {version}");
+            _ = Pact.LogToStdOut(3);
+            // arrange
             var host = "0.0.0.0";
-            var pact = Pact.NewPact("grpc-greeter-client-dotnet", "grpc-greeter");
+            var pact = Pact.NewPact("grpc-greeter-client", "grpc-greeter");
             var interaction = Pact.NewSyncMessageInteraction(pact, "a request to a plugin");
             Pact.WithSpecification(pact, Pact.PactSpecification.V4);
             var content = $@"{{
@@ -83,15 +75,9 @@ namespace GrpcGreeterClient.Tests
                         ""name"": ""matching(type, 'foo')""
                     }},
                     ""response"": {{
-                        ""message"": [""matching(type, 'Hello foo')""]
+                        ""message"": ""matching(type, 'Hello foo')""
                     }}
                 }}";
-
-            // TODO - Investigate matchers
-            // Failures:
-            // 1) Verifying a pact between grpc-greeter-client-dotnet and grpc-greeter - a request to a plugin
-            //     1.1) has a matching body
-            //            $.message -> Expected 'Hello foo' to be equal to 'hello foo'
 
             Pact.PluginAdd(pact, "protobuf", "0.4.0");
             Pact.PluginInteractionContents(interaction, 0, "application/grpc", content);
@@ -99,10 +85,13 @@ namespace GrpcGreeterClient.Tests
             var port = Pact.CreateMockServerForTransport(pact, host, 0, "grpc", null);
             Console.WriteLine("Port: " + port);
 
+            // act
             var client = new GreeterClientWrapper("http://localhost:" + port);
             var result = await client.SayHello("foo");
             Console.WriteLine("Result: " + result);
 
+            // assert
+            result.Should().Be("Hello foo");
             var matched = Pact.MockServerMatched(port);
             Console.WriteLine("Matched: " + matched);
             matched.Should().BeTrue();

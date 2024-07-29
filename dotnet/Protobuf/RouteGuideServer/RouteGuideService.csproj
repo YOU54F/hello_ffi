@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- to avoid code-signing on macos due to Failed to create CoreCLR, HRESULT: 0x8007000C -->
+     <!-- codesign -f \-\-remove-signature ./bin/Debug/net8.0/GrpcGreeter -->
+    <UseAppHost>false</UseAppHost> 
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RouteGuide\RouteGuide.csproj" />
+
+  </ItemGroup>
+
+</Project>

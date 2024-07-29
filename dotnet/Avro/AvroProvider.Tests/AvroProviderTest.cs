@@ -1,24 +1,21 @@
-using System.Threading.Tasks;
-using System.Threading;
 using FluentAssertions;
 using Xunit;
 using PactFfi;
+using System.Threading.Tasks;
 
-namespace GrpcGreeter.Tests
+namespace AvroProvider.Tests
 {
-    public class GrpcGreeterTests
+    public class AvroProviderTests
     {
 
         [Fact]
         public void ReturnsVerificationFailureWhenNoRunningProvider()
         {
-
             _ = Pact.LogToStdOut(3);
 
             var verifier = Pact.VerifierNewForApplication("pact-dotnet","0.0.0");
-            Pact.VerifierSetProviderInfo(verifier,"grpc-greeter",null,null,0,null);
-            Pact.AddProviderTransport(verifier, "grpc",5060,"/","http");
-            Pact.VerifierAddFileSource(verifier,"../../../../pacts/grpc-greeter-client-grpc-greeter.json");
+            Pact.VerifierSetProviderInfo(verifier,"AvroProvider",null,null,8081,null);
+            Pact.VerifierAddFileSource(verifier,"../../../../pacts/AvroConsumer-AvroProvider.json");
             var VerifierExecuteResult = Pact.VerifierExecute(verifier);
             VerifierExecuteResult.Should().Be(1);
         }
@@ -26,27 +23,26 @@ namespace GrpcGreeter.Tests
         public async Task ReturnsVerificationSuccessRunningProviderAsync()
         {
             _ = Pact.LogToStdOut(3);
-
+            ushort port = 8080;
             var verifier = Pact.VerifierNewForApplication("pact-dotnet", "0.0.0");
-            Pact.VerifierSetProviderInfo(verifier, "grpc-greeter", null, null, 0, null);
-            Pact.AddProviderTransport(verifier, "grpc", 5000, "/", "https");
-            Pact.VerifierAddFileSource(verifier, "../../../../pacts/grpc-greeter-client-grpc-greeter.json");
+            Pact.VerifierSetProviderInfo(verifier,"AvroProvider",null,null,port,null);
+            Pact.VerifierAddFileSource(verifier,"../../../../pacts/AvroConsumer-AvroProvider.json");
 
-            // Arrange
-            // Setup our app to run before our verifier executes
-            // Setup a cancellation token so we can shutdown the app after
-            var cts = new CancellationTokenSource();
+            // // Arrange
+            // // Setup our app to run before our verifier executes
+            // // Setup a cancellation token so we can shutdown the app after
+            var cts = new System.Threading.CancellationTokenSource();
             var token = cts.Token;
             var runAppTask = Task.Run(async () =>
             {
-                await GrpcGreeterService.RunApp([], token);
+                await AvroProvider.StartServer(token, "http://localhost:" + port + "/");
             }, token);
-            await Task.Delay(2000);
 
             // Act
             var VerifierExecuteResult = Pact.VerifierExecute(verifier);
             VerifierExecuteResult.Should().Be(0);
             Pact.VerifierShutdown(verifier);
+
             // After test execution, signal the task to terminate
             cts.Cancel();
         }

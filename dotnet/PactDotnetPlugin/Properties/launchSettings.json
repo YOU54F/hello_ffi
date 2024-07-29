@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "GrpcPactPlugin": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:50051;https://localhost:7112",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -94,8 +94,55 @@ dotnet_grpc_client_run:
 	dotnet run --project dotnet/Grpc/GrpcGreeterClient 
 dotnet_grpc_provider_run:
 	dotnet run --project dotnet/Grpc/GrpcGreeter 
+dotnet_grpc: 
+	make dotnet_grpc_client_test 
+	make dotnet_grpc_provider_test
 
-dotnet: dotnet_grpc_client_test dotnet_grpc_provider_test
+dotnet_tcp_client_run:
+	dotnet run --project dotnet/Tcp/TcpClient
+dotnet_tcp_provider_run:
+	dotnet run --project dotnet/Tcp/TcpListener
+dotnet_tcp_client_test:
+	$(LOAD_PATH) dotnet test dotnet/Tcp/TcpClient.Tests
+dotnet_tcp_provider_test:
+	$(LOAD_PATH) dotnet test dotnet/Tcp/TcpListener.Tests
+dotnet_tcp: 
+	make dotnet_tcp_client_test 
+	make dotnet_tcp_provider_test
+
+dotnet_avro_client_run:
+	dotnet run --project dotnet/Avro/AvroClient
+dotnet_avro_provider_run:
+	dotnet run --project dotnet/Avro/AvroProvider
+dotnet_avro_client_test:
+	$(LOAD_PATH) dotnet test dotnet/Avro/AvroClient.Tests
+dotnet_avro_provider_test:
+	$(LOAD_PATH) dotnet test dotnet/Avro/AvroProvider.Tests
+dotnet_avro: 
+	make dotnet_avro_client_test 
+	make dotnet_avro_provider_test
+
+dotnet_protobuf_client_run:
+	dotnet run --project dotnet/Protobuf/RouteGuideClient
+dotnet_protobuf_provider_run:
+	dotnet run --project dotnet/Protobuf/RouteGuideServer
+dotnet_protobuf_client_test:
+	$(LOAD_PATH) dotnet test dotnet/Protobuf/RouteGuideClient.Tests
+dotnet_protobuf_provider_test:
+	$(LOAD_PATH) dotnet test dotnet/Protobuf/RouteGuideServer.Tests
+dotnet_protobuf: 
+	make dotnet_protobuf_client_test 
+	make dotnet_protobuf_provider_test
+
+dotnet_plugin_client_test:
+	$(LOAD_PATH) dotnet test dotnet/Plugin/FooPluginConsumer.Tests
+dotnet_plugin_install_local:
+	cd dotnet/PactDotnetPlugin && make install_local
+dotnet_plugin: 
+	make dotnet_plugin_install_local 
+	make dotnet_plugin_client_test 
+
+dotnet: dotnet_grpc dotnet_tcp dotnet_avro dotnet_protobuf dotnet_plugin_client_test dotnet_plugin
 alpine_php:
 	docker run --platform=${DOCKER_DEFAULT_PLATFORM} -v ${PWD}:/app --rm alpine sh -c 'apk add php make php83-ffi libgcc protoc && cd /app && make php'
 

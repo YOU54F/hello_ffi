@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- to avoid code-signing on macos due to Failed to create CoreCLR, HRESULT: 0x8007000C -->
+    <!-- codesign -f \-\-remove-signature ./bin/Debug/net8.0/GrpcGreeter -->
+    <UseAppHost>false</UseAppHost> 
+  </PropertyGroup>
+<ItemGroup>
+  <PackageReference Include="Apache.Avro" Version="1.11.3" />
+</ItemGroup>
+
+</Project>
